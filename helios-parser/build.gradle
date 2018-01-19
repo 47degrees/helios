@@ -1,0 +1,7 @@
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+    compile "io.arrow-kt:arrow-data:$arrowVersion"
+}
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+apply from: rootProject.file('gradle/generated-kotlin-sources.gradle')

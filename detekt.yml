@@ -16,7 +16,7 @@ potential-bugs:
       active: false
 
 exceptions:
-  active: true
+  active: false
 
 empty:
   active: true
@@ -25,21 +25,7 @@ empty-blocks:
   active: false
 
 complexity:
-  active: true
-  LongMethod:
-    threshold: 20
-  LongParameterList:
-    active: false
-  LargeClass:
-    threshold: 300
-  ComplexMethod:
-    threshold: 10
-  NestedBlockDepth:
-    threshold: 5
-  TooManyFunctions:
-    active: false
-  LabeledExpression:
-    active: false
+  active: false
 
 code-smell:
   active: true
