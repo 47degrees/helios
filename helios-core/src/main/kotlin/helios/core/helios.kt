@@ -99,11 +99,11 @@ const val MinLongString = "-9223372036854775808"
 
 }
 
-@lenses data class JsBoolean(val value: Boolean) : Json() {
+@lenses @isos data class JsBoolean(val value: Boolean) : Json() {
     override fun toJsonString(): String = "$value"
 }
 
-@lenses data class JsString(val value: CharSequence) : Json() {
+@lenses @isos data class JsString(val value: CharSequence) : Json() {
     override fun toJsonString(): String = """"$value""""
 }
 
@@ -176,7 +176,7 @@ const val MinLongString = "-9223372036854775808"
     }
 }
 
-@lenses data class JsDecimal(val value: String) : JsNumber() {
+@lenses @isos data class JsDecimal(val value: String) : JsNumber() {
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
     override fun toBigInteger(): Option<BigInteger> = toBigDecimal().map { it.toBigInteger() }
@@ -188,7 +188,7 @@ const val MinLongString = "-9223372036854775808"
     override fun toJsonString(): String = value
 }
 
-@lenses data class JsLong(val value: Long) : JsNumber() {
+@lenses @isos data class JsLong(val value: Long) : JsNumber() {
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
     override fun toBigInteger(): Option<BigInteger> = toBigDecimal().map { it.toBigInteger() }
@@ -200,7 +200,7 @@ const val MinLongString = "-9223372036854775808"
     override fun toJsonString(): String = "$value"
 }
 
-data class JsDouble(val value: Double) : JsNumber() {
+@lenses @isos data class JsDouble(val value: Double) : JsNumber() {
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
     override fun toBigInteger(): Option<BigInteger> = toBigDecimal().map { it.toBigInteger() }
@@ -212,7 +212,7 @@ data class JsDouble(val value: Double) : JsNumber() {
     override fun toJsonString(): String = "$value"
 }
 
-@lenses data class JsFloat(val value: Float) : JsNumber() {
+@lenses @isos data class JsFloat(val value: Float) : JsNumber() {
 
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
@@ -225,7 +225,7 @@ data class JsDouble(val value: Double) : JsNumber() {
     override fun toJsonString(): String = "$value"
 }
 
-@lenses data class JsInt(val value: Int) : JsNumber() {
+@lenses @isos data class JsInt(val value: Int) : JsNumber() {
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
     override fun toBigInteger(): Option<BigInteger> = value.toBigInteger().some()
@@ -237,11 +237,13 @@ data class JsDouble(val value: Double) : JsNumber() {
     override fun toJsonString(): String = "$value"
 }
 
-@lenses data class JsArray(val value: List<Json>) : Json() {
+@lenses @isos data class JsArray(val value: List<Json>) : Json() {
     override fun toJsonString(): String =
             value.map { it.toJsonString() }.joinToString(prefix = "[", separator = ",", postfix = "]")
 }
-@lenses data class JsObject(val value: Map<String, Json>) : Json() {
+@lenses @isos data class JsObject(val value: Map<String, Json>) : Json() {
+
+    companion object
 
     fun toList(): List<Tuple2<String, Json>> = value.toList().map { it.first toT it.second }
 
