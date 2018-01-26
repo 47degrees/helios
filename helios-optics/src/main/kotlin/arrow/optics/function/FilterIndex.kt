@@ -1,6 +1,5 @@
 package arrow.optics.function
 
-
 import arrow.HK
 import arrow.TC
 import arrow.core.Tuple2

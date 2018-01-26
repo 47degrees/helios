@@ -3,7 +3,10 @@ package helios.optics
 import arrow.optics.*
 import arrow.optics.function.index
 import helios.core.*
-
+import helios.typeclasses.Decoder
+import helios.typeclasses.Encoder
+import helios.typeclasses.decoder
+import helios.typeclasses.encoder
 
 data class JsonPath(val json: Optional<Json, Json>) {
 
@@ -24,6 +27,26 @@ data class JsonPath(val json: Optional<Json, Json>) {
     val `null`: Optional<Json, JsNull> = json compose jsonJsNull()
 
     fun select(field: String): JsonPath =
-        JsonPath(json compose jsonJsObject() compose index(field))
+            JsonPath(json compose jsonJsObject() compose index(field))
+
+    operator fun get(i: Int): JsonPath =
+            JsonPath(json compose jsonJsArray() compose index(i))
+
+    fun <A> to(DE: Decoder<A>, EN: Encoder<A>): Optional<Json, A> =
+            json compose parse(DE, EN)
 
 }
+
+inline fun <reified A> JsonPath.to(EN: Encoder<A> = encoder(), DE: Decoder<A> = decoder()): Optional<Json, A> =
+        json compose parse(DE, EN)
+
+/**
+ * Unsafe optic: needs some investigation because it is required to extract reasonable typed values from Json.
+ * https://github.com/circe/circe/blob/master/modules/optics/src/main/scala/io/circe/optics/JsonPath.scala#L152
+ */
+@PublishedApi internal fun <A> parse(DE: Decoder<A>, EN: Encoder<A>): Prism<Json, A> = Prism(
+        getOrModify = { json -> DE.decode(json).mapLeft { _ -> json } },
+        reverseGet = EN::encode
+)
+
+@PublishedApi internal inline fun <reified A> parse(EN: Encoder<A> = encoder(), DE: Decoder<A> = decoder()): Prism<Json, A> = parse(DE, EN)

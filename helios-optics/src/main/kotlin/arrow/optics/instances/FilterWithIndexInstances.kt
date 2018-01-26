@@ -10,7 +10,6 @@ import arrow.optics.function.filterIndex
 import arrow.optics.instances.listToListKW
 import arrow.optics.instances.stringToList
 
-
 @instance(ListKW::class)
 interface ListKWFilterIndexInstance<A> : FilterIndex<ListKWKind<A>, Int, A> {
     override fun filter(p: (Int) -> Boolean): Traversal<ListKWKind<A>, A> = FilterIndex.fromTraverse<ListKWHK, A>({ aas ->
