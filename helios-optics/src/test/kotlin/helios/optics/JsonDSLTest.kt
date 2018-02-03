@@ -26,7 +26,6 @@ class JsonDSLTest : UnitSpec() {
                 bGen = streetGen(),
                 funcGen = genFunctionAToB(streetGen()),
                 EQA = Eq.any(),
-                EQB = Eq.any(),
                 EQOptionB = Option.eq(Eq.any())
         ))
 
