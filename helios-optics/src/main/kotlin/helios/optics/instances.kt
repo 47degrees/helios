@@ -11,6 +11,7 @@ import arrow.optics.typeclasses.At
 import arrow.optics.typeclasses.Index
 import arrow.syntax.either.left
 import arrow.syntax.either.right
+import helios.core.JsArray
 import helios.core.JsObject
 import helios.core.Json
 
@@ -37,4 +38,12 @@ interface JsObjectAtInstance : At<JsObject, String, Option<Json>> {
             }
     )
 
+}
+
+@instance(JsArray::class)
+interface JsArrayIndexInstance : Index<JsArray, Int, Json> {
+    override fun index(i: Int): Optional<JsArray, Json> = Optional(
+            getOrModify = { it.value.getOrNull(i)?.right() ?: it.left() },
+            set = { js -> { jsArr -> jsArr.copy(jsArr.value.mapIndexed { index, t -> if (index == i) js else t }) } }
+    )
 }

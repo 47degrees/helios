@@ -4,7 +4,8 @@ import arrow.core.Either
 import arrow.optics.modify
 import helios.core.Json
 import helios.optics.JsonPath.Companion.root
-import helios.optics.selectGet
+import helios.optics.extract
+import helios.optics.selectExtract
 import helios.typeclasses.Decoder
 import helios.typeclasses.DecodingError
 import helios.typeclasses.decoder
@@ -41,10 +42,9 @@ fun main(args: Array<String>) {
         println("Successfully decode the json: $it")
     })
 
-    root.selectGet<String>("name").modify(companyJson) { chrs ->
+    root.selectExtract<String>("name").modify(companyJson) { chrs ->
         chrs.toUpperCase()
     }.let(::println)
 
-    root.selectGet<Address>("address").getOption(companyJson).let(::println)
-
+    root.select("address").select("street").selectExtract<String>("name").getOption(companyJson).let(::println)
 }
