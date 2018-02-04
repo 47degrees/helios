@@ -5,3 +5,6 @@ include ':helios-meta'
 include ':helios-core'
 include ':helios-parser'
 include ':helios-benchmarks'
+include ':helios-sample'
+include ':helios-optics'
+
