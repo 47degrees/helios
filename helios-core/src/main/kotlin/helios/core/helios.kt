@@ -238,6 +238,9 @@ data class JsDouble(val value: Double) : JsNumber() {
 }
 
 @lenses data class JsArray(val value: List<Json>) : Json() {
+
+    operator fun get(index: Int): Option<Json> = Option.fromNullable(value.getOrNull(index))
+
     override fun toJsonString(): String =
             value.map { it.toJsonString() }.joinToString(prefix = "[", separator = ",", postfix = "]")
 }
