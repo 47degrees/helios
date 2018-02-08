@@ -47,4 +47,7 @@ fun main(args: Array<String>) {
     }.let(::println)
 
     root.select("address").select("street").selectExtract<String>("name").getOption(companyJson).let(::println)
+
+    root.dynamic("address.street.name").string.getOption(companyJson).let(::println)
+
 }
