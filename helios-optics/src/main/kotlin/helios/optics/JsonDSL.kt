@@ -115,6 +115,28 @@ data class JsonPath(val json: Optional<Json, Json>) {
     fun <A> selectExtract(DE: Decoder<A>, EN: Encoder<A>, name: String): Optional<Json, A> =
             select(name).extract(DE, EN)
 
+    /**
+     * Dynamically select a path.
+     *
+     * example:
+     *{
+     *  "person": {
+     *    "id": 12345,
+     *    "name": "John Doe",
+     *    "phones": {
+     *      "home": "800-123-4567",
+     *      "mobile": "877-123-1234"
+     *    }
+     *  }
+     *}
+     *
+     *To select home phone: dynamic("person.phones.home")
+     *
+     * @param path dot notation path
+     */
+    fun dynamic(path: String): JsonPath =
+            path.split(".").fold(this) { jsPath, str -> jsPath.select(str) }
+
 }
 
 /**
