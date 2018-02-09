@@ -1,16 +1,10 @@
 package helios.optics
 
-import arrow.core.Option
+import arrow.core.*
 import arrow.optics.*
-import arrow.optics.typeclasses.At
-import arrow.optics.typeclasses.Index
-import arrow.optics.typeclasses.at
-import arrow.optics.typeclasses.index
+import arrow.optics.typeclasses.*
 import helios.core.*
-import helios.typeclasses.Decoder
-import helios.typeclasses.Encoder
-import helios.typeclasses.decoder
-import helios.typeclasses.encoder
+import helios.typeclasses.*
 
 /**
  * [JsonPath] is a Json DSL based on Arrow-Optics (http://arrow-kt.io/docs/optics/iso/).
@@ -84,7 +78,7 @@ data class JsonPath(val json: Optional<Json, Json>) {
     /**
      * Select field with [name] in [JsObject] from path.
      */
-    fun select(name: String): JsonPath = JsonPath(json compose jsonJsObject() compose Index.index(name))
+    fun select(name: String) = JsonPath(json compose jsonJsObject() compose Index.index(name))
 
     /**
      * Extract field with [name] from [JsObject] from path.
@@ -94,7 +88,7 @@ data class JsonPath(val json: Optional<Json, Json>) {
     /**
      *  Get element at index [i] from [JsArray].
      */
-    operator fun get(i: Int): JsonPath = JsonPath(json compose jsonJsArray() compose Index.index(i))
+    operator fun get(i: Int) = JsonPath(json compose jsonJsArray() compose Index.index(i))
 
     /**
      * Extract [A] from path.
@@ -107,6 +101,21 @@ data class JsonPath(val json: Optional<Json, Json>) {
      */
     fun <A> selectExtract(DE: Decoder<A>, EN: Encoder<A>, name: String): Optional<Json, A> =
             select(name).extract(DE, EN)
+
+    /**
+     * Select every entry in [JsObject] or [JsArray].
+     */
+    fun every() = JsonTraversalPath(json compose jsonDescendants)
+
+    /**
+     * Filter [JsArray] by indices that satisfy the predicate [p].
+     */
+    fun filterIndex(p: Predicate<Int>) = JsonTraversalPath(array compose FilterIndex.filterIndex(p = p))
+
+    /**
+     * Filter [JsObject] by keys that satisfy the predicate [p].
+     */
+    fun filterKeys(p: Predicate<String>) = JsonTraversalPath(`object` compose FilterIndex.filterIndex(p = p))
 
 }
 

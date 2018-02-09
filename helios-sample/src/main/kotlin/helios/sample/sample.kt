@@ -1,6 +1,7 @@
 package helios.sample
 
 import arrow.core.Either
+import arrow.optics.Traversal
 import arrow.optics.modify
 import helios.core.Json
 import helios.optics.JsonPath.Companion.root
@@ -22,10 +23,12 @@ const val companyJsonString = """
   },
   "employees": [
     {
-      "name": "John doe"
+      "name": "John",
+      "lastName": "doe"
     },
     {
-      "name": "Jane doe"
+      "name": "Jane",
+      "lastName": "doe"
     }
   ]
 }"""
@@ -47,4 +50,17 @@ fun main(args: Array<String>) {
     }.let(::println)
 
     root.select("address").select("street").selectExtract<String>("name").getOption(companyJson).let(::println)
+
+    val employeeLastNames: Traversal<Json, String> = root.select("employees").every().select("lastName").extract()
+
+    employeeLastNames.modify(companyJson, String::capitalize).let {
+        employeeLastNames.getAll(it)
+    }.let(::println)
+
+    root.select("employees").filterIndex { it == 0 }.select("name").extract<String>()
+            .getAll(companyJson).let(::println)
+
+    root.select("employees").every().filterKeys { it == "name" }
+            .string.getAll(companyJson).let(::println)
+
 }
