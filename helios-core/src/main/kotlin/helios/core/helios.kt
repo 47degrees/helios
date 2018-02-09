@@ -248,12 +248,17 @@ const val MinLongString = "-9223372036854775808"
 }
 
 @lenses @isos data class JsObject(val value: Map<String, Json>) : Json() {
+
+    companion object {
+        operator fun invoke(vararg keyValues: Pair<String, Json>) = JsObject(keyValues.toMap())
+        operator fun invoke(vararg keyValues: Tuple2<String, Json>) = JsObject(keyValues.map { it.a to it.b }.toMap())
+    }
+
     fun toList(): List<Tuple2<String, Json>> = value.toList().map { it.first toT it.second }
 
     override fun toJsonString(): String =
             value.map { (k, v) -> """"$k":${v.toJsonString()}""" }.joinToString(prefix = "{", separator = ",", postfix = "}")
 
-    companion object
 }
 
 object JsNull : Json() {
