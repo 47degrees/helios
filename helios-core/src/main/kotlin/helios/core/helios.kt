@@ -93,7 +93,7 @@ const val MinLongString = "-9223372036854775808"
                 lhs.toList().fold(rhs) { acc, (key, value) ->
                     rhs[key].fold({ acc.add(key, value) }, { r -> acc.add(key, value.merge(r)) })
                 }
-            }).ev().getOrElse { that }
+            }).reify().getOrElse { that }
 
     abstract fun toJsonString(): String
 

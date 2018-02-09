@@ -59,7 +59,7 @@ class JsonFileGenerator(
 
     private fun createInstance(je: JsonElement): String = """|Either.applicative<DecodingError>().map(${je.pairs.map { (p, t) -> "value[\"$p\"].fold({Either.Left(KeyNotFound(\"$p\"))}, { decoder<$t>().decode(it)})" }.joinToString(prefix = "\n\t", separator = ",\n\t", postfix = "\n")}, { ${je.pairs.map { (p, _) -> p }.joinToString(prefix = if (je.pairs.size > 1) "(" else "", separator = ",", postfix = if (je.pairs.size > 1) ")" else "")} ->
             |  ${je.name}(${je.pairs.map { (p, _) -> "$p = $p" }.joinToString(",")})
-            |}).ev()
+            |}).reify()
             |""".trimMargin()
 
     private fun genToJson(je: JsonElement): String =
