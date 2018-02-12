@@ -105,7 +105,7 @@ data class JsonPath(val json: Optional<Json, Json>) {
     /**
      * Select every entry in [JsObject] or [JsArray].
      */
-    fun every() = JsonTraversalPath(json compose jsonDescendants)
+    fun every() = JsonTraversalPath(json compose jsonTraversal)
 
     /**
      * Filter [JsArray] by indices that satisfy the predicate [p].

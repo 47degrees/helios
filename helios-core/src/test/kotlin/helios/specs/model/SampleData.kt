@@ -1,6 +1,7 @@
 package helios.specs.model
 
 import arrow.core.Either
+import arrow.core.fix
 import arrow.deriving
 import arrow.higherkind
 import arrow.isos
@@ -37,17 +38,17 @@ class GenA<A>(val value: Gen<A>) : GenAOf<A>, Gen<A> by value {
             GenA(value.map(f))
 
     fun <B> flatMap(f: (A) -> GenAOf<B>): GenA<B> =
-            map(f).value.generate().reify()
+            map(f).value.generate().fix()
 
     fun <B> ap(ff: GenAOf<(A) -> B>): GenA<B> =
-            ff.reify().flatMap { this.reify().map(it) }
+            ff.fix().flatMap { this.fix().map(it) }
 
     companion object {
         fun <A> pure(a: A): GenA<A> =
                 GenA(Gen.create { a })
 
         tailrec fun <A, B> tailRecM(a: A, f: (A) -> GenAOf<Either<A, B>>): GenA<B> {
-            val r = f(a).reify()
+            val r = f(a).fix()
             val genValue = r.value.generate()
             return when (genValue) {
                 is Either.Left<A, B> -> tailRecM(genValue.a, f)
@@ -71,7 +72,7 @@ object GenFriend : Gen<Friend> {
                     Gen.string().k(),
                     Gen.string().k(),
                     friendIso()::reverseGet
-            ).reify().generate()
+            ).fix().generate()
 
 }
 

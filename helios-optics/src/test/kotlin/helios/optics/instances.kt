@@ -4,6 +4,7 @@ import arrow.core.None
 import arrow.core.Option
 import arrow.core.orElse
 import arrow.optics.typeclasses.at
+import arrow.optics.typeclasses.each
 import arrow.optics.typeclasses.index
 import arrow.test.UnitSpec
 import arrow.test.generators.genFunctionAToB

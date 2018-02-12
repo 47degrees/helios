@@ -9,6 +9,7 @@ import arrow.optics.Lens
 import arrow.optics.Optional
 import arrow.optics.Traversal
 import arrow.optics.typeclasses.At
+import arrow.optics.typeclasses.Each
 import arrow.optics.typeclasses.Index
 import arrow.syntax.either.left
 import arrow.syntax.either.right
