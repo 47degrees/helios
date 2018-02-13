@@ -5,6 +5,7 @@ import arrow.core.Option
 import arrow.core.orElse
 import arrow.optics.typeclasses.at
 import arrow.optics.typeclasses.each
+import arrow.optics.typeclasses.filterIndex
 import arrow.optics.typeclasses.index
 import arrow.test.UnitSpec
 import arrow.test.generators.genFunctionAToB
@@ -32,6 +33,7 @@ class InstancesTest : UnitSpec() {
             index<JsArray, Int, Json>().index(1) shouldNotBe null
             each<JsObject, Json>().each() shouldNotBe null
             each<JsArray, Json>().each() shouldNotBe null
+            filterIndex<List<Json>, Int, Json>() shouldNotBe null
             at<JsObject, String, Option<Json>>().at("one") shouldNotBe null
         }
 

@@ -19,6 +19,7 @@ import helios.core.JsObject
 import helios.core.JsString
 import helios.optics.JsonPath.Companion.root
 import helios.typeclasses.decoder
+import helios.typeclasses.encoder
 
 import io.kotlintest.KTestJUnitRunner
 import io.kotlintest.matchers.shouldBe
@@ -42,105 +43,105 @@ class JsonDSLTest : UnitSpec() {
 
         "bool prism" {
             forAll(genJsBoolean()) { jsBool ->
-                JsonPath.root.boolean.getOption(jsBool) == jsBool.value.some()
+                JsonPath.root.boolean.fix().getOption(jsBool) == jsBool.value.some()
             }
 
-            JsonPath.root.boolean.getOption(JsString("false")) shouldBe none<Boolean>()
+            JsonPath.root.boolean.fix().getOption(JsString("false")) shouldBe none<Boolean>()
         }
 
         "string prism" {
             forAll(genJsString()) { jsString ->
-                JsonPath.root.string.getOption(jsString) == jsString.value.some()
+                JsonPath.root.string.fix().getOption(jsString) == jsString.value.some()
             }
 
-            JsonPath.root.string.getOption(JsFalse) shouldBe none<String>()
+            JsonPath.root.string.fix().getOption(JsFalse) shouldBe none<String>()
         }
 
         "number prism" {
             forAll(genJsNumber()) { jsNumber ->
-                JsonPath.root.number.getOption(jsNumber) == jsNumber.some()
+                JsonPath.root.number.fix().getOption(jsNumber) == jsNumber.some()
             }
 
-            JsonPath.root.number.getOption(JsFalse) shouldBe none<JsNumber>()
+            JsonPath.root.number.fix().getOption(JsFalse) shouldBe none<JsNumber>()
         }
 
         "decimal prism" {
             forAll(genJsDecimal()) { jsDecimal ->
-                JsonPath.root.decimal.getOption(jsDecimal) == jsDecimal.value.some()
+                JsonPath.root.decimal.fix().getOption(jsDecimal) == jsDecimal.value.some()
             }
 
-            JsonPath.root.decimal.getOption(JsFalse) shouldBe none<JsDecimal>()
+            JsonPath.root.decimal.fix().getOption(JsFalse) shouldBe none<JsDecimal>()
         }
 
         "long prism" {
             forAll(genJsLong()) { jsLong ->
-                JsonPath.root.long.getOption(jsLong) == jsLong.value.some()
+                JsonPath.root.long.fix().getOption(jsLong) == jsLong.value.some()
             }
 
-            JsonPath.root.long.getOption(JsFalse) shouldBe none<JsLong>()
+            JsonPath.root.long.fix().getOption(JsFalse) shouldBe none<JsLong>()
         }
 
         "float prism" {
             forAll(genJsFloat()) { jsFloat ->
-                JsonPath.root.float.getOption(jsFloat) == jsFloat.value.some()
+                JsonPath.root.float.fix().getOption(jsFloat) == jsFloat.value.some()
             }
 
-            JsonPath.root.float.getOption(JsFalse) shouldBe none<JsFloat>()
+            JsonPath.root.float.fix().getOption(JsFalse) shouldBe none<JsFloat>()
         }
 
         "int prism" {
             forAll(genJsInt()) { jsInt ->
-                JsonPath.root.int.getOption(jsInt) == jsInt.value.some()
+                JsonPath.root.int.fix().getOption(jsInt) == jsInt.value.some()
             }
 
-            JsonPath.root.int.getOption(JsString("5")) shouldBe none<Int>()
+            JsonPath.root.int.fix().getOption(JsString("5")) shouldBe none<Int>()
         }
 
         "array prism" {
             forAll(genJsArray()) { jsArray ->
-                JsonPath.root.array.getOption(jsArray) == jsArray.value.some()
+                JsonPath.root.array.fix().getOption(jsArray) == jsArray.value.some()
             }
 
-            JsonPath.root.array.getOption(JsString("5")) shouldBe none<JsArray>()
+            JsonPath.root.array.fix().getOption(JsString("5")) shouldBe none<JsArray>()
         }
 
         "object prism" {
             forAll(genJsObject()) { jsObj ->
-                JsonPath.root.`object`.getOption(jsObj) == jsObj.value.some()
+                JsonPath.root.`object`.fix().getOption(jsObj) == jsObj.value.some()
             }
 
-            JsonPath.root.`object`.getOption(JsString("5")) shouldBe none<JsObject>()
+            JsonPath.root.`object`.fix().getOption(JsString("5")) shouldBe none<JsObject>()
         }
 
         "null prism" {
             forAll(genJsNull()) { jsNull ->
-                JsonPath.root.`null`.getOption(jsNull) == jsNull.some()
+                JsonPath.root.`null`.fix().getOption(jsNull) == jsNull.some()
             }
 
-            JsonPath.root.`null`.getOption(JsString("5")) shouldBe none<JsNull>()
+            JsonPath.root.`null`.fix().getOption(JsString("5")) shouldBe none<JsNull>()
         }
 
         "at from object" {
             forAll(genJson(genCity())) { cityJson ->
-                root.at("streets").getOption(cityJson).flatten() == cityJson["streets"]
+                root.at("streets").fix().getOption(cityJson).flatten() == cityJson["streets"]
             }
         }
 
         "select from object" {
             forAll(genJson(genCity())) { cityJson ->
-                root.select("streets").json.getOption(cityJson) == cityJson["streets"]
+                root.select("streets").json.fix().getOption(cityJson) == cityJson["streets"]
             }
         }
 
         "extract from object" {
             forAll(genJson(genCity())) { cityJson ->
-                root.extract<City>().getOption(cityJson) == decoder<City>().decode(cityJson).toOption()
+                JsonPath.root.extract<City>(decoder(), encoder()).fix().getOption(cityJson) == decoder<City>().decode(cityJson).toOption()
             }
         }
 
         "get from array" {
             forAll(genJson(genCity())) { cityJson ->
-                JsonPath.root.select("streets")[0].extract<Street>().getOption(cityJson) ==
+                JsonPath.root.select("streets")[0].extract<Street>(decoder(), encoder()).fix().getOption(cityJson) ==
                         decoder<City>().decode(cityJson).toOption().flatMap { Option.fromNullable(it.streets.getOrNull(0)) }
             }
         }
