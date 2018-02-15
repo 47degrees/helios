@@ -45,39 +45,45 @@ fun main(args: Array<String>) {
         println("Successfully decode the json: $it")
     })
 
-    root.name().string.fix().modify(companyJson, String::toUpperCase).let(::println)
+    root.name.string.fix().modify(companyJson, String::toUpperCase).let(::println)
 
-    root.address().street().name().string.fix().getOption(companyJson).let(::println)
+    root.address.street.name.string.fix().getOption(companyJson).let(::println)
 
-    val employeeLastNames: Traversal<Json, String> = root.employees().every().lastName().string.fix()
+    val employeeLastNames: Traversal<Json, String> = root.employees.every().lastName.string.fix()
 
     employeeLastNames.modify(companyJson, String::capitalize).let {
         employeeLastNames.getAll(it)
     }.let(::println)
 
-    root.employees().filterIndex { it == 0 }.select("name").string.getAll(companyJson).let(::println)
+    root.employees.filterIndex { it == 0 }.select("name").string.getAll(companyJson).let(::println)
 
-    root.employees().every().filterKeys { it == "name" }.string.getAll(companyJson).let(::println)
+    root.employees.every().filterKeys { it == "name" }.string.getAll(companyJson).let(::println)
 
 }
 
 /**
  * Generated code for Company
  */
-fun <F> JsonPathFunctions<F>.name(): JsonPathFunctions<F> = select("name")
-fun <F> JsonPathFunctions<F>.address(): JsonPathFunctions<F> = select("address")
-fun <F> JsonPathFunctions<F>.employees(): JsonPathFunctions<F> = select("employees")
+val <F> JsonPathFunctions<F>.name: JsonPathFunctions<F>
+    get() = select("name")
+val <F> JsonPathFunctions<F>.address: JsonPathFunctions<F>
+    get() = select("address")
+val <F> JsonPathFunctions<F>.employees: JsonPathFunctions<F>
+    get() = select("employees")
 
 /**
  * Generated code for Address
  */
-fun <F> JsonPathFunctions<F>.city(): JsonPathFunctions<F> = select("city")
-fun <F> JsonPathFunctions<F>.street(): JsonPathFunctions<F> = select("street")
+val <F> JsonPathFunctions<F>.city: JsonPathFunctions<F>
+    get() = select("city")
+val <F> JsonPathFunctions<F>.street: JsonPathFunctions<F>
+    get() = select("street")
 
 /**
  * Generated code for Street
  */
-fun <F> JsonPathFunctions<F>.number(): JsonPathFunctions<F> = select("number")
+val <F> JsonPathFunctions<F>.number: JsonPathFunctions<F>
+    get() = select("number")
 //fun <F> JsonPathFunctions<F>.name(): JsonPathFunctions<F> = select("name") <-- conflict with Company.name && Employee.name
 
 
@@ -85,4 +91,5 @@ fun <F> JsonPathFunctions<F>.number(): JsonPathFunctions<F> = select("number")
  * Generated code for Employee
  */
 //fun <F> JsonPathFunctions<F>.name(): JsonPathFunctions<F> = select("name") <-- conflict with Company.name && Street.name
-fun <F> JsonPathFunctions<F>.lastName(): JsonPathFunctions<F> = select("lastName")
+val <F> JsonPathFunctions<F>.lastName: JsonPathFunctions<F>
+    get() = select("lastName")
