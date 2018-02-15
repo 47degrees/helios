@@ -1,8 +1,8 @@
 package helios.optics
 
 import arrow.Kind
+import arrow.Kind3
 import arrow.core.identity
-import arrow.optics.Traversal
 import arrow.optics.typeclasses.each
 import arrow.typeclasses.Applicative
 import helios.core.JsArray
@@ -22,4 +22,16 @@ val jsonTraversal = object : Traversal<Json, Json> {
             { FA.pure(it) },
             { FA.pure(JsNull) }
     )
+}
+
+typealias Kind4<F, A, B, C, D> = Kind<Kind3<F, A, B, C>, D>
+
+fun <S, T, A, B> arrow.optics.POptional<S, T, A, B>.asHPOptional(): POptional<S, T, A, B> = POptional(
+        getOrModify = this::getOrModify,
+        set = { b -> { s -> this.set(s, b) } }
+)
+
+fun <S, T, A, B> arrow.optics.PTraversal<S, T, A, B>.asHPTraversal() = object : PTraversal<S, T, A, B> {
+    override fun <F> modifyF(FA: Applicative<F>, s: S, f: (A) -> Kind<F, B>): Kind<F, T> =
+            this@asHPTraversal.modifyF(FA, s, f)
 }
