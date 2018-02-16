@@ -7,6 +7,8 @@ import arrow.optics.typeclasses.Index
 import arrow.optics.typeclasses.at
 import arrow.optics.typeclasses.index
 import helios.core.*
+import helios.instances.StringDecoderInstance
+import helios.instances.StringEncoderInstance
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
 import helios.typeclasses.decoder
@@ -37,34 +39,39 @@ data class JsonPath(val json: Optional<Json, Json>) {
     val boolean: Optional<Json, Boolean> = json compose jsonJsBoolean() compose jsBooleanIso()
 
     /**
+     * Extract value as [CharSequence] from path.
+     */
+    val charseq: Optional<Json, CharSequence> = json compose jsonJsString() compose jsStringIso()
+
+    /**
      * Extract value as [String] from path.
      */
-    val string: Optional<Json, CharSequence> = json compose jsonJsString() compose jsStringIso()
+    val string: Optional<Json, String> = extract(StringEncoderInstance, StringDecoderInstance)
 
     /**
      * Extract value as [JsNumber] from path.
      */
-    val number: Optional<Json, JsNumber> = json compose jsonJsNumber()
+    val jsnumber: Optional<Json, JsNumber> = json compose jsonJsNumber()
 
     /**
      * Extract value as [JsDecimal] from path.
      */
-    val decimal: Optional<Json, String> = number compose jsNumberJsDecimal() compose jsDecimalIso()
+    val decimal: Optional<Json, String> = jsnumber compose jsNumberJsDecimal() compose jsDecimalIso()
 
     /**
      * Extract value as [Long] from path.
      */
-    val long: Optional<Json, Long> = number compose jsNumberJsLong() compose jsLongIso()
+    val long: Optional<Json, Long> = jsnumber compose jsNumberJsLong() compose jsLongIso()
 
     /**
      * Extract value as [Float] from path.
      */
-    val float: Optional<Json, Float> = number compose jsNumberJsFloat() compose jsFloatIso()
+    val float: Optional<Json, Float> = jsnumber compose jsNumberJsFloat() compose jsFloatIso()
 
     /**
      * Extract value as [Int] from path.
      */
-    val int: Optional<Json, Int> = number compose jsNumberJsInt() compose jsIntIso()
+    val int: Optional<Json, Int> = jsnumber compose jsNumberJsInt() compose jsIntIso()
 
     /**
      * Extract [JsArray] as `List<Json>` from path.

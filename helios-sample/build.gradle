@@ -5,6 +5,7 @@ dependencies {
 
     kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
     kapt project(':helios-meta-compiler')
+    kapt project(':helios-dsl-syntax-compiler')
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
