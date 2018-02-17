@@ -4,6 +4,8 @@ import arrow.core.*
 import arrow.optics.*
 import arrow.optics.typeclasses.*
 import helios.core.*
+import helios.instances.StringDecoderInstance
+import helios.instances.StringEncoderInstance
 import helios.typeclasses.*
 
 data class JsonTraversalPath(val json: Traversal<Json, Json>) {
@@ -14,34 +16,39 @@ data class JsonTraversalPath(val json: Traversal<Json, Json>) {
     val boolean: Traversal<Json, Boolean> = json compose jsonJsBoolean() compose jsBooleanIso()
 
     /**
+     * Extract value as [CharSequence] from path.
+     */
+    val charseq: Traversal<Json, CharSequence> = json compose jsonJsString() compose jsStringIso()
+
+    /**
      * Extract value as [String] from path.
      */
-    val string: Traversal<Json, CharSequence> = json compose jsonJsString() compose jsStringIso()
+    val string: Traversal<Json, String> = extract(StringEncoderInstance, StringDecoderInstance)
 
     /**
      * Extract value as [JsNumber] from path.
      */
-    val number: Traversal<Json, JsNumber> = json compose jsonJsNumber()
+    val jsnumber: Traversal<Json, JsNumber> = json compose jsonJsNumber()
 
     /**
      * Extract value as [JsDecimal] from path.
      */
-    val decimal: Traversal<Json, String> = number compose jsNumberJsDecimal() compose jsDecimalIso()
+    val decimal: Traversal<Json, String> = jsnumber compose jsNumberJsDecimal() compose jsDecimalIso()
 
     /**
      * Extract value as [Long] from path.
      */
-    val long: Traversal<Json, Long> = number compose jsNumberJsLong() compose jsLongIso()
+    val long: Traversal<Json, Long> = jsnumber compose jsNumberJsLong() compose jsLongIso()
 
     /**
      * Extract value as [Float] from path.
      */
-    val float: Traversal<Json, Float> = number compose jsNumberJsFloat() compose jsFloatIso()
+    val float: Traversal<Json, Float> = jsnumber compose jsNumberJsFloat() compose jsFloatIso()
 
     /**
      * Extract value as [Int] from path.
      */
-    val int: Traversal<Json, Int> = number compose jsNumberJsInt() compose jsIntIso()
+    val int: Traversal<Json, Int> = jsnumber compose jsNumberJsInt() compose jsIntIso()
 
     /**
      * Extract [JsArray] as `List<Json>` from path.
