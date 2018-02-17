@@ -31,23 +31,23 @@ data class Friend(
         Applicative::class,
         Monad::class
 )
-class GenA<A>(val value: Gen<A>) : GenAKind<A>, Gen<A> by value {
+class GenA<A>(val value: Gen<A>) : GenAOf<A>, Gen<A> by value {
 
     fun <B> map(f: (A) -> B): GenA<B> =
             GenA(value.map(f))
 
-    fun <B> flatMap(f: (A) -> GenAKind<B>): GenA<B> =
-            map(f).value.generate().ev()
+    fun <B> flatMap(f: (A) -> GenAOf<B>): GenA<B> =
+            map(f).value.generate().fix()
 
-    fun <B> ap(ff: GenAKind<(A) -> B>): GenA<B> =
-            ff.ev().flatMap { this.ev().map(it) }
+    fun <B> ap(ff: GenAOf<(A) -> B>): GenA<B> =
+            ff.fix().flatMap { this.fix().map(it) }
 
     companion object {
         fun <A> pure(a: A): GenA<A> =
                 GenA(Gen.create { a })
 
-        tailrec fun <A, B> tailRecM(a: A, f: (A) -> GenAKind<Either<A, B>>): GenA<B> {
-            val r = f(a).ev()
+        tailrec fun <A, B> tailRecM(a: A, f: (A) -> GenAOf<Either<A, B>>): GenA<B> {
+            val r = f(a).fix()
             val genValue = r.value.generate()
             return when (genValue) {
                 is Either.Left<A, B> -> tailRecM(genValue.a, f)
@@ -71,7 +71,7 @@ object GenFriend : Gen<Friend> {
                     Gen.string().k(),
                     Gen.string().k(),
                     friendIso()::reverseGet
-            ).ev().generate()
+            ).fix().generate()
 
 }
 
