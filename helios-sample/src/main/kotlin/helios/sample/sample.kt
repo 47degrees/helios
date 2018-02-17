@@ -4,9 +4,7 @@ import arrow.core.Either
 import arrow.optics.Traversal
 import arrow.optics.modify
 import helios.core.Json
-import helios.optics.JsonPath.Companion.root
-import helios.optics.extract
-import helios.optics.selectExtract
+import helios.optics.JsonPath
 import helios.typeclasses.Decoder
 import helios.typeclasses.DecodingError
 import helios.typeclasses.decoder
@@ -35,8 +33,9 @@ const val companyJsonString = """
 
 fun main(args: Array<String>) {
 
-    val companyDecoder: Decoder<Company> = decoder()
     val companyJson: Json = Json.parseUnsafe(companyJsonString)
+
+    val companyDecoder: Decoder<Company> = decoder()
     val errorOrCompany: Either<DecodingError, Company> = companyDecoder.decode(companyJson)
 
     errorOrCompany.fold({
@@ -45,22 +44,20 @@ fun main(args: Array<String>) {
         println("Successfully decode the json: $it")
     })
 
-    root.selectExtract<String>("name").modify(companyJson) { chrs ->
-        chrs.toUpperCase()
-    }.let(::println)
+    JsonPath.root.select("name").string.modify(companyJson, String::toUpperCase).let(::println)
+    JsonPath.root.name.string.modify(companyJson, String::toUpperCase).let(::println)
 
-    root.select("address").select("street").selectExtract<String>("name").getOption(companyJson).let(::println)
+    JsonPath.root.select("address").select("street").select("name").string.getOption(companyJson).let(::println)
+    JsonPath.root.address.street.name.string.getOption(companyJson).let(::println)
 
-    val employeeLastNames: Traversal<Json, String> = root.select("employees").every().select("lastName").extract()
+    val employeeLastNames: Traversal<Json, String> = JsonPath.root.select("employees").every().select("lastName").extract()
 
     employeeLastNames.modify(companyJson, String::capitalize).let {
         employeeLastNames.getAll(it)
     }.let(::println)
 
-    root.select("employees").filterIndex { it == 0 }.select("name").extract<String>()
-            .getAll(companyJson).let(::println)
+    JsonPath.root.select("employees").filterIndex { it == 0 }.select("name").extract<String>().getAll(companyJson).let(::println)
 
-    root.select("employees").every().filterKeys { it == "name" }
-            .string.getAll(companyJson).let(::println)
+    JsonPath.root.select("employees").every().filterKeys { it == "name" }.string.getAll(companyJson).let(::println)
 
 }
