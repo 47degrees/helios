@@ -7,5 +7,5 @@ include ':helios-parser'
 include ':helios-benchmarks'
 include ':helios-sample'
 include ':helios-optics'
-include 'helios-dsl-syntax-compiler'
-
+include ':helios-dsl-syntax-compiler'
+include ':helios-retrofit-converter'
