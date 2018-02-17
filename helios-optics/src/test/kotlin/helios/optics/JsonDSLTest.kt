@@ -58,10 +58,10 @@ class JsonDSLTest : UnitSpec() {
 
         "number prism" {
             forAll(genJsNumber()) { jsNumber ->
-                JsonPath.root.number.getOption(jsNumber) == jsNumber.some()
+                JsonPath.root.jsnumber.getOption(jsNumber) == jsNumber.some()
             }
 
-            JsonPath.root.number.getOption(JsFalse) shouldBe none<JsNumber>()
+            JsonPath.root.jsnumber.getOption(JsFalse) shouldBe none<JsNumber>()
         }
 
         "decimal prism" {
