@@ -26,7 +26,7 @@ buildscript {
         kotlinVersion = '1.2.20'
         kotlinxCoroutinesVersion = '0.20'
         kotlinxCollectionsImmutableVersion = '0.1'
-        arrowVersion = '0.6.1'
+        arrowVersion = '0.6.2-SNAPSHOT'
     }
 
     repositories {

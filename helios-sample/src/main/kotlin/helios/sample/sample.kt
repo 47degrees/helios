@@ -30,8 +30,9 @@ const val companyJsonString = """
 
 fun main(args: Array<String>) {
 
-    val companyDecoder: Decoder<Company> = decoder()
     val companyJson: Json = Json.parseUnsafe(companyJsonString)
+
+    val companyDecoder: Decoder<Company> = decoder()
     val errorOrCompany: Either<DecodingError, Company> = companyDecoder.decode(companyJson)
 
     errorOrCompany.fold({
@@ -40,8 +41,10 @@ fun main(args: Array<String>) {
         println("Successfully decode the json: $it")
     })
 
+    JsonPath.root.select("name").string.modify(companyJson, String::toUpperCase).let(::println)
     JsonPath.root.name.string.modify(companyJson, String::toUpperCase).let(::println)
 
+    JsonPath.root.select("address").select("street").select("name").string.getOption(companyJson).let(::println)
     JsonPath.root.address.street.name.string.getOption(companyJson).let(::println)
 
 }

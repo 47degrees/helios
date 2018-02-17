@@ -2,7 +2,7 @@ package java_util
 
 import arrow.core.Either
 import arrow.core.applicative
-import arrow.core.ev
+import arrow.core.fix
 import arrow.core.identity
 import arrow.data.k
 import helios.core.*
@@ -32,7 +32,7 @@ interface ListDecoderInstance<A> : Decoder<List<A>> {
             value.asJsArray().toList()
                     .flatMap {
                         it.value.map { decoderA().decode(it) }
-                    }.k().traverse(::identity, Either.applicative()).ev().map { it.list }
+                    }.k().traverse(::identity, Either.applicative()).fix().map { it.list }
 }
 
 object ListDecoderInstanceImplicits {
