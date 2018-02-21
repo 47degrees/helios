@@ -17,9 +17,6 @@ import arrow.syntax.option.toOption
 import helios.core.JsInt
 import helios.core.JsObject
 import helios.core.Json
-import helios.core.jsStringIso
-import helios.core.jsonJsObject
-import helios.core.jsonJsString
 
 data class JsonDynamicPathPath(val json: Optional<Either<PathNotFound, Json>, Either<PathNotFound, Json>>) {
 
@@ -39,7 +36,6 @@ data class JsonDynamicPathPath(val json: Optional<Either<PathNotFound, Json>, Ei
     fun select(name: String): JsonDynamicPathPath = JsonDynamicPathPath(json compose dynamicIndex().index(name))
 
 }
-
 
 data class PathNotFound(val value: String)
 

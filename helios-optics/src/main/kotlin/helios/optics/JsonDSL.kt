@@ -119,7 +119,7 @@ data class JsonPath(val json: Optional<Json, Json>) {
      * Dynamically select a path.
      *
      * example:
-     *{
+     * {
      *  "person": {
      *    "id": 12345,
      *    "name": "John Doe",
@@ -128,7 +128,7 @@ data class JsonPath(val json: Optional<Json, Json>) {
      *      "mobile": "877-123-1234"
      *    }
      *  }
-     *}
+     * }
      *
      *To select home phone: dynamic("person.phones.home")
      *

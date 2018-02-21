@@ -43,5 +43,4 @@ class JsonDslSyntaxProcessor : AbstractProcessor() {
         return JsonAnnotated(element, proto)
     }
 
-
 }

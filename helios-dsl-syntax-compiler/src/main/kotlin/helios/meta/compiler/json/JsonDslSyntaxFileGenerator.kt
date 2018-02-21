@@ -2,8 +2,6 @@ package helios.meta.compiler.json
 
 import arrow.common.Package
 import arrow.common.utils.ClassOrPackageDataWrapper
-import arrow.common.utils.extractFullName
-import arrow.common.utils.removeBackticks
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.serialization.ProtoBuf
 import org.jetbrains.kotlin.serialization.deserialization.NameResolver

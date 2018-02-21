@@ -47,7 +47,6 @@ fun main(args: Array<String>) {
     JsonPath.root.select("address").select("street").select("name").string.getOption(companyJson).let(::println)
     JsonPath.root.address.street.name.string.getOption(companyJson).let(::println)
 
-
     JsonPath.root.dynamic("address.street.name").charseq.getOption(companyJson).let(::println) //Some(Right(b=Functional street))
 
     JsonPath.root.dynamic("blabla.street.name").charseq.getOption(companyJson).let(::println) //Some(Left(a=PathNotFound(value=blabla)))
