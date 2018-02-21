@@ -1,6 +1,8 @@
 package helios.optics
 
+import arrow.core.Either
 import arrow.core.Option
+import arrow.core.Right
 import arrow.data.getOption
 import arrow.data.k
 import arrow.data.updated
