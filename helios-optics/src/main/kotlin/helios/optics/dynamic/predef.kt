@@ -2,6 +2,7 @@ package helios.optics.dynamic
 
 import arrow.core.Either
 import arrow.core.Left
+import arrow.core.Option
 import arrow.core.Right
 import arrow.core.getOrElse
 import arrow.core.identity
@@ -14,12 +15,11 @@ import arrow.syntax.either.left
 import arrow.syntax.either.right
 import arrow.syntax.option.toEither
 import arrow.syntax.option.toOption
-import helios.core.JsInt
 import helios.core.JsObject
 import helios.core.Json
 
 sealed class JsonPathFailure
-data class PathNotFound(val value: String): JsonPathFailure()
+data class PathNotFound(val value: String) : JsonPathFailure()
 object TypeExtractionFailed: JsonPathFailure()
 
 internal val dynamicIndex = object : Index<Either<PathNotFound, Json>, String, Either<PathNotFound, Json>> {
@@ -45,41 +45,27 @@ internal val dynamicIndex = object : Index<Either<PathNotFound, Json>, String, E
     )
 }
 
-val rightJson: Optional<Json, Either<PathNotFound, Json>> = POptional(
+internal val rightJson: Optional<Json, Either<PathNotFound, Json>> = POptional(
         getOrModify = { Right(it.right()) },
         set = { pathOrJson -> { json -> pathOrJson.fold({ json }, ::identity) } }
 )
 
-val dynamicJson: Optional<PathNotFound, Json> = POptional(
+internal val dynamicJson: Optional<PathNotFound, Json> = POptional(
         getOrModify = { it.left() },
         set = { _ -> { it } }
 )
 
-val jsonAsString: Optional<Either<PathNotFound, Json>, Either<PathNotFound, CharSequence>> = POptional(
-        getOrModify = { pathOrJson -> pathOrJson.fold({ Right(it.left()) }, { it.asJsString().map { Right(it.value.right()) as Either<Either<PathNotFound, Json>, Either<PathNotFound, CharSequence>> }.getOrElse { Left(pathOrJson) } }) },
+internal fun <A> jsonAs(fromJson: (Json) -> Option<A>, toJson: (A) -> Json): Optional<Either<PathNotFound, Json>, Either<PathNotFound, A>> = POptional(
+        getOrModify = { pathOrJson ->
+            pathOrJson.fold({ Right(it.left()) },
+                    { fromJson(it).map { value -> Right(value.right()) as Either<Either<PathNotFound, Json>, Either<PathNotFound, A>> }.getOrElse { Left(pathOrJson) } })
+        },
         set = { pathOrSequence ->
             {
                 it.fold({ it.left() }, {
                     pathOrSequence.fold({ it.left() }, { chars ->
-                        it.asJsString().map {
-                            it.copy(chars)
-                        }.toEither { PathNotFound("Conversion failed") }
-                    })
-                })
-            }
-        }
-)
-
-val jsonAsInt: Optional<Either<PathNotFound, Json>, Either<PathNotFound, Int>> = POptional(
-        getOrModify = { pathOrJson -> pathOrJson.fold({ Right(it.left()) }, { it.asJsNumber().flatMap { (it as? JsInt).toOption() }.map { Right(it.value.right()) as Either<Either<PathNotFound, Json>, Either<PathNotFound, Int>> }.getOrElse { Left(pathOrJson) } }) },
-        set = { pathOrSequence ->
-            {
-                it.fold({ it.left() }, {
-                    pathOrSequence.fold({ it.left() }, { int ->
-                        it.asJsNumber().flatMap {
-                            (it as? JsInt).toOption().map {
-                                it.copy(int)
-                            }
+                        fromJson(it).map {
+                            toJson(it)
                         }.toEither { PathNotFound("Conversion failed") }
                     })
                 })

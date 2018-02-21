@@ -7,8 +7,6 @@ import arrow.optics.typeclasses.Index
 import arrow.optics.typeclasses.at
 import arrow.optics.typeclasses.index
 import helios.core.*
-import helios.instances.StringDecoderInstance
-import helios.instances.StringEncoderInstance
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
 import helios.typeclasses.decoder
