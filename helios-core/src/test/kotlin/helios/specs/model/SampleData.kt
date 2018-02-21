@@ -1,6 +1,7 @@
 package helios.specs.model
 
 import arrow.core.Either
+import arrow.core.fix
 import arrow.deriving
 import arrow.higherkind
 import arrow.isos

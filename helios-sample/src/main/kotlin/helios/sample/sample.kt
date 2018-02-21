@@ -21,10 +21,12 @@ const val companyJsonString = """
   },
   "employees": [
     {
-      "name": "John doe"
+      "name": "John",
+      "lastName": "doe"
     },
     {
-      "name": "Jane doe"
+      "name": "Jane",
+      "lastName": "doe"
     }
   ]
 }"""
@@ -47,6 +49,16 @@ fun main(args: Array<String>) {
 
     JsonPath.root.select("address").select("street").select("name").string.getOption(companyJson).let(::println)
     JsonPath.root.address.street.name.string.getOption(companyJson).let(::println)
+
+    val employeeLastNames = JsonPath.root.employees.every().lastName.string
+
+    employeeLastNames.modify(companyJson, String::capitalize).let {
+        employeeLastNames.getAll(it)
+    }.let(::println)
+
+    JsonPath.root.employees.filterIndex { it == 0 }.name.string.getAll(companyJson).let(::println)
+
+    JsonPath.root.employees.every().filterKeys { it == "name" }.string.getAll(companyJson).let(::println)
 
     JsonPath.root.dynamic("address.street.name").extractCharSeq(companyJson).let(::println)
     JsonPath.root.dynamic("address.fff.name").extractInt(companyJson).let(::println)

@@ -35,6 +35,9 @@ class JsonDslSyntaxFileGenerator(
             """
             |val helios.optics.JsonPath.$it
             |    inline get() = select("$it")
+            |
+            |val helios.optics.JsonTraversalPath.$it
+            |    inline get() = select("$it")
             |""".trimMargin()
         }
         val file = File(generatedDir, "${jsonAnnotationClass.simpleName}.helios.dsl.syntax.$`package`.kt")

@@ -1,11 +1,8 @@
 package helios.optics
 
-import arrow.core.Option
+import arrow.core.*
 import arrow.optics.*
-import arrow.optics.typeclasses.At
-import arrow.optics.typeclasses.Index
-import arrow.optics.typeclasses.at
-import arrow.optics.typeclasses.index
+import arrow.optics.typeclasses.*
 import helios.core.*
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
@@ -112,6 +109,21 @@ data class JsonPath(val json: Optional<Json, Json>) {
      */
     fun <A> selectExtract(DE: Decoder<A>, EN: Encoder<A>, name: String): Optional<Json, A> =
             select(name).extract(DE, EN)
+
+    /**
+     * Select every entry in [JsObject] or [JsArray].
+     */
+    fun every() = JsonTraversalPath(json compose jsonTraversal)
+
+    /**
+     * Filter [JsArray] by indices that satisfy the predicate [p].
+     */
+    fun filterIndex(p: Predicate<Int>) = JsonTraversalPath(array compose FilterIndex.filterIndex(p = p))
+
+    /**
+     * Filter [JsObject] by keys that satisfy the predicate [p].
+     */
+    fun filterKeys(p: Predicate<String>) = JsonTraversalPath(`object` compose FilterIndex.filterIndex(p = p))
 
 }
 
