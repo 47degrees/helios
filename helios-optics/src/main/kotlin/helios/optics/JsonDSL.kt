@@ -1,17 +1,11 @@
 package helios.optics
 
-import arrow.core.Either
 import arrow.core.Option
-import arrow.core.Right
-import arrow.core.identity
 import arrow.optics.*
 import arrow.optics.typeclasses.At
 import arrow.optics.typeclasses.Index
 import arrow.optics.typeclasses.at
 import arrow.optics.typeclasses.index
-import arrow.syntax.collections.firstOption
-import arrow.syntax.either.left
-import arrow.syntax.either.right
 import helios.core.*
 import helios.instances.StringDecoderInstance
 import helios.instances.StringEncoderInstance
