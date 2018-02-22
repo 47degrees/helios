@@ -3,6 +3,7 @@ package helios.sample
 import arrow.core.Either
 import arrow.optics.modify
 import helios.core.Json
+import helios.dynamic.JsonDynamicPath
 import helios.optics.JsonPath
 import helios.typeclasses.Decoder
 import helios.typeclasses.DecodingError
@@ -49,7 +50,6 @@ fun main(args: Array<String>) {
     JsonPath.root.select("address").select("street").select("name").string.getOption(companyJson).let(::println)
     JsonPath.root.address.street.name.string.getOption(companyJson).let(::println)
 
-    JsonPath.root.select("employees").every().select("lastName").string
     val employeeLastNames = JsonPath.root.employees.every().lastName.string
 
     employeeLastNames.modify(companyJson, String::capitalize).let {
@@ -59,5 +59,9 @@ fun main(args: Array<String>) {
     JsonPath.root.employees.filterIndex { it == 0 }.name.string.getAll(companyJson).let(::println)
 
     JsonPath.root.employees.every().filterKeys { it == "name" }.string.getAll(companyJson).let(::println)
+
+    JsonDynamicPath().dynamic("address.street.name").extractCharSeq(companyJson).let(::println)
+    JsonDynamicPath().dynamic("address.fff.name").extractInt(companyJson).let(::println)
+    JsonDynamicPath().dynamic("address.street.name").extractInt(companyJson).let(::println)
 
 }

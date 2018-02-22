@@ -4,9 +4,6 @@ import arrow.core.*
 import arrow.optics.*
 import arrow.optics.typeclasses.*
 import helios.core.*
-import helios.typeclasses.*
-import helios.instances.StringDecoderInstance
-import helios.instances.StringEncoderInstance
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
 import helios.typeclasses.decoder
@@ -34,57 +31,57 @@ data class JsonPath(val json: Optional<Json, Json>) {
     /**
      * Extract value as [Boolean] from path.
      */
-    val boolean: Optional<Json, Boolean> = json compose jsonJsBoolean() compose jsBooleanIso()
+    val boolean: Optional<Json, Boolean> = json compose jsBooleanPrism
 
     /**
      * Extract value as [CharSequence] from path.
      */
-    val charseq: Optional<Json, CharSequence> = json compose jsonJsString() compose jsStringIso()
+    val charseq: Optional<Json, CharSequence> = json compose jsCharSeqPrism
 
     /**
      * Extract value as [String] from path.
      */
-    val string: Optional<Json, String> = extract(StringEncoderInstance, StringDecoderInstance)
+    val string: Optional<Json, String> = json compose jsStringPrism
 
     /**
      * Extract value as [JsNumber] from path.
      */
-    val jsnumber: Optional<Json, JsNumber> = json compose jsonJsNumber()
+    val jsnumber: Optional<Json, JsNumber> = json compose jsNumberPrism
 
     /**
      * Extract value as [JsDecimal] from path.
      */
-    val decimal: Optional<Json, String> = jsnumber compose jsNumberJsDecimal() compose jsDecimalIso()
+    val decimal: Optional<Json, String> = json compose jsDecimalPrism
 
     /**
      * Extract value as [Long] from path.
      */
-    val long: Optional<Json, Long> = jsnumber compose jsNumberJsLong() compose jsLongIso()
+    val long: Optional<Json, Long> = json compose jsLongPrism
 
     /**
      * Extract value as [Float] from path.
      */
-    val float: Optional<Json, Float> = jsnumber compose jsNumberJsFloat() compose jsFloatIso()
+    val float: Optional<Json, Float> = json compose jsFloatPrism
 
     /**
      * Extract value as [Int] from path.
      */
-    val int: Optional<Json, Int> = jsnumber compose jsNumberJsInt() compose jsIntIso()
+    val int: Optional<Json, Int> = json compose jsIntPrism
 
     /**
      * Extract [JsArray] as `List<Json>` from path.
      */
-    val array: Optional<Json, List<Json>> = json compose jsonJsArray() compose jsArrayIso()
+    val array: Optional<Json, List<Json>> = json compose jsArrayPrism
 
     /**
      * Extract [JsObject] as `Map<String, Json>` from path.
      */
-    val `object`: Optional<Json, Map<String, Json>> = json compose jsonJsObject() compose jsObjectIso()
+    val `object`: Optional<Json, Map<String, Json>> = json compose jsObjectPrism
 
     /**
      * Extract [JsNull] from path.
      */
-    val `null`: Optional<Json, JsNull> = json compose jsonJsNull()
+    val `null`: Optional<Json, JsNull> = json compose jsNullPrism
 
     /**
      * Select field with [name] in [JsObject] from path.
