@@ -1,4 +1,4 @@
-package helios.optics.dynamic
+package helios.dynamic
 
 import arrow.core.Either
 import arrow.core.Left
@@ -60,14 +60,10 @@ internal fun <A> jsonAs(fromJson: (Json) -> Option<A>, toJson: (A) -> Json): Opt
             pathOrJson.fold({ Right(it.left()) },
                     { fromJson(it).map { value -> Right(value.right()) as Either<Either<PathNotFound, Json>, Either<PathNotFound, A>> }.getOrElse { Left(pathOrJson) } })
         },
-        set = { pathOrSequence ->
+        set = { new ->
             {
                 it.fold({ it.left() }, {
-                    pathOrSequence.fold({ it.left() }, { chars ->
-                        fromJson(it).map {
-                            toJson(it)
-                        }.toEither { PathNotFound("Conversion failed") }
-                    })
+                    new.fold({ it.left() }, { toJson(it).right() })
                 })
             }
         }

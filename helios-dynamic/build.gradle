@@ -1,0 +1,25 @@
+dependencies {
+    compile project(":helios-core")
+    compile project(":helios-meta")
+    compile project(":helios-parser")
+    compile project(":helios-optics")
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+    compile "io.arrow-kt:arrow-optics:$arrowVersion"
+    compile "io.arrow-kt:arrow-typeclasses:$arrowVersion"
+    compileOnly project(':helios-meta-compiler')
+
+    kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
+    kapt project(':helios-meta-compiler')
+
+    testCompile "io.arrow-kt:arrow-test:$arrowVersion"
+    kaptTest project(':helios-meta-compiler')
+    kaptTest "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
+    testCompileOnly "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
+
+    testCompileOnly project(':helios-meta-compiler')
+    testCompile "io.kotlintest:kotlintest:$kotlinTestVersion"
+}
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+apply from: rootProject.file('gradle/generated-kotlin-sources.gradle')
+apply plugin: 'kotlin-kapt'

@@ -1,6 +1,7 @@
 dependencies {
     compile project(":helios-core")
     compile project(":helios-optics")
+    compile project(":helios-dynamic")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
 
     kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"

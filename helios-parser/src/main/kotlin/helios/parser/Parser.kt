@@ -1,6 +1,6 @@
 package helios.parser
 
-import arrow.data.Try
+import arrow.core.Try
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.channels.ReadableByteChannel

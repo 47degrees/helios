@@ -3,8 +3,8 @@ package helios.sample
 import arrow.core.Either
 import arrow.optics.modify
 import helios.core.Json
+import helios.dynamic.JsonDynamicPath
 import helios.optics.JsonPath
-import helios.optics.dynamic.dynamic
 import helios.typeclasses.Decoder
 import helios.typeclasses.DecodingError
 import helios.typeclasses.decoder
@@ -60,8 +60,8 @@ fun main(args: Array<String>) {
 
     JsonPath.root.employees.every().filterKeys { it == "name" }.string.getAll(companyJson).let(::println)
 
-    JsonPath.root.dynamic("address.street.name").extractCharSeq(companyJson).let(::println)
-    JsonPath.root.dynamic("address.fff.name").extractInt(companyJson).let(::println)
-    JsonPath.root.dynamic("address.street.name").extractInt(companyJson).let(::println)
+    JsonDynamicPath().dynamic("address.street.name").extractCharSeq(companyJson).let(::println)
+    JsonDynamicPath().dynamic("address.fff.name").extractInt(companyJson).let(::println)
+    JsonDynamicPath().dynamic("address.street.name").extractInt(companyJson).let(::println)
 
 }
