@@ -1,0 +1,30 @@
+// Footer
+// -----------------------------------------------
+// -----------------------------------------------
+
+#footer {
+    padding: ($base-point-grid * 6) /*48px*/ 0;
+    font-size: 0.875rem;
+    
+    .footer-navigation-menu {
+        li {
+            display: inline-block;
+        }
+        
+        li+li {
+            margin-left: ($base-point-grid * 2); /*16px*/
+        }
+    }
+}
+
+// Responsive mode
+
+@include bp(medium) {
+    #footer {
+        text-align: center;
+        
+        p {
+            margin-bottom: ($base-point-grid * 2); /*16px*/
+        }
+    }
+}

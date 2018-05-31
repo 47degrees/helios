@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2798" height="1511" viewBox="0 0 2798 1511">
+  <defs>
+    <linearGradient id="helios-logo-masthead-a" x1="100%" x2=".474%" y1=".928%" y2="100%">
+      <stop offset="0%" stop-color="#FFA000"/>
+      <stop offset="100%" stop-color="#FF6F00"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd" stroke="url(#helios-logo-masthead-a)" stroke-width="300" transform="translate(176 187)">
+    <polygon points="603 0 1206 448.428 975.674 1174 230.326 1174 0 448.428" opacity=".789" transform="matrix(-1 0 0 1 1206 0)"/>
+    <polygon points="778 0 1381 448.428 1150.675 1174 405.326 1174 175 448.428" transform="matrix(-1 0 0 1 1556 0)"/>
+    <polygon points="947 0 1550 448.428 1319.675 1174 574.326 1174 344 448.428"/>
+    <polygon points="1171 0 1774 448.428 1543.675 1174 798.326 1174 568 448.428"/>
+    <polygon points="1395 0 1998 448.428 1767.675 1174 1022.326 1174 792 448.428" opacity=".938"/>
+    <polygon points="1619 0 2222 448.428 1991.675 1174 1246.325 1174 1016 448.428"/>
+    <polygon points="1843 0 2446 448.428 2215.675 1174 1470.325 1174 1240 448.428"/>
+  </g>
+</svg>

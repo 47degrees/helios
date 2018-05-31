@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <g fill="none" fill-rule="evenodd">
+    <polygon stroke="#FFA000" stroke-width="2" points="40.36 4.394 30.998 11.199 49.721 11.199"/>
+    <polygon stroke="#FFA000" stroke-width="2" points="6.488 29.012 10.062 40.021 15.849 22.207"/>
+    <polygon stroke="#FFA000" stroke-width="2" points="61.295 68.842 64.869 57.833 49.722 68.842"/>
+    <polygon stroke="#FFA000" stroke-width="2" points="19.426 68.842 30.997 68.842 15.85 57.833"/>
+    <polygon stroke="#FFA000" stroke-width="2" points="40.36 75.647 49.721 68.841 30.998 68.841"/>
+    <polygon stroke="#FFA000" stroke-width="2" points="70.656 40.02 64.87 57.834 74.232 51.029"/>
+    <polygon stroke="#FFA000" stroke-width="2" points="19.426 11.199 15.85 22.208 30.997 11.199"/>
+    <polygon stroke="#FFA000" stroke-width="2" points="61.295 11.199 49.722 11.199 64.869 22.208"/>
+    <polygon stroke="#FFA000" stroke-width="2" points="70.826 18.128 52.079 4.503 28.909 4.503 10.162 18.128 3 40.171 10.162 62.216 28.909 75.839 52.079 75.839 70.826 62.216 77.988 40.171"/>
+    <path stroke="#FFA000" stroke-width="2" d="M45 38C45 33.0294373 40.9705627 29 36 29 31.0294373 29 27 33.0294373 27 38M36 43C36 47.9705627 40.0294373 52 45 52 49.9705627 52 54 47.9705627 54 43"/>
+    <polygon fill="#FFA000" points="36 38 40 43 32 43"/>
+    <polygon fill="#FFA000" points="45 43 41 38 49 38"/>
+  </g>
+</svg>
