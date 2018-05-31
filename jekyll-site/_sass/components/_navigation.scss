@@ -36,7 +36,7 @@
                     color: $white;
                 }
                 &:hover {
-                    color: $brand-primary;
+                    color: rgba($white, 0.5);
                 }
                 &:active {
                     color: $white;
