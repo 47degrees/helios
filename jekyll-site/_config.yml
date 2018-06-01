@@ -1,8 +1,8 @@
-title: Λnk 
+title: '{Helios}'
 #-------------------------
-name: Ank
+name: '{Helios}'
 #-------------------------
-description: Helios is a purely functional JSON library for Kotlin built on Arrow
+description: '{Helios} is a purely functional JSON library for Kotlin built on Arrow'
 #-------------------------
 author: 47 Degrees
 keywords: functional-programming, kotlin-library, monads, monad-transformers, functional-data-structure, kotlin, fp-types, adt, free-monads, tagless-final, mtl, for-comprehension, category-theory

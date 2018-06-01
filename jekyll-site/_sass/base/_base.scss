@@ -27,6 +27,10 @@ body {
     font-family: $base-font-family;
     font-weight: $font-regular;
     line-height: $base-line-height;
+    
+    &#doc {
+        background: $white;
+    }
 }
 
 h1,

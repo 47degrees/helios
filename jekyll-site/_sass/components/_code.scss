@@ -15,8 +15,8 @@ code {
 
     &.hljs {
         padding: ($base-point-grid * 3);
-        background: $gray-primary;
-        color: rgba($white, 0.9);
+        background: rgba($gray-primary, 0.045);
+        //color: rgba($white, 0.9);
 
         .hljs-keyword,
         .hljs-selector-tag,
