@@ -1,9 +1,6 @@
 package helios.optics
 
-import arrow.core.Option
-import arrow.core.eq
-import arrow.syntax.monad.flatten
-import arrow.syntax.option.*
+import arrow.core.*
 import arrow.test.*
 import arrow.test.generators.genFunctionAToB
 import arrow.test.laws.*
@@ -18,7 +15,6 @@ import helios.core.JsNumber
 import helios.core.JsObject
 import helios.core.JsString
 import helios.optics.JsonPath.Companion.root
-import helios.typeclasses.decoder
 
 import io.kotlintest.KTestJUnitRunner
 import io.kotlintest.matchers.shouldBe
@@ -32,8 +28,8 @@ class JsonDSLTest : UnitSpec() {
     init {
 
         testLaws(PrismLaws.laws(
-                prism = parse(),
-                aGen = genJson(genStreet()),
+                prism = parse(Street.decoder(), Street.encoder()),
+                aGen = genJson(Street.encoder(), genStreet()),
                 bGen = genStreet(),
                 funcGen = genFunctionAToB(genStreet()),
                 EQA = Eq.any(),
@@ -121,27 +117,27 @@ class JsonDSLTest : UnitSpec() {
         }
 
         "at from object" {
-            forAll(genJson(genCity())) { cityJson ->
-                root.at("streets").getOption(cityJson).flatten() == cityJson["streets"]
+            forAll(genJson(City.encoder(), genCity())) { cityJson ->
+                root.at("streets").getOption(cityJson).flatMap(::identity) == cityJson["streets"]
             }
         }
 
         "select from object" {
-            forAll(genJson(genCity())) { cityJson ->
+            forAll(genJson(City.encoder(), genCity())) { cityJson ->
                 root.select("streets").json.getOption(cityJson) == cityJson["streets"]
             }
         }
 
         "extract from object" {
-            forAll(genJson(genCity())) { cityJson ->
-                root.extract<City>().getOption(cityJson) == decoder<City>().decode(cityJson).toOption()
+            forAll(genJson(City.encoder(), genCity())) { cityJson ->
+                root.extract(City.decoder(), City.encoder()).getOption(cityJson) == City.decoder().decode(cityJson).toOption()
             }
         }
 
         "get from array" {
-            forAll(genJson(genCity())) { cityJson ->
-                JsonPath.root.select("streets")[0].extract<Street>().getOption(cityJson) ==
-                        decoder<City>().decode(cityJson).toOption().flatMap { Option.fromNullable(it.streets.getOrNull(0)) }
+            forAll(genJson(City.encoder(), genCity())) { cityJson ->
+                JsonPath.root.select("streets")[0].extract(Street.decoder(), Street.encoder()).getOption(cityJson) ==
+                        City.decoder().decode(cityJson).toOption().flatMap { Option.fromNullable(it.streets.getOrNull(0)) }
             }
         }
 

@@ -2,9 +2,10 @@ package helios.meta.compiler.json
 
 import arrow.common.Package
 import arrow.common.utils.ClassOrPackageDataWrapper
-import org.jetbrains.kotlin.name.Name
-import org.jetbrains.kotlin.serialization.ProtoBuf
-import org.jetbrains.kotlin.serialization.deserialization.NameResolver
+import me.eugeniomarletti.kotlin.metadata.shadow.metadata.ProtoBuf
+import me.eugeniomarletti.kotlin.metadata.shadow.metadata.deserialization.NameResolver
+import me.eugeniomarletti.kotlin.metadata.shadow.name.Name
+import me.eugeniomarletti.kotlin.metadata.shadow.serialization.deserialization.getName
 import java.io.File
 
 data class JsonElement(
