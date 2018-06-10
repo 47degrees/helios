@@ -9,7 +9,7 @@ import helios.core.*
 /**
  * [Traversal] with focus in all values of a JsObject of JsArray.
  */
-val jsonTraversal = object : Traversal<Json, Json> {
+fun Json.Companion.traversal(): Traversal<Json, Json> = object : Traversal<Json, Json> {
     override fun <F> modifyF(FA: Applicative<F>, s: Json, f: (Json) -> Kind<F, Json>): Kind<F, Json> = with(FA) {
         s.fold(
                 { it.just() },

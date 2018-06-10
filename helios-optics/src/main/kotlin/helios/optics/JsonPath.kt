@@ -2,11 +2,19 @@ package helios.optics
 
 import arrow.core.*
 import arrow.optics.*
+import arrow.optics.dsl.at
+import arrow.optics.instances.ListFilterIndexInstance
+import arrow.optics.instances.MapFilterIndexInstance
 import helios.core.*
 import helios.instances.decoder
 import helios.instances.encoder
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
+
+/**
+ * [JsonPath] which is the start of any path.
+ */
+inline val Json.Companion.path: JsonPath get() = JsonPath(Optional.id())
 
 /**
  * [JsonPath] is a Json DSL based on Arrow-Optics (http://arrow-kt.io/docs/optics/iso/).
@@ -15,27 +23,15 @@ import helios.typeclasses.Encoder
  */
 data class JsonPath(val json: Optional<Json, Json>) {
 
-    companion object {
-        /**
-         * [JsonPath] [root] which is the start of any path.
-         */
-        val root = JsonPath(Optional.id())
-
-        /**
-         * Overload constructor to point to [root].
-         */
-        operator fun invoke() = root
-    }
-
     /**
      * Extract value as [Boolean] from path.
      */
-    val boolean: Optional<Json, Boolean> = json compose Json.jsBoolean compose JsBoolean.iso
+    val boolean: Optional<Json, Boolean> = json.jsBoolean compose JsBoolean.iso
 
     /**
      * Extract value as [CharSequence] from path.
      */
-    val charseq: Optional<Json, CharSequence> = json compose Json.jsString compose JsString.iso
+    val charseq: Optional<Json, CharSequence> = json.jsString compose JsString.iso
 
     /**
      * Extract value as [String] from path.
@@ -45,57 +41,57 @@ data class JsonPath(val json: Optional<Json, Json>) {
     /**
      * Extract value as [JsNumber] from path.
      */
-    val jsnumber: Optional<Json, JsNumber> = json compose Json.jsNumber
+    val jsnumber: Optional<Json, JsNumber> = json.jsNumber
 
     /**
      * Extract value as [JsDecimal] from path.
      */
-    val decimal: Optional<Json, String> = jsnumber compose JsNumber.jsDecimal compose JsDecimal.iso
+    val decimal: Optional<Json, String> = jsnumber.jsDecimal compose JsDecimal.iso
 
     /**
      * Extract value as [Long] from path.
      */
-    val long: Optional<Json, Long> = jsnumber compose JsNumber.jsLong compose JsLong.iso
+    val long: Optional<Json, Long> = jsnumber.jsLong compose JsLong.iso
 
     /**
      * Extract value as [Float] from path.
      */
-    val float: Optional<Json, Float> = jsnumber compose JsNumber.jsFloat compose JsFloat.iso
+    val float: Optional<Json, Float> = jsnumber.jsFloat compose JsFloat.iso
 
     /**
      * Extract value as [Int] from path.
      */
-    val int: Optional<Json, Int> = jsnumber compose JsNumber.jsInt compose JsInt.iso
+    val int: Optional<Json, Int> = jsnumber.jsInt compose JsInt.iso
 
     /**
      * Extract [JsArray] as `List<Json>` from path.
      */
-    val array: Optional<Json, List<Json>> = json compose Json.jsArray compose JsArray.iso
+    val array: Optional<Json, List<Json>> = json.jsArray compose JsArray.iso
 
     /**
      * Extract [JsObject] as `Map<String, Json>` from path.
      */
-    val `object`: Optional<Json, Map<String, Json>> = json compose Json.jsObject compose JsObject.iso
+    val `object`: Optional<Json, Map<String, Json>> = json.jsObject compose JsObject.iso
 
     /**
      * Extract [JsNull] from path.
      */
-    val `null`: Optional<Json, JsNull> = json compose Json.jsNull
+    val `null`: Optional<Json, JsNull> = json.jsNull
 
     /**
      * Select field with [name] in [JsObject] from path.
      */
-    fun select(name: String): JsonPath = JsonPath(json compose Json.jsObject compose JsObject.index().index(name))
+    fun select(name: String): JsonPath = JsonPath(json.jsObject compose JsObject.index().index(name))
 
     /**
      * Extract field with [name] from [JsObject] from path.
      */
-    fun at(field: String): Optional<Json, Option<Json>> = json compose Json.jsObject compose JsObject.at().at(field)
+    fun at(field: String): Optional<Json, Option<Json>> = json.jsObject.at(JsObject.at(), field)
 
     /**
      *  Get element at index [i] from [JsArray].
      */
-    operator fun get(i: Int): JsonPath = JsonPath(json compose Json.jsArray compose JsArray.index().index(i))
+    operator fun get(i: Int): JsonPath = JsonPath(json.jsArray compose JsArray.index().index(i))
 
     /**
      * Extract [A] from path.
@@ -112,7 +108,7 @@ data class JsonPath(val json: Optional<Json, Json>) {
     /**
      * Select every entry in [JsObject] or [JsArray].
      */
-    fun every() = JsonTraversalPath(json compose jsonTraversal)
+    fun every() = JsonTraversalPath(json compose Json.traversal())
 
     /**
      * Filter [JsArray] by indices that satisfy the predicate [p].
