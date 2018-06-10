@@ -1,13 +1,10 @@
 package helios.core
 
-import arrow.*
 import arrow.core.*
-import arrow.syntax.applicative.map
-import arrow.syntax.option.*
+import arrow.optics.optics
 import helios.instances.HeliosFacade
 import helios.parser.Parser
 import helios.typeclasses.Decoder
-import helios.typeclasses.decoder
 import java.io.File
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -17,7 +14,7 @@ import java.nio.channels.ReadableByteChannel
 const val MaxLongString = "9223372036854775807"
 const val MinLongString = "-9223372036854775808"
 
-@prisms sealed class Json {
+@optics sealed class Json {
 
     companion object {
         fun fromValues(i: Iterable<Json>): JsArray = JsArray(i.toList())
@@ -49,7 +46,7 @@ const val MinLongString = "-9223372036854775808"
         else -> None
     }
 
-    inline fun <reified A> decode(decoder: Decoder<A> = decoder<A>()) =
+    fun <A> decode(decoder: Decoder<A>) =
             decoder.decode(this)
 
     fun <B> fold(ifJsString: (JsString) -> B,
@@ -99,15 +96,19 @@ const val MinLongString = "-9223372036854775808"
 
 }
 
-@lenses @isos data class JsBoolean(val value: Boolean) : Json() {
+@optics data class JsBoolean(val value: Boolean) : Json() {
     override fun toJsonString(): String = "$value"
+
+    companion object
 }
 
-@lenses @isos data class JsString(val value: CharSequence) : Json() {
+@optics data class JsString(val value: CharSequence) : Json() {
     override fun toJsonString(): String = """"$value""""
+
+    companion object
 }
 
-@prisms sealed class JsNumber : Json() {
+@optics sealed class JsNumber : Json() {
 
     abstract fun toBigDecimal(): Option<BigDecimal>
 
@@ -176,7 +177,7 @@ const val MinLongString = "-9223372036854775808"
     }
 }
 
-@lenses @isos data class JsDecimal(val value: String) : JsNumber() {
+@optics data class JsDecimal(val value: String) : JsNumber() {
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
     override fun toBigInteger(): Option<BigInteger> = toBigDecimal().map { it.toBigInteger() }
@@ -186,9 +187,11 @@ const val MinLongString = "-9223372036854775808"
     override fun toLong(): Option<Long> = value.toLong().some()
 
     override fun toJsonString(): String = value
+
+    companion object
 }
 
-@lenses @isos data class JsLong(val value: Long) : JsNumber() {
+@optics data class JsLong(val value: Long) : JsNumber() {
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
     override fun toBigInteger(): Option<BigInteger> = toBigDecimal().map { it.toBigInteger() }
@@ -198,9 +201,11 @@ const val MinLongString = "-9223372036854775808"
     override fun toLong(): Option<Long> = value.some()
 
     override fun toJsonString(): String = "$value"
+
+    companion object
 }
 
-@lenses @isos data class JsDouble(val value: Double) : JsNumber() {
+@optics data class JsDouble(val value: Double) : JsNumber() {
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
     override fun toBigInteger(): Option<BigInteger> = toBigDecimal().map { it.toBigInteger() }
@@ -210,9 +215,11 @@ const val MinLongString = "-9223372036854775808"
     override fun toLong(): Option<Long> = value.toLong().some()
 
     override fun toJsonString(): String = "$value"
+
+    companion object
 }
 
-@lenses @isos data class JsFloat(val value: Float) : JsNumber() {
+@optics data class JsFloat(val value: Float) : JsNumber() {
 
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
@@ -223,9 +230,11 @@ const val MinLongString = "-9223372036854775808"
     override fun toLong(): Option<Long> = value.toLong().some()
 
     override fun toJsonString(): String = "$value"
+
+    companion object
 }
 
-@lenses @isos data class JsInt(val value: Int) : JsNumber() {
+@optics data class JsInt(val value: Int) : JsNumber() {
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
     override fun toBigInteger(): Option<BigInteger> = value.toBigInteger().some()
@@ -235,19 +244,21 @@ const val MinLongString = "-9223372036854775808"
     override fun toLong(): Option<Long> = value.toLong().some()
 
     override fun toJsonString(): String = "$value"
-}
-
-@lenses @isos data class JsArray(val value: List<Json>) : Json() {
-
-    operator fun get(index: Int): Option<Json> = Option.fromNullable(value.getOrNull(index))
-
-    override fun toJsonString(): String =
-            value.map { it.toJsonString() }.joinToString(prefix = "[", separator = ",", postfix = "]")
 
     companion object
 }
 
-@lenses @isos data class JsObject(val value: Map<String, Json>) : Json() {
+@optics data class JsArray(val value: List<Json>) : Json() {
+
+    operator fun get(index: Int): Option<Json> = Option.fromNullable(value.getOrNull(index))
+
+    override fun toJsonString(): String =
+            value.joinToString(prefix = "[", separator = ",", postfix = "]", transform = Json::toJsonString)
+
+    companion object
+}
+
+@optics data class JsObject(val value: Map<String, Json>) : Json() {
 
     companion object {
         operator fun invoke(vararg keyValues: Pair<String, Json>) = JsObject(keyValues.toMap())

@@ -1,64 +1,36 @@
 package helios.instances
 
-import arrow.core.Either
-import arrow.core.Option
-import arrow.core.Tuple2
-import arrow.core.Tuple3
+import arrow.core.*
 import arrow.instance
-import arrow.syntax.option.some
-import arrow.syntax.option.toEither
+import arrow.instances.BooleanInstances
 import helios.core.*
 import helios.typeclasses.*
 
-object IntEncoderInstance : Encoder<Int> {
-    override fun encode(value: Int): Json = JsNumber(value)
+fun Int.Companion.encoder() = object : Encoder<Int> {
+    override fun Int.encode(): Json = JsNumber(this)
 }
 
-object IntEncoderInstanceImplicits {
-    fun instance(): IntEncoderInstance = IntEncoderInstance
-}
-
-object IntDecoderInstance : Decoder<Int> {
+fun Int.Companion.decoder() = object : Decoder<Int> {
     override fun decode(value: Json): Either<DecodingError, Int> =
             value.asJsNumber().flatMap { it.toInt() }.toEither { NumberDecodingError(value) }
 }
 
-object IntDecoderInstanceImplicits {
-    fun instance(): IntDecoderInstance = IntDecoderInstance
+fun BooleanInstances.encoder() = object : Encoder<Boolean> {
+    override fun Boolean.encode(): Json = JsBoolean(this)
 }
 
-object BooleanEncoderInstance : Encoder<Boolean> {
-    override fun encode(value: Boolean): Json = JsBoolean(value)
-}
-
-object BooleanEncoderInstanceImplicits {
-    fun instance(): BooleanEncoderInstance = BooleanEncoderInstance
-}
-
-object BooleanDecoderInstance : Decoder<Boolean> {
+fun BooleanInstances.decoder() = object : Decoder<Boolean> {
     override fun decode(value: Json): Either<DecodingError, Boolean> =
             value.asJsBoolean().flatMap { it.value.some() }.toEither { BooleanDecodingError(value) }
 }
 
-object BooleanDecoderInstanceImplicits {
-    fun instance(): BooleanDecoderInstance = BooleanDecoderInstance
+fun String.Companion.encoder() = object : Encoder<String> {
+    override fun String.encode(): Json = JsString(this)
 }
 
-object StringEncoderInstance : Encoder<String> {
-    override fun encode(value: String): Json = JsString(value)
-}
-
-object StringEncoderInstanceImplicits {
-    fun instance(): StringEncoderInstance = StringEncoderInstance
-}
-
-object StringDecoderInstance : Decoder<String> {
+fun String.Companion.decoder() = object : Decoder<String> {
     override fun decode(value: Json): Either<DecodingError, String> =
             value.asJsString().flatMap { it.value.toString().some() }.toEither { StringDecodingError(value) }
-}
-
-object StringDecoderInstanceImplicits {
-    fun instance(): StringDecoderInstance = StringDecoderInstance
 }
 
 @instance(Option::class)
@@ -66,8 +38,9 @@ interface OptionEncoderInstance<in A> : Encoder<Option<A>> {
 
     fun encoderA(): Encoder<A>
 
-    override fun encode(value: Option<A>): Json =
-            value.fold({ JsNull }, { encoderA().encode(it) })
+    override fun Option<A>.encode(): Json =
+            fold({ JsNull }, { encoderA().run { it.encode() } })
+
 }
 
 @instance(Tuple2::class)
@@ -77,10 +50,10 @@ interface Tuple2EncoderInstance<A, B> : Encoder<Tuple2<A, B>> {
 
     fun encoderB(): Encoder<B>
 
-    override fun encode(value: Tuple2<A, B>): Json = JsArray(
+    override fun Tuple2<A, B>.encode(): Json = JsArray(
             listOf(
-                    encoderA().encode(value.a),
-                    encoderB().encode(value.b)
+                    encoderA().run { a.encode() },
+                    encoderB().run { b.encode() }
             )
     )
 
@@ -95,12 +68,13 @@ interface Tuple3EncoderInstance<A, B, C> : Encoder<Tuple3<A, B, C>> {
 
     fun encoderC(): Encoder<C>
 
-    override fun encode(value: Tuple3<A, B, C>): Json = JsArray(
+    override fun Tuple3<A, B, C>.encode(): Json = JsArray(
             listOf(
-                    encoderA().encode(value.a),
-                    encoderB().encode(value.b),
-                    encoderC().encode(value.c)
+                    encoderA().run { a.encode() },
+                    encoderB().run { b.encode() },
+                    encoderC().run { c.encode() }
             )
     )
 
 }
+
