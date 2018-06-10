@@ -1,12 +1,9 @@
 package helios.sample
 
 import arrow.core.Either
-import arrow.optics.modify
 import helios.core.Json
 import helios.optics.JsonPath
-import helios.typeclasses.Decoder
 import helios.typeclasses.DecodingError
-import helios.typeclasses.decoder
 
 const val companyJsonString = """
 {
@@ -34,8 +31,7 @@ fun main(args: Array<String>) {
 
     val companyJson: Json = Json.parseUnsafe(companyJsonString)
 
-    val companyDecoder: Decoder<Company> = decoder()
-    val errorOrCompany: Either<DecodingError, Company> = companyDecoder.decode(companyJson)
+    val errorOrCompany: Either<DecodingError, Company> = Company.decoder().decode(companyJson)
 
     errorOrCompany.fold({
         println("Something went wrong during decoding: $it")
