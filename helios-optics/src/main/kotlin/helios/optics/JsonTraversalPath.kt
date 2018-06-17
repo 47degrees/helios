@@ -1,10 +1,10 @@
 package helios.optics
 
 import arrow.core.*
+
 import arrow.optics.*
 import arrow.optics.dsl.at
-import arrow.optics.instances.ListFilterIndexInstance
-import arrow.optics.instances.MapFilterIndexInstance
+import arrow.optics.instances.*
 import helios.core.*
 import helios.instances.decoder
 import helios.instances.encoder
@@ -15,12 +15,12 @@ data class JsonTraversalPath(val json: Traversal<Json, Json>) {
     /**
      * Extract value as [Boolean] from path.
      */
-    val boolean: Traversal<Json, Boolean> = json.jsBoolean compose JsBoolean.iso
+    val boolean: Traversal<Json, Boolean> = json compose Json.jsBoolean compose JsBoolean.value
 
     /**
      * Extract value as [CharSequence] from path.
      */
-    val charseq: Traversal<Json, CharSequence> = json.jsString compose JsString.iso
+    val charseq: Traversal<Json, CharSequence> = json compose Json.jsString compose JsString.value
 
     /**
      * Extract value as [String] from path.
@@ -30,57 +30,57 @@ data class JsonTraversalPath(val json: Traversal<Json, Json>) {
     /**
      * Extract value as [JsNumber] from path.
      */
-    val jsnumber: Traversal<Json, JsNumber> = json.jsNumber
+    val jsnumber: Traversal<Json, JsNumber> = json compose Json.jsNumber
 
     /**
      * Extract value as [JsDecimal] from path.
      */
-    val decimal: Traversal<Json, String> = jsnumber.jsDecimal compose JsDecimal.iso
+    val decimal: Traversal<Json, String> = jsnumber compose JsNumber.jsDecimal compose JsDecimal.value
 
     /**
      * Extract value as [Long] from path.
      */
-    val long: Traversal<Json, Long> = jsnumber.jsLong compose JsLong.iso
+    val long: Traversal<Json, Long> = jsnumber compose JsNumber.jsLong compose JsLong.value
 
     /**
      * Extract value as [Float] from path.
      */
-    val float: Traversal<Json, Float> = jsnumber.jsFloat compose JsFloat.iso
+    val float: Traversal<Json, Float> = jsnumber compose JsNumber.jsFloat compose JsFloat.value
 
     /**
      * Extract value as [Int] from path.
      */
-    val int: Traversal<Json, Int> = jsnumber.jsInt compose JsInt.iso
+    val int: Traversal<Json, Int> = jsnumber compose JsNumber.jsInt compose JsInt.value
 
     /**
      * Extract [JsArray] as `List<Json>` from path.
      */
-    val array: Traversal<Json, List<Json>> = json.jsArray compose JsArray.iso
+    val array: Traversal<Json, List<Json>> = json compose Json.jsArray compose JsArray.value
 
     /**
      * Extract [JsObject] as `Map<String, Json>` from path.
      */
-    val `object`: Traversal<Json, Map<String, Json>> = json.jsObject compose JsObject.iso
+    val `object`: Traversal<Json, Map<String, Json>> = json compose Json.jsObject compose JsObject.value
 
     /**
      * Extract [JsNull] from path.
      */
-    val `null`: Traversal<Json, JsNull> = json.jsNull
+    val `null`: Traversal<Json, JsNull> = json compose Json.jsNull
 
     /**
      * Select field with [name] in [JsObject] from path.
      */
-    fun select(name: String) = JsonTraversalPath(json.jsObject compose JsObject.index().index(name))
+    fun select(name: String) = JsonTraversalPath(json compose Json.jsObject compose JsObject.index().index(name))
 
     /**
      * Extract field with [name] from [JsObject] from path.
      */
-    fun at(field: String): Traversal<Json, Option<Json>> = json.jsObject.at(JsObject.at(), field)
+    fun at(field: String): Traversal<Json, Option<Json>> = (json compose Json.jsObject).at(JsObject.at(), field)
 
     /**
      *  Get element at index [i] from [JsArray].
      */
-    operator fun get(i: Int) = JsonTraversalPath(json.jsArray compose JsArray.index().index(i))
+    operator fun get(i: Int) = JsonTraversalPath(json compose Json.jsArray compose JsArray.index().index(i))
 
     /**
      * Extract [A] from path.
