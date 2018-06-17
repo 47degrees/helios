@@ -116,7 +116,7 @@ class JsonDSLTest : UnitSpec() {
 
         "select from object" {
             forAll(Gen.json(City.encoder(), genCity())) { cityJson ->
-                Json.path.select("streets").json.getOption(cityJson) == cityJson["streets"]
+                Json.path.select("streets").getOption(cityJson) == cityJson["streets"]
             }
         }
 

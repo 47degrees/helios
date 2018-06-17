@@ -2,7 +2,10 @@ package helios.sample
 
 import arrow.core.Either
 import helios.core.Json
+import helios.optics.*
 import helios.optics.path
+import helios.optics.select
+import helios.optics.string
 import helios.typeclasses.DecodingError
 
 const val companyJsonString = """
@@ -45,8 +48,8 @@ fun main(args: Array<String>) {
     Json.path.select("address").select("street").select("name").string.getOption(companyJson).let(::println)
     Json.path.address.street.name.string.getOption(companyJson).let(::println)
 
-    Json.path.select("employees").every().select("lastName").string
-    val employeeLastNames = Json.path.employees.every().lastName.string
+    Json.path.select("employees").every.select("lastName").string
+    val employeeLastNames = Json.path.employees.every.lastName.string
 
     employeeLastNames.modify(companyJson, String::capitalize).let {
         employeeLastNames.getAll(it)
@@ -54,6 +57,6 @@ fun main(args: Array<String>) {
 
     Json.path.employees.filterIndex { it == 0 }.name.string.getAll(companyJson).let(::println)
 
-    Json.path.employees.every().filterKeys { it == "name" }.string.getAll(companyJson).let(::println)
+    Json.path.employees.every.filterKeys { it == "name" }.string.getAll(companyJson).let(::println)
 
 }

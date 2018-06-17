@@ -2,6 +2,8 @@ package helios.meta.compiler.json
 
 import arrow.common.Package
 import arrow.common.utils.ClassOrPackageDataWrapper
+import arrow.optics.Optional
+import arrow.optics.Traversal
 import me.eugeniomarletti.kotlin.metadata.shadow.metadata.ProtoBuf
 import me.eugeniomarletti.kotlin.metadata.shadow.metadata.deserialization.NameResolver
 import me.eugeniomarletti.kotlin.metadata.shadow.name.Name
@@ -22,6 +24,8 @@ class JsonDslSyntaxFileGenerator(
         jsonAnnotatedList: List<JsonAnnotated>
 ) {
 
+    private val Json = "helios.core.Json"
+
     private val packageSyntax: List<Pair<Package, List<Name>>> = jsonAnnotatedList
             .map { JsonElement(it.classOrPackageProto.`package`, it) }
             .groupBy(JsonElement::`package`)
@@ -32,12 +36,12 @@ class JsonDslSyntaxFileGenerator(
      * Main entry point for json dsl syntax generation
      */
     fun generate() = packageSyntax.forEach { (`package`, names) ->
-        val content = names.joinToString(prefix = "package $`package`\n\n", separator = "\n") {
+        val content = names.joinToString(prefix = "package $`package`\n\nimport helios.optics.select\n\n", separator = "\n") {
             """
-            |val helios.optics.JsonPath.$it
+            |inline val $Optional<$Json, $Json>.$it
             |    inline get() = select("$it")
             |
-            |val helios.optics.JsonTraversalPath.$it
+            |inline val $Traversal<$Json, $Json>.$it
             |    inline get() = select("$it")
             |""".trimMargin()
         }
