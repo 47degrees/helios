@@ -71,9 +71,10 @@ object GenFriend : Gen<Friend> {
                     Gen.list(Gen.string()).k(),
                     Gen.list(Gen.int()).k(),
                     Gen.string().k(),
-                    Gen.string().k(),
-                    Friend.iso::reverseGet
-            ).fix().generate()
+                    Gen.string().k()
+            ) { (_id, latitude, longitude, tags, range, greeting, favoriteFruit) ->
+                Friend(_id, latitude, longitude, tags, range, greeting, favoriteFruit)
+            }.fix().generate()
 
 }
 
