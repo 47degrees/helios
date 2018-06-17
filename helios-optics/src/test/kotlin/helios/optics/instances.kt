@@ -23,27 +23,27 @@ class InstancesTest : UnitSpec() {
 
         testLaws(OptionalLaws.laws(
                 optional = JsObject.index().index(Gen.string().generate()),
-                aGen = genJsObject(),
-                bGen = genJson(),
-                funcGen = genFunctionAToB(genJson()),
+                aGen = Gen.jsObject(),
+                bGen = Gen.json(),
+                funcGen = genFunctionAToB(Gen.json()),
                 EQA = Eq.any(),
                 EQOptionB = Eq.any()
         ))
 
         testLaws(OptionalLaws.laws(
                 optional = JsArray.index().index(1),
-                aGen = genJsArray(),
-                bGen = genJson(),
-                funcGen = genFunctionAToB(genJson()),
+                aGen = Gen.jsArray(),
+                bGen = Gen.json(),
+                funcGen = genFunctionAToB(Gen.json()),
                 EQA = Eq.any(),
                 EQOptionB = Eq.any()
         ))
 
         testLaws(TraversalLaws.laws(
                 traversal = JsObject.each().each(),
-                aGen = genJsObject(),
-                bGen = genJson(),
-                funcGen = genFunctionAToB(genJson()),
+                aGen = Gen.jsObject(),
+                bGen = Gen.json(),
+                funcGen = genFunctionAToB(Gen.json()),
                 EQA = Eq.any(),
                 EQOptionB = Eq.any(),
                 EQListB = Eq.any()
@@ -51,9 +51,9 @@ class InstancesTest : UnitSpec() {
 
         testLaws(TraversalLaws.laws(
                 traversal = JsArray.each().each(),
-                aGen = genJsArray(),
-                bGen = genJson(),
-                funcGen = genFunctionAToB(genJson()),
+                aGen = Gen.jsArray(),
+                bGen = Gen.json(),
+                funcGen = genFunctionAToB(Gen.json()),
                 EQA = Eq.any(),
                 EQOptionB = Eq.any(),
                 EQListB = Eq.any()
@@ -61,9 +61,9 @@ class InstancesTest : UnitSpec() {
 
         testLaws(LensLaws.laws(
                 lens = JsObject.at().at(Gen.string().generate()),
-                aGen = genJsObject(),
-                bGen = genOption(genJson()),
-                funcGen = genFunctionAToB(genOption(genJson())),
+                aGen = Gen.jsObject(),
+                bGen = genOption(Gen.json()),
+                funcGen = genFunctionAToB(genOption(Gen.json())),
                 EQA = Eq.any(),
                 EQB = Eq.any(),
                 MB = object : Monoid<Option<Json>> {
