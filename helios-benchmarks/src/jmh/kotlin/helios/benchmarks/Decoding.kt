@@ -8,8 +8,8 @@ import com.google.gson.JsonElement
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import helios.benchmarks.sample.Friends
+import helios.benchmarks.sample.decoder
 import helios.core.Json
-import helios.typeclasses.decoder
 import org.openjdk.jmh.annotations.*
 
 @State(Scope.Benchmark)
@@ -53,7 +53,7 @@ object Parsed {
 
     val jacksonJson: JsonNode = jackson.readTree(jsonString)
 
-    val heliosFriendsDecoder = decoder<Friends>()
+    val heliosFriendsDecoder = Friends.decoder()
 
     val heliosJson: Json = Json.parseUnsafe(jsonString)
 

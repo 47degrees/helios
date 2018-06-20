@@ -1,10 +1,7 @@
 dependencies {
     compile project(":helios-core")
-    compile project(":helios-meta")
-    compile project(":helios-parser")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     compile "io.arrow-kt:arrow-optics:$arrowVersion"
-    compile "io.arrow-kt:arrow-typeclasses:$arrowVersion"
 
     kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
     kapt project(':helios-meta-compiler')
@@ -12,10 +9,8 @@ dependencies {
     testCompile "io.arrow-kt:arrow-test:0.7.1"
     kaptTest project(':helios-meta-compiler')
     kaptTest "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
-    testCompileOnly "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
 
-    testCompileOnly project(':helios-meta-compiler')
-    testCompile "io.kotlintest:kotlintest:$kotlinTestVersion"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
