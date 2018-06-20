@@ -1,4 +1,4 @@
-package helios.sample
+package helios.samples
 
 import helios.meta.json
 

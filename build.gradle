@@ -134,6 +134,7 @@ dokka {
 
     outputFormat = 'html'
     outputDirectory = "$buildDir/kdoc"
+    samples = ['helios-optics/src/test/kotlin/helios/optics/JsonPath.kt']
     reportUndocumented = false
 }
 

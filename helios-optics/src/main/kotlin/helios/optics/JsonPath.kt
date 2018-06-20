@@ -3,29 +3,34 @@ package helios.optics
 
 import arrow.core.*
 import arrow.optics.*
-import arrow.optics.dsl.at
-import arrow.optics.instances.ListFilterIndexInstance
-import arrow.optics.instances.MapFilterIndexInstance
+import arrow.optics.dsl.*
+import arrow.optics.instances.*
+
 import helios.core.*
-import helios.instances.decoder
-import helios.instances.encoder
-import helios.typeclasses.Decoder
-import helios.typeclasses.Encoder
+import helios.typeclasses.*
+import helios.instances.*
+import helios.meta.json
 
 /**
- * JsonPath is a Json DSL based on Arrow-Optics (http://arrow-kt.io/docs/optics/iso/).
+ * [Json.Companion.path] is a Json DSL based on [Arrow-Optics](http://arrow-kt.io/docs/optics/iso/).
  *
- * With JsonPath you can represent paths/relations within your [Json] and it allows for working with [Json] in a more elegant way.
+ * With [Json.Companion.path] you can represent paths/relations within your [Json]. This enables an elegant way of working with [Json].
+ *
+ * @sample helios.optics.JsonPathExample.select
  */
 inline val Json.Companion.path: Optional<Json, Json> inline get() = Optional.id()
 
 /**
  * Extract value as [Boolean] from path.
+ *
+ * @sample helios.optics.JsonPathExample.boolean
  */
 inline val Optional<Json, Json>.boolean: Optional<Json, Boolean> inline get() = this compose Json.jsBoolean compose JsBoolean.value
 
 /**
  * Extract value as [CharSequence] from path.
+ *
+ * @sample helios.optics.JsonPathExample.charseq
  */
 inline val Optional<Json, Json>.charseq: Optional<Json, CharSequence> inline get() = this compose Json.jsString compose JsString.value
 
@@ -80,7 +85,7 @@ inline val Optional<Json, Json>.`null`: Optional<Json, JsNull> inline get() = th
 fun Optional<Json, Json>.select(name: String): Optional<Json, Json> = this compose Json.jsObject compose JsObject.index().index(name)
 
 /**
- * Extract field with [name] from [JsObject] from path.
+ * Extract field with [field] from [JsObject] from path.
  */
 fun Optional<Json, Json>.at(field: String): Optional<Json, Option<Json>> = (this compose Json.jsObject).at(JsObject.at(), field)
 
