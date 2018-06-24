@@ -1,11 +1,8 @@
 package helios.sample
 
-import arrow.core.Either
-import helios.core.Json
+import arrow.core.*
+import helios.core.*
 import helios.optics.*
-import helios.optics.path
-import helios.optics.select
-import helios.optics.string
 import helios.typeclasses.DecodingError
 
 const val companyJsonString = """
@@ -58,5 +55,26 @@ fun main(args: Array<String>) {
     Json.path.employees.filterIndex { it == 0 }.name.string.getAll(companyJson).let(::println)
 
     Json.path.employees.every.filterKeys { it == "name" }.string.getAll(companyJson).let(::println)
+
+    val json: Json = JsObject(
+      "first_name" to JsString("John"),
+      "last_name" to JsString("Doe"),
+      "age" to JsNumber(28),
+      "siblings" to JsArray(listOf(
+        JsObject(
+          "first_name" to JsString("Elia"),
+          "age" to JsNumber(23)
+        ),
+        JsObject(
+          "first_name" to JsString("Robert"),
+          "age" to JsNumber(25)
+        )
+      ))
+    )
+
+    Json.path.select("siblings")[1]
+      .toSibling()
+      .first_name
+      .set(json, "Robert Jr.")
 
 }
