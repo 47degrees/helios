@@ -80,7 +80,12 @@ inline val Optional<Json, Json>.`null`: Optional<Json, JsNull> inline get() = th
 fun Optional<Json, Json>.select(name: String): Optional<Json, Json> = this compose Json.jsObject compose JsObject.index().index(name)
 
 /**
- * Extract field with [name] from [JsObject] from path.
+ * Select field with [name] in [JsObject] from path.
+ */
+operator fun Optional<Json, Json>.get(name: String): Optional<Json, Json> = this compose Json.jsObject compose JsObject.index().index(name)
+
+/**
+ * Extract field with [field] from [JsObject] from path.
  */
 fun Optional<Json, Json>.at(field: String): Optional<Json, Option<Json>> = (this compose Json.jsObject).at(JsObject.at(), field)
 
