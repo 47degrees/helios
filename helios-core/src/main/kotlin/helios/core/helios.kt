@@ -165,8 +165,8 @@ sealed class JsNumber : Json() {
         fun fromIntegralStringUnsafe(value: String): JsNumber {
             val bound = if (value[0] == '-') MinLongString else MaxLongString
             val isJsDecimal =
-                    value.length < bound.length
-                            || (value.length == bound.length && value <= bound)
+              !(value.length < bound.length
+                            || (value.length == bound.length && value <= bound))
             return if (isJsDecimal) JsDecimal(value) else {
                 val longValue = java.lang.Long.parseLong(value)
 
