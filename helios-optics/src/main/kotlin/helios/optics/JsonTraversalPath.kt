@@ -42,6 +42,11 @@ inline val Traversal<Json, Json>.decimal: Traversal<Json, String> inline get() =
 inline val Traversal<Json, Json>.long: Traversal<Json, Long> inline get() = jsnumber compose JsNumber.jsLong compose JsLong.value
 
 /**
+ * Extract value as [Double] from path.
+ */
+inline val Traversal<Json, Json>.double: Traversal<Json, Double> inline get() = jsnumber compose JsNumber.jsDouble compose JsDouble.value
+
+/**
  * Extract value as [Float] from path.
  */
 inline val Traversal<Json, Json>.float: Traversal<Json, Float> inline get() = jsnumber compose JsNumber.jsFloat compose JsFloat.value

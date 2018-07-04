@@ -50,6 +50,11 @@ inline val Optional<Json, Json>.decimal: Optional<Json, String> inline get() = j
 inline val Optional<Json, Json>.long: Optional<Json, Long> inline get() = jsnumber compose JsNumber.jsLong compose JsLong.value
 
 /**
+ * Extract value as [Double] from [Json.Companion.path].
+ */
+inline val Optional<Json, Json>.double: Optional<Json, Double> inline get() = jsnumber compose JsNumber.jsDouble compose JsDouble.value
+
+/**
  * Extract value as [Float] from [Json.Companion.path].
  */
 inline val Optional<Json, Json>.float: Optional<Json, Float> inline get() = jsnumber compose JsNumber.jsFloat compose JsFloat.value
