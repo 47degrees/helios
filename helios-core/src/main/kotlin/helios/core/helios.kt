@@ -93,6 +93,12 @@ sealed class Json {
 
     abstract fun toJsonString(): String
 
+    override fun equals(other: Any?): Boolean = Json.eq().run {
+        (other as? Json)?.let { this@Json.eqv(it) } ?: false
+    }
+
+    override fun hashCode(): Int = super.hashCode()
+
 }
 
 data class JsBoolean(val value: Boolean) : Json() {
@@ -150,6 +156,12 @@ sealed class JsNumber : Json() {
         }
     }
 
+    override fun equals(other: Any?): Boolean = JsNumber.eq().run {
+        (other as? JsNumber)?.let { this@JsNumber.eqv(it) } ?: false
+    }
+
+    override abstract fun hashCode(): Int
+
     companion object {
 
         operator fun invoke(value: Long): JsLong = JsLong(value)
@@ -165,7 +177,7 @@ sealed class JsNumber : Json() {
         fun fromIntegralStringUnsafe(value: String): JsNumber {
             val bound = if (value[0] == '-') MinLongString else MaxLongString
             val isJsDecimal =
-              !(value.length < bound.length
+                    !(value.length < bound.length
                             || (value.length == bound.length && value <= bound))
             return if (isJsDecimal) JsDecimal(value) else {
                 val longValue = java.lang.Long.parseLong(value)
@@ -187,6 +199,12 @@ data class JsDecimal(val value: String) : JsNumber() {
 
     override fun toJsonString(): String = value
 
+    override fun equals(other: Any?): Boolean = JsNumber.eq().run {
+        (other as? JsNumber)?.let { this@JsDecimal.eqv(it) } ?: false
+    }
+
+    override fun hashCode(): Int = value.hashCode()
+
     companion object
 }
 
@@ -201,6 +219,12 @@ data class JsLong(val value: Long) : JsNumber() {
 
     override fun toJsonString(): String = "$value"
 
+    override fun equals(other: Any?): Boolean = JsNumber.eq().run {
+        (other as? JsNumber)?.let { this@JsLong.eqv(it) } ?: false
+    }
+
+    override fun hashCode(): Int = value.hashCode()
+
     companion object
 }
 
@@ -214,6 +238,12 @@ data class JsDouble(val value: Double) : JsNumber() {
     override fun toLong(): Option<Long> = value.toLong().some()
 
     override fun toJsonString(): String = "$value"
+
+    override fun equals(other: Any?): Boolean = JsNumber.eq().run {
+        (other as? JsNumber)?.let { this@JsDouble.eqv(it) } ?: false
+    }
+
+    override fun hashCode(): Int = value.hashCode()
 
     companion object
 }
@@ -230,6 +260,12 @@ data class JsFloat(val value: Float) : JsNumber() {
 
     override fun toJsonString(): String = "$value"
 
+    override fun equals(other: Any?): Boolean = JsNumber.eq().run {
+        (other as? JsNumber)?.let { this@JsFloat.eqv(it) } ?: false
+    }
+
+    override fun hashCode(): Int = value.hashCode()
+
     companion object
 }
 
@@ -244,6 +280,12 @@ data class JsInt(val value: Int) : JsNumber() {
 
     override fun toJsonString(): String = "$value"
 
+    override fun equals(other: Any?): Boolean = JsNumber.eq().run {
+        (other as? JsNumber)?.let { this@JsInt.eqv(it) } ?: false
+    }
+
+    override fun hashCode(): Int = value.hashCode()
+
     companion object
 }
 
@@ -253,6 +295,12 @@ data class JsArray(val value: List<Json>) : Json() {
 
     override fun toJsonString(): String =
             value.joinToString(prefix = "[", separator = ",", postfix = "]", transform = Json::toJsonString)
+
+    override fun equals(other: Any?): Boolean = JsArray.eq().run {
+        (other as? JsArray)?.let { this@JsArray.eqv(it) } ?: false
+    }
+
+    override fun hashCode(): Int = value.hashCode()
 
     companion object
 }
@@ -269,6 +317,12 @@ data class JsObject(val value: Map<String, Json>) : Json() {
     override fun toJsonString(): String =
             value.map { (k, v) -> """"$k":${v.toJsonString()}""" }.joinToString(prefix = "{", separator = ",", postfix = "}")
 
+    override fun equals(other: Any?): Boolean = JsObject.eq().run {
+        (other as? JsObject)?.let { this@JsObject.eqv(it) } ?: false
+    }
+
+    override fun hashCode(): Int = value.hashCode()
+
 }
 
 object JsNull : Json() {
@@ -277,3 +331,4 @@ object JsNull : Json() {
 
 val JsTrue = JsBoolean(true)
 val JsFalse = JsBoolean(false)
+
