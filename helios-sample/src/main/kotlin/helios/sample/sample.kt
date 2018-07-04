@@ -1,8 +1,8 @@
 package helios.sample
 
-import arrow.core.Either
-import helios.core.Json
-import helios.optics.path
+import arrow.core.*
+import helios.core.*
+import helios.optics.*
 import helios.typeclasses.DecodingError
 
 const val companyJsonString = """
@@ -45,8 +45,8 @@ fun main(args: Array<String>) {
     Json.path.select("address").select("street").select("name").string.getOption(companyJson).let(::println)
     Json.path.address.street.name.string.getOption(companyJson).let(::println)
 
-    Json.path.select("employees").every().select("lastName").string
-    val employeeLastNames = Json.path.employees.every().lastName.string
+    Json.path.select("employees").every.select("lastName").string
+    val employeeLastNames = Json.path.employees.every.lastName.string
 
     employeeLastNames.modify(companyJson, String::capitalize).let {
         employeeLastNames.getAll(it)
@@ -54,6 +54,27 @@ fun main(args: Array<String>) {
 
     Json.path.employees.filterIndex { it == 0 }.name.string.getAll(companyJson).let(::println)
 
-    Json.path.employees.every().filterKeys { it == "name" }.string.getAll(companyJson).let(::println)
+    Json.path.employees.every.filterKeys { it == "name" }.string.getAll(companyJson).let(::println)
+
+    val json: Json = JsObject(
+      "first_name" to JsString("John"),
+      "last_name" to JsString("Doe"),
+      "age" to JsNumber(28),
+      "siblings" to JsArray(listOf(
+        JsObject(
+          "first_name" to JsString("Elia"),
+          "age" to JsNumber(23)
+        ),
+        JsObject(
+          "first_name" to JsString("Robert"),
+          "age" to JsNumber(25)
+        )
+      ))
+    )
+
+    Json.path.select("siblings")[1]
+      .toSibling()
+      .first_name
+      .set(json, "Robert Jr.")
 
 }

@@ -51,7 +51,7 @@ interface JsObjectAtInstance : At<JsObject, String, Option<Json>> {
 interface JsObjectEachInstance : Each<JsObject, Json> {
     override fun each() = object : Traversal<JsObject, Json> {
         override fun <F> modifyF(FA: Applicative<F>, s: JsObject, f: (Json) -> Kind<F, Json>): Kind<F, JsObject> = FA.run {
-                s.value.k().traverse(FA, f).map { JsObject(it.map) }
+            s.value.k().traverse(FA, f).map { JsObject(it.map) }
         }
     }
 }

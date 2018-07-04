@@ -1,7 +1,6 @@
 package helios.core
 
 import arrow.core.*
-import arrow.optics.optics
 import helios.instances.HeliosFacade
 import helios.parser.Parser
 import helios.typeclasses.Decoder
@@ -14,7 +13,7 @@ import java.nio.channels.ReadableByteChannel
 const val MaxLongString = "9223372036854775807"
 const val MinLongString = "-9223372036854775808"
 
-@optics sealed class Json {
+sealed class Json {
 
     companion object {
         fun fromValues(i: Iterable<Json>): JsArray = JsArray(i.toList())
@@ -86,29 +85,29 @@ const val MinLongString = "-9223372036854775808"
             (this as? JsNull)?.some() ?: none()
 
     fun merge(that: Json): Json =
-            Option.applicative().map(asJsObject(), that.asJsObject(), { (lhs, rhs) ->
+            Option.applicative().map(asJsObject(), that.asJsObject()) { (lhs, rhs) ->
                 lhs.toList().fold(rhs) { acc, (key, value) ->
                     rhs[key].fold({ acc.add(key, value) }, { r -> acc.add(key, value.merge(r)) })
                 }
-            }).fix().getOrElse { that }
+            }.fix().getOrElse { that }
 
     abstract fun toJsonString(): String
 
 }
 
-@optics data class JsBoolean(val value: Boolean) : Json() {
+data class JsBoolean(val value: Boolean) : Json() {
     override fun toJsonString(): String = "$value"
 
     companion object
 }
 
-@optics data class JsString(val value: CharSequence) : Json() {
+data class JsString(val value: CharSequence) : Json() {
     override fun toJsonString(): String = """"$value""""
 
     companion object
 }
 
-@optics sealed class JsNumber : Json() {
+sealed class JsNumber : Json() {
 
     abstract fun toBigDecimal(): Option<BigDecimal>
 
@@ -177,7 +176,7 @@ const val MinLongString = "-9223372036854775808"
     }
 }
 
-@optics data class JsDecimal(val value: String) : JsNumber() {
+data class JsDecimal(val value: String) : JsNumber() {
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
     override fun toBigInteger(): Option<BigInteger> = toBigDecimal().map { it.toBigInteger() }
@@ -191,7 +190,7 @@ const val MinLongString = "-9223372036854775808"
     companion object
 }
 
-@optics data class JsLong(val value: Long) : JsNumber() {
+data class JsLong(val value: Long) : JsNumber() {
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
     override fun toBigInteger(): Option<BigInteger> = toBigDecimal().map { it.toBigInteger() }
@@ -205,7 +204,7 @@ const val MinLongString = "-9223372036854775808"
     companion object
 }
 
-@optics data class JsDouble(val value: Double) : JsNumber() {
+data class JsDouble(val value: Double) : JsNumber() {
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
     override fun toBigInteger(): Option<BigInteger> = toBigDecimal().map { it.toBigInteger() }
@@ -219,7 +218,7 @@ const val MinLongString = "-9223372036854775808"
     companion object
 }
 
-@optics data class JsFloat(val value: Float) : JsNumber() {
+data class JsFloat(val value: Float) : JsNumber() {
 
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
@@ -234,7 +233,7 @@ const val MinLongString = "-9223372036854775808"
     companion object
 }
 
-@optics data class JsInt(val value: Int) : JsNumber() {
+data class JsInt(val value: Int) : JsNumber() {
     override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
     override fun toBigInteger(): Option<BigInteger> = value.toBigInteger().some()
@@ -248,7 +247,7 @@ const val MinLongString = "-9223372036854775808"
     companion object
 }
 
-@optics data class JsArray(val value: List<Json>) : Json() {
+data class JsArray(val value: List<Json>) : Json() {
 
     operator fun get(index: Int): Option<Json> = Option.fromNullable(value.getOrNull(index))
 
@@ -258,7 +257,7 @@ const val MinLongString = "-9223372036854775808"
     companion object
 }
 
-@optics data class JsObject(val value: Map<String, Json>) : Json() {
+data class JsObject(val value: Map<String, Json>) : Json() {
 
     companion object {
         operator fun invoke(vararg keyValues: Pair<String, Json>) = JsObject(keyValues.toMap())
