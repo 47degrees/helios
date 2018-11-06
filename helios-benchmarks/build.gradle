@@ -1,6 +1,6 @@
 dependencies {
     compile project(":helios-core")
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     compile 'com.beust:klaxon:2.0.3'
     compile 'com.tomatobean:jsonparser:1.0.5'
     compile 'com.squareup.moshi:moshi-kotlin:1.5.0'

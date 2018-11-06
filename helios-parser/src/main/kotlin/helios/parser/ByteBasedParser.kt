@@ -30,7 +30,7 @@ interface ByteBasedParser<J> : Parser<J> {
         var j = i
         var c: Int = (byte(j) and 0xff.toByte()).toInt()
         while (c != 34) {
-            if (c < 32) return die(j, "control char ($c) in string")
+            if (c < 32) die(j, "control char ($c) in string")
             if (c == 92) return -1
             j += 1
             c = (byte(j) and 0xff.toByte()).toInt()

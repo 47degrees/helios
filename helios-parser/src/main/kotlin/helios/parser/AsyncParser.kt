@@ -1,8 +1,6 @@
 package helios.parser
 
-import arrow.core.Either
-import arrow.core.Left
-import arrow.core.Right
+import arrow.core.*
 import java.nio.ByteBuffer
 
 sealed class Mode(val start: Int, val value: Int)
@@ -142,12 +140,11 @@ class AsyncParser<J>(
     val ASYNC_END = -3
     val ASYNC_POSTVAL = -2
     val ASYNC_PREVAL = -1
-
+    //TODO Either from Try
     fun churn(facade: Facade<J>): Either<ParseException, List<J>> {
 
         // accumulates json values
         val results = arrayListOf<J>()
-
         // we rely on exceptions to tell us when we run out of data
         return try {
             while (true) {
@@ -160,26 +157,25 @@ class AsyncParser<J>(
 
                         ' ', '\t', '\r' -> offset += 1
                         '[' -> {
-                            if (state == ASYNC_PRESTART) {
-                                offset += 1
-                                state = ASYNC_START
-                            } else if (state == ASYNC_END) {
-                                die(offset, "expected eof")
-                            } else if (state == ASYNC_POSTVAL) {
-                                die(offset, "expected , or ]")
-                            } else {
-                                state = 0
+                            when (state) {
+                                ASYNC_PRESTART -> {
+                                    offset += 1
+                                    state = ASYNC_START
+                                }
+                                ASYNC_END -> die(offset, "expected eof")
+                                ASYNC_POSTVAL -> die(offset, "expected , or ]")
+                                else -> state = 0
                             }
                         }
 
                         ',' -> {
-                            if (state == ASYNC_POSTVAL) {
-                                offset += 1
-                                state = ASYNC_PREVAL
-                            } else if (state == ASYNC_END) {
-                                die(offset, "expected eof")
-                            } else {
-                                die(offset, "expected json value")
+                            when (state) {
+                                ASYNC_POSTVAL -> {
+                                    offset += 1
+                                    state = ASYNC_PREVAL
+                                }
+                                ASYNC_END -> die(offset, "expected eof")
+                                else -> die(offset, "expected json value")
                             }
                         }
 
@@ -199,13 +195,13 @@ class AsyncParser<J>(
                         }
 
                         else -> {
-                            if (state == ASYNC_END) {
-                                die(offset, "expected eof")
-                            } else if (state == ASYNC_POSTVAL) {
-                                die(offset, "expected ] or ,")
-                            } else {
-                                if (state == ASYNC_PRESTART && streamMode > 0) streamMode = -1
-                                state = 0
+                            when (state) {
+                                ASYNC_END -> die(offset, "expected eof")
+                                ASYNC_POSTVAL -> die(offset, "expected ] or ,")
+                                else -> {
+                                    if (state == ASYNC_PRESTART && streamMode > 0) streamMode = -1
+                                    state = 0
+                                }
                             }
                         }
                     }
@@ -218,12 +214,10 @@ class AsyncParser<J>(
                     } else {
                         rparse(state, curr, stack, facade)
                     }
-                    if (streamMode > 0) {
-                        state = ASYNC_POSTVAL
-                    } else if (streamMode == 0) {
-                        state = ASYNC_PREVAL
-                    } else {
-                        state = ASYNC_END
+                    state = when {
+                        streamMode > 0 -> ASYNC_POSTVAL
+                        streamMode == 0 -> ASYNC_PREVAL
+                        else -> ASYNC_END
                     }
                     curr = j
                     offset = j
@@ -287,13 +281,13 @@ class AsyncParser<J>(
     /**
      * Access a byte range as a string.
      *
-     * Since the underlying data are UTF-8 encoded, i and k must occur on unicode
+     * Since the underlying data are UTF-8 encoded, i and j must occur on unicode
      * boundaries. Also, the resulting String is not guaranteed to have length
-     * (k - i).
+     * (j - i).
      */
-    override fun at(i: Int, k: Int): CharSequence {
-        if (k > len) throw AsyncException()
-        val size = k - i
+    override fun at(i: Int, j: Int): CharSequence {
+        if (j > len) throw AsyncException()
+        val size = j - i
         val arr = ByteArray(size)
         System.arraycopy(data, i, arr, 0, size)
         return String(arr, utf8)

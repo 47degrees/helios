@@ -1,6 +1,6 @@
 package helios.parser
 
-import arrow.data.Try
+import arrow.core.Try
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.channels.ReadableByteChannel
@@ -112,33 +112,33 @@ interface Parser<J> {
      * number.
      */
     fun parseNum(i: Int, ctxt: FContext<J>, facade: Facade<J>): Int {
-        var j = i
-        var c = at(j)
+        var k = i
+        var c = at(k)
         var decIndex = -1
         var expIndex = -1
 
         if (c == '-') {
-            j += 1
-            c = at(j)
+            k += 1
+            c = at(k)
         }
         if (c == '0') {
-            j += 1
-            c = at(j)
+            k += 1
+            c = at(k)
         } else if ('1' <= c && c <= '9') {
             while ('0' <= c && c <= '9') {
-                j += 1; c = at(j)
+                k += 1; c = at(k)
             }
         } else {
             die(i, "expected digit")
         }
 
         if (c == '.') {
-            decIndex = j - i
-            j += 1
-            c = at(j)
+            decIndex = k - i
+            k += 1
+            c = at(k)
             if ('0' <= c && c <= '9') {
                 while ('0' <= c && c <= '9') {
-                    j += 1; c = at(j)
+                    k += 1; c = at(k)
                 }
             } else {
                 die(i, "expected digit")
@@ -146,24 +146,24 @@ interface Parser<J> {
         }
 
         if (c == 'e' || c == 'E') {
-            expIndex = j - i
-            j += 1
-            c = at(j)
+            expIndex = k - i
+            k += 1
+            c = at(k)
             if (c == '+' || c == '-') {
-                j += 1
-                c = at(j)
+                k += 1
+                c = at(k)
             }
             if ('0' <= c && c <= '9') {
                 while ('0' <= c && c <= '9') {
-                    j += 1; c = at(j)
+                    k += 1; c = at(k)
                 }
             } else {
                 die(i, "expected digit")
             }
         }
 
-        ctxt.add(facade.jnum(at(i, j), decIndex, expIndex))
-        return j
+        ctxt.add(facade.jnum(at(i, k), decIndex, expIndex))
+        return k
     }
 
     /**
@@ -390,12 +390,12 @@ interface Parser<J> {
             } else {
                 val ctxt = stack[0]
 
-                if ((c >= '0' && c <= '9') || c == '-') {
-                    val j = parseNum(i, ctxt, facade)
-                    rparse(if (ctxt.isObj()) OBJEND else ARREND, j, stack, facade)
+                if ((c in '0'..'9') || c == '-') {
+                    val jc = parseNum(i, ctxt, facade)
+                    rparse(if (ctxt.isObj()) OBJEND else ARREND, jc, stack, facade)
                 } else if (c == '"') {
-                    val j = parseString(i, ctxt)
-                    rparse(if (ctxt.isObj()) OBJEND else ARREND, j, stack, facade)
+                    val jc = parseString(i, ctxt)
+                    rparse(if (ctxt.isObj()) OBJEND else ARREND, jc, stack, facade)
                 } else if (c == 't') {
                     ctxt.add(parseTrue(i, facade))
                     rparse(if (ctxt.isObj()) OBJEND else ARREND, i + 4, stack, facade)
@@ -486,7 +486,7 @@ interface Parser<J> {
         fun <J> parseFromByteBuffer(buf: ByteBuffer, facade: Facade<J>): Try<J> =
                 Try { ByteBufferParser<J>(buf).parse(facade) }
 
-        fun <J> async(mode: Mode, facade: Facade<J>): AsyncParser<J> =
+        fun <J> async(mode: Mode): AsyncParser<J> =
                 AsyncParser(mode)
     }
 
