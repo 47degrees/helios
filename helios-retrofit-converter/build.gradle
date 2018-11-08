@@ -3,7 +3,7 @@ dependencies {
     compile project(":helios-core")
     compile project(":helios-meta")
     compile project(":helios-parser")
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     compile "com.squareup.retrofit2:retrofit:2.3.0"
 }
 
