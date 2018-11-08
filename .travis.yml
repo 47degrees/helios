@@ -4,5 +4,4 @@ jdk:
 - oraclejdk7
 
 script:
-- ./gradlew clean build
-- ./gradlew test
+- ./gradlew clean build test
