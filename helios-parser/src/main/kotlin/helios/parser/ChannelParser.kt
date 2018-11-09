@@ -135,7 +135,7 @@ class ChannelParser<J>(val ch: ReadableByteChannel, bufferSize: Int) : SyncParse
      * method is used to parse JSON values like numbers, constants, or
      * delimiters, which are known to be within ASCII).
      */
-    tailrec override fun at(i: Int): Char =
+    override tailrec fun at(i: Int): Char =
             if (i < Bufsize) curr[i].toChar()
             else if (i < Allsize) next[i and Mask].toChar()
             else {
@@ -145,16 +145,16 @@ class ChannelParser<J>(val ch: ReadableByteChannel, bufferSize: Int) : SyncParse
     /**
      * Access a byte range as a string.
      *
-     * Since the underlying data are UTF-8 encoded, i and k must occur
+     * Since the underlying data are UTF-8 encoded, i and j must occur
      * on unicode boundaries. Also, the resulting String is not
-     * guaranteed to have length (k - i).
+     * guaranteed to have length (j - i).
      */
-    tailrec override fun at(i: Int, k: Int): CharSequence {
-        val len = k - i
-        return if (k > Allsize) {
+    override tailrec fun at(i: Int, j: Int): CharSequence {
+        val len = j - i
+        return if (j > Allsize) {
             grow()
-            at(i, k)
-        } else if (k <= Bufsize) {
+            at(i, j)
+        } else if (j <= Bufsize) {
             String(curr, i, len, utf8)
         } else if (i >= Bufsize) {
             String(next, i - Bufsize, len, utf8)
@@ -162,7 +162,7 @@ class ChannelParser<J>(val ch: ReadableByteChannel, bufferSize: Int) : SyncParse
             val arr = ByteArray(len)
             val mid = Bufsize - i
             System.arraycopy(curr, i, arr, 0, mid)
-            System.arraycopy(next, 0, arr, mid, k - Bufsize)
+            System.arraycopy(next, 0, arr, mid, j - Bufsize)
             String(arr, utf8)
         }
     }

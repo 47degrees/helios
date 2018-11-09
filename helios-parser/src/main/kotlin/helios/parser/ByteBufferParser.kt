@@ -34,8 +34,8 @@ class ByteBufferParser<J>(val src: ByteBuffer) : SyncParser<J>, ByteBasedParser<
     override fun byte(i: Int): Byte = src.get(i + start)
     override fun at(i: Int): Char = src.get(i + start).toChar()
 
-    override fun at(i: Int, k: Int): CharSequence {
-        val len = k - i
+    override fun at(i: Int, j: Int): CharSequence {
+        val len = j - i
         val arr = ByteArray(len)
         src.position(i + start)
         src.get(arr, 0, len)

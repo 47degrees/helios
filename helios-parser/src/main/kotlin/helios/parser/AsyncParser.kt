@@ -1,8 +1,6 @@
 package helios.parser
 
-import arrow.core.Either
-import arrow.core.Left
-import arrow.core.Right
+import arrow.core.*
 import java.nio.ByteBuffer
 
 sealed class Mode(val start: Int, val value: Int)
@@ -142,12 +140,11 @@ class AsyncParser<J>(
     val ASYNC_END = -3
     val ASYNC_POSTVAL = -2
     val ASYNC_PREVAL = -1
-
+    //TODO Either from Try
     fun churn(facade: Facade<J>): Either<ParseException, List<J>> {
 
         // accumulates json values
         val results = arrayListOf<J>()
-
         // we rely on exceptions to tell us when we run out of data
         return try {
             while (true) {
@@ -287,13 +284,13 @@ class AsyncParser<J>(
     /**
      * Access a byte range as a string.
      *
-     * Since the underlying data are UTF-8 encoded, i and k must occur on unicode
+     * Since the underlying data are UTF-8 encoded, i and j must occur on unicode
      * boundaries. Also, the resulting String is not guaranteed to have length
-     * (k - i).
+     * (j - i).
      */
-    override fun at(i: Int, k: Int): CharSequence {
-        if (k > len) throw AsyncException()
-        val size = k - i
+    override fun at(i: Int, j: Int): CharSequence {
+        if (j > len) throw AsyncException()
+        val size = j - i
         val arr = ByteArray(size)
         System.arraycopy(data, i, arr, 0, size)
         return String(arr, utf8)
