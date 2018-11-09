@@ -1,64 +1,38 @@
 package helios.instances
 
-import arrow.core.Either
-import arrow.core.Option
-import arrow.core.Tuple2
-import arrow.core.Tuple3
+import arrow.core.*
 import arrow.instance
-import arrow.syntax.option.some
-import arrow.syntax.option.toEither
+import arrow.instances.BooleanInstances
+import arrow.instances.eq
+import arrow.typeclasses.Eq
 import helios.core.*
 import helios.typeclasses.*
 
-object IntEncoderInstance : Encoder<Int> {
-    override fun encode(value: Int): Json = JsNumber(value)
+fun Int.Companion.encoder() = object : Encoder<Int> {
+    override fun Int.encode(): Json = JsNumber(this)
 }
 
-object IntEncoderInstanceImplicits {
-    fun instance(): IntEncoderInstance = IntEncoderInstance
-}
-
-object IntDecoderInstance : Decoder<Int> {
+fun Int.Companion.decoder() = object : Decoder<Int> {
     override fun decode(value: Json): Either<DecodingError, Int> =
             value.asJsNumber().flatMap { it.toInt() }.toEither { NumberDecodingError(value) }
 }
 
-object IntDecoderInstanceImplicits {
-    fun instance(): IntDecoderInstance = IntDecoderInstance
+fun BooleanInstances.encoder() = object : Encoder<Boolean> {
+    override fun Boolean.encode(): Json = JsBoolean(this)
 }
 
-object BooleanEncoderInstance : Encoder<Boolean> {
-    override fun encode(value: Boolean): Json = JsBoolean(value)
-}
-
-object BooleanEncoderInstanceImplicits {
-    fun instance(): BooleanEncoderInstance = BooleanEncoderInstance
-}
-
-object BooleanDecoderInstance : Decoder<Boolean> {
+fun BooleanInstances.decoder() = object : Decoder<Boolean> {
     override fun decode(value: Json): Either<DecodingError, Boolean> =
             value.asJsBoolean().flatMap { it.value.some() }.toEither { BooleanDecodingError(value) }
 }
 
-object BooleanDecoderInstanceImplicits {
-    fun instance(): BooleanDecoderInstance = BooleanDecoderInstance
+fun String.Companion.encoder() = object : Encoder<String> {
+    override fun String.encode(): Json = JsString(this)
 }
 
-object StringEncoderInstance : Encoder<String> {
-    override fun encode(value: String): Json = JsString(value)
-}
-
-object StringEncoderInstanceImplicits {
-    fun instance(): StringEncoderInstance = StringEncoderInstance
-}
-
-object StringDecoderInstance : Decoder<String> {
+fun String.Companion.decoder() = object : Decoder<String> {
     override fun decode(value: Json): Either<DecodingError, String> =
             value.asJsString().flatMap { it.value.toString().some() }.toEither { StringDecodingError(value) }
-}
-
-object StringDecoderInstanceImplicits {
-    fun instance(): StringDecoderInstance = StringDecoderInstance
 }
 
 @instance(Option::class)
@@ -66,8 +40,9 @@ interface OptionEncoderInstance<in A> : Encoder<Option<A>> {
 
     fun encoderA(): Encoder<A>
 
-    override fun encode(value: Option<A>): Json =
-            value.fold({ JsNull }, { encoderA().encode(it) })
+    override fun Option<A>.encode(): Json =
+            fold({ JsNull }, { encoderA().run { it.encode() } })
+
 }
 
 @instance(Tuple2::class)
@@ -77,10 +52,10 @@ interface Tuple2EncoderInstance<A, B> : Encoder<Tuple2<A, B>> {
 
     fun encoderB(): Encoder<B>
 
-    override fun encode(value: Tuple2<A, B>): Json = JsArray(
+    override fun Tuple2<A, B>.encode(): Json = JsArray(
             listOf(
-                    encoderA().encode(value.a),
-                    encoderB().encode(value.b)
+                    encoderA().run { a.encode() },
+                    encoderB().run { b.encode() }
             )
     )
 
@@ -95,12 +70,85 @@ interface Tuple3EncoderInstance<A, B, C> : Encoder<Tuple3<A, B, C>> {
 
     fun encoderC(): Encoder<C>
 
-    override fun encode(value: Tuple3<A, B, C>): Json = JsArray(
+    override fun Tuple3<A, B, C>.encode(): Json = JsArray(
             listOf(
-                    encoderA().encode(value.a),
-                    encoderB().encode(value.b),
-                    encoderC().encode(value.c)
+                    encoderA().run { a.encode() },
+                    encoderB().run { b.encode() },
+                    encoderC().run { c.encode() }
             )
     )
 
+}
+
+private inline val Json.isNull inline get() = this === JsNull
+
+@instance(JsObject::class)
+interface JsObjectEqInstance : Eq<JsObject> {
+    override fun JsObject.eqv(b: JsObject): Boolean = with(Json.eq()) {
+        this@eqv.value.entries.zip(b.value.entries) { aa, bb ->
+            aa.key == bb.key && aa.value.eqv(bb.value)
+        }.fold(true) { b1, b2 -> b1 && b2 }
+    }
+}
+
+@instance(JsArray::class)
+interface JsArrayEqInstance : Eq<JsArray> {
+    override fun JsArray.eqv(b: JsArray): Boolean = with(Json.eq()) {
+        this@eqv.value.zip(b.value) { a, b -> a.eqv(b) }
+                .fold(true) { b1, b2 -> b1 && b2 }
+    }
+}
+
+@instance(Json::class)
+interface JsonEqInstance : Eq<Json> {
+    override fun Json.eqv(b: Json): Boolean = when {
+        this is JsObject && b is JsObject -> JsObject.eq().run { this@eqv.eqv(b) }
+        this is JsString && b is JsString -> String.eq().run { this@eqv.value.toString().eqv(b.value.toString()) }
+        this is JsNumber && b is JsNumber -> JsNumber.eq().run { this@eqv.eqv(b) }
+        this is JsBoolean && b is JsBoolean -> BooleanInstances.eq().run { this@eqv.value.eqv(b.value) }
+        this is JsArray && b is JsArray -> JsArray.eq().run { this@eqv.eqv(b) }
+        else -> this.isNull && b.isNull
+    }
+
+}
+
+@instance(JsNumber::class)
+interface JsNumberEqInstance : Eq<JsNumber> {
+    override fun JsNumber.eqv(b: JsNumber): Boolean = when (this) {
+        is JsDecimal -> when (b) {
+            is JsDecimal -> String.eq().run { this@eqv.value.eqv(b.value) }
+            is JsLong -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
+            is JsDouble -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
+            is JsFloat -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
+            is JsInt -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
+        }
+        is JsLong -> when (b) {
+            is JsDecimal -> String.eq().run { this@eqv.value.toString().eqv(b.value) }
+            is JsLong -> Long.eq().run { this@eqv.value.eqv(b.value) }
+            is JsDouble -> Double.eq().run { this@eqv.value.toDouble().eqv(b.value) }
+            is JsFloat -> Float.eq().run { this@eqv.value.toFloat().eqv(b.value) }
+            is JsInt -> Long.eq().run { this@eqv.value.eqv(b.value.toLong()) }
+        }
+        is JsDouble -> when (b) {
+            is JsDecimal -> String.eq().run { this@eqv.value.toString().eqv(b.value) }
+            is JsLong -> Double.eq().run { this@eqv.value.eqv(b.value.toDouble()) }
+            is JsDouble -> Double.eq().run { this@eqv.value.eqv(b.value) }
+            is JsFloat -> Double.eq().run { this@eqv.value.eqv(b.value.toDouble()) }
+            is JsInt -> Double.eq().run { this@eqv.value.eqv(b.value.toDouble()) }
+        }
+        is JsFloat -> when (b) {
+            is JsDecimal -> String.eq().run { this@eqv.value.toString().eqv(b.value) }
+            is JsLong -> Float.eq().run { this@eqv.value.eqv(b.value.toFloat()) }
+            is JsDouble -> Double.eq().run { this@eqv.value.toDouble().eqv(b.value) }
+            is JsFloat -> Float.eq().run { this@eqv.value.eqv(b.value) }
+            is JsInt -> Float.eq().run { this@eqv.value.eqv(b.value.toFloat()) }
+        }
+        is JsInt -> when (b) {
+            is JsDecimal -> String.eq().run { this@eqv.value.toString().eqv(b.value) }
+            is JsLong -> Long.eq().run { this@eqv.value.toLong().eqv(b.value) }
+            is JsDouble -> Double.eq().run { this@eqv.value.toDouble().eqv(b.value) }
+            is JsFloat -> Float.eq().run { this@eqv.value.toFloat().eqv(b.value) }
+            is JsInt -> Int.eq().run { this@eqv.value.eqv(b.value) }
+        }
+    }
 }

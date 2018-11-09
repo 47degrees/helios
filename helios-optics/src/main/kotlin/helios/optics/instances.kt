@@ -2,6 +2,8 @@ package helios.optics
 
 import arrow.Kind
 import arrow.core.Option
+import arrow.core.left
+import arrow.core.right
 import arrow.data.getOption
 import arrow.data.k
 import arrow.instance
@@ -11,8 +13,6 @@ import arrow.optics.Traversal
 import arrow.optics.typeclasses.At
 import arrow.optics.typeclasses.Each
 import arrow.optics.typeclasses.Index
-import arrow.syntax.either.left
-import arrow.syntax.either.right
 import arrow.typeclasses.Applicative
 import helios.core.JsArray
 import helios.core.JsObject
@@ -50,16 +50,18 @@ interface JsObjectAtInstance : At<JsObject, String, Option<Json>> {
 @instance(JsObject::class)
 interface JsObjectEachInstance : Each<JsObject, Json> {
     override fun each() = object : Traversal<JsObject, Json> {
-        override fun <F> modifyF(FA: Applicative<F>, s: JsObject, f: (Json) -> Kind<F, Json>): Kind<F, JsObject> =
-                FA.map(s.value.k().traverse(f, FA)) { JsObject(it.map) }
+        override fun <F> modifyF(FA: Applicative<F>, s: JsObject, f: (Json) -> Kind<F, Json>): Kind<F, JsObject> = FA.run {
+            s.value.k().traverse(FA, f).map { JsObject(it.map) }
+        }
     }
 }
 
 @instance(JsArray::class)
 interface JsArrayEachInstance : Each<JsArray, Json> {
     override fun each() = object : Traversal<JsArray, Json> {
-        override fun <F> modifyF(FA: Applicative<F>, s: JsArray, f: (Json) -> Kind<F, Json>): Kind<F, JsArray> =
-                FA.map(s.value.k().traverse(f, FA)) { JsArray(it.list) }
+        override fun <F> modifyF(FA: Applicative<F>, s: JsArray, f: (Json) -> Kind<F, Json>): Kind<F, JsArray> = FA.run {
+            s.value.k().traverse(FA, f).map { JsArray(it.list) }
+        }
     }
 }
 

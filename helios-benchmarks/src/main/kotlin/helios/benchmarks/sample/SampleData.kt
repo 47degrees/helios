@@ -2,8 +2,12 @@ package helios.benchmarks.sample
 
 import helios.meta.json
 
-@json data class Friends(val friends: List<Friend>)
-@json data class NestedFriends(val id: Int, val name: String)
+@json data class Friends(val friends: List<Friend>) {
+    companion object
+}
+@json data class NestedFriends(val id: Int, val name: String) {
+    companion object
+}
 @json data class Friend(
         val _id: String,
         val latitude: String,
@@ -13,7 +17,9 @@ import helios.meta.json
         val friends: List<NestedFriends>,
         val greeting: String,
         val favoriteFruit: String
-)
+) {
+    companion object
+}
 
 val sampleJson: String = """
         {

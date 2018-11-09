@@ -4,8 +4,7 @@ import arrow.core.Either
 import arrow.core.fix
 import arrow.deriving
 import arrow.higherkind
-import arrow.isos
-import arrow.syntax.applicative.map
+import arrow.optics.optics
 import arrow.typeclasses.Applicative
 import arrow.typeclasses.Functor
 import arrow.typeclasses.Monad
@@ -15,7 +14,7 @@ import io.kotlintest.properties.map
 
 
 @json
-@isos
+@optics
 data class Friend(
         val _id: String,
         val latitude: String,
@@ -24,7 +23,9 @@ data class Friend(
         val range: List<Int>,
         val greeting: String,
         val favoriteFruit: String
-)
+) {
+    companion object
+}
 
 @higherkind
 @deriving(
@@ -44,7 +45,7 @@ class GenA<A>(val value: Gen<A>) : GenAOf<A>, Gen<A> by value {
             ff.fix().flatMap { this.fix().map(it) }
 
     companion object {
-        fun <A> pure(a: A): GenA<A> =
+        fun <A> just(a: A): GenA<A> =
                 GenA(Gen.create { a })
 
         tailrec fun <A, B> tailRecM(a: A, f: (A) -> GenAOf<Either<A, B>>): GenA<B> {
@@ -52,7 +53,7 @@ class GenA<A>(val value: Gen<A>) : GenAOf<A>, Gen<A> by value {
             val genValue = r.value.generate()
             return when (genValue) {
                 is Either.Left<A, B> -> tailRecM(genValue.a, f)
-                is Either.Right<A, B> -> pure(genValue.b)
+                is Either.Right<A, B> -> just(genValue.b)
             }
         }
     }
@@ -70,9 +71,10 @@ object GenFriend : Gen<Friend> {
                     Gen.list(Gen.string()).k(),
                     Gen.list(Gen.int()).k(),
                     Gen.string().k(),
-                    Gen.string().k(),
-                    friendIso()::reverseGet
-            ).fix().generate()
+                    Gen.string().k()
+            ) { (_id, latitude, longitude, tags, range, greeting, favoriteFruit) ->
+                Friend(_id, latitude, longitude, tags, range, greeting, favoriteFruit)
+            }.fix().generate()
 
 }
 
