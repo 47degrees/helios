@@ -1,12 +1,9 @@
 package helios.sample
 
-import arrow.core.Either
-import arrow.optics.modify
-import helios.core.Json
-import helios.optics.JsonPath
-import helios.typeclasses.Decoder
+import arrow.core.*
+import helios.core.*
+import helios.optics.*
 import helios.typeclasses.DecodingError
-import helios.typeclasses.decoder
 
 const val companyJsonString = """
 {
@@ -34,8 +31,7 @@ fun main(args: Array<String>) {
 
     val companyJson: Json = Json.parseUnsafe(companyJsonString)
 
-    val companyDecoder: Decoder<Company> = decoder()
-    val errorOrCompany: Either<DecodingError, Company> = companyDecoder.decode(companyJson)
+    val errorOrCompany: Either<DecodingError, Company> = Company.decoder().decode(companyJson)
 
     errorOrCompany.fold({
         println("Something went wrong during decoding: $it")
@@ -43,21 +39,42 @@ fun main(args: Array<String>) {
         println("Successfully decode the json: $it")
     })
 
-    JsonPath.root.select("name").string.modify(companyJson, String::toUpperCase).let(::println)
-    JsonPath.root.name.string.modify(companyJson, String::toUpperCase).let(::println)
+    Json.path.select("name").string.modify(companyJson, String::toUpperCase).let(::println)
+    Json.path.name.string.modify(companyJson, String::toUpperCase).let(::println)
 
-    JsonPath.root.select("address").select("street").select("name").string.getOption(companyJson).let(::println)
-    JsonPath.root.address.street.name.string.getOption(companyJson).let(::println)
+    Json.path.select("address").select("street").select("name").string.getOption(companyJson).let(::println)
+    Json.path.address.street.name.string.getOption(companyJson).let(::println)
 
-    JsonPath.root.select("employees").every().select("lastName").string
-    val employeeLastNames = JsonPath.root.employees.every().lastName.string
+    Json.path.select("employees").every.select("lastName").string
+    val employeeLastNames = Json.path.employees.every.lastName.string
 
     employeeLastNames.modify(companyJson, String::capitalize).let {
         employeeLastNames.getAll(it)
     }.let(::println)
 
-    JsonPath.root.employees.filterIndex { it == 0 }.name.string.getAll(companyJson).let(::println)
+    Json.path.employees.filterIndex { it == 0 }.name.string.getAll(companyJson).let(::println)
 
-    JsonPath.root.employees.every().filterKeys { it == "name" }.string.getAll(companyJson).let(::println)
+    Json.path.employees.every.filterKeys { it == "name" }.string.getAll(companyJson).let(::println)
+
+    val json: Json = JsObject(
+      "first_name" to JsString("John"),
+      "last_name" to JsString("Doe"),
+      "age" to JsNumber(28),
+      "siblings" to JsArray(listOf(
+        JsObject(
+          "first_name" to JsString("Elia"),
+          "age" to JsNumber(23)
+        ),
+        JsObject(
+          "first_name" to JsString("Robert"),
+          "age" to JsNumber(25)
+        )
+      ))
+    )
+
+    Json.path.select("siblings")[1]
+      .toSibling()
+      .first_name
+      .set(json, "Robert Jr.")
 
 }
