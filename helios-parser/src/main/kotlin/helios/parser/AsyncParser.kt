@@ -157,25 +157,26 @@ class AsyncParser<J>(
 
                         ' ', '\t', '\r' -> offset += 1
                         '[' -> {
-                            when (state) {
-                                ASYNC_PRESTART -> {
-                                    offset += 1
-                                    state = ASYNC_START
-                                }
-                                ASYNC_END -> die(offset, "expected eof")
-                                ASYNC_POSTVAL -> die(offset, "expected , or ]")
-                                else -> state = 0
+                            if (state == ASYNC_PRESTART) {
+                                offset += 1
+                                state = ASYNC_START
+                            } else if (state == ASYNC_END) {
+                                die(offset, "expected eof")
+                            } else if (state == ASYNC_POSTVAL) {
+                                die(offset, "expected , or ]")
+                            } else {
+                                state = 0
                             }
                         }
 
                         ',' -> {
-                            when (state) {
-                                ASYNC_POSTVAL -> {
-                                    offset += 1
-                                    state = ASYNC_PREVAL
-                                }
-                                ASYNC_END -> die(offset, "expected eof")
-                                else -> die(offset, "expected json value")
+                            if (state == ASYNC_POSTVAL) {
+                                offset += 1
+                                state = ASYNC_PREVAL
+                            } else if (state == ASYNC_END) {
+                                die(offset, "expected eof")
+                            } else {
+                                die(offset, "expected json value")
                             }
                         }
 
@@ -195,13 +196,13 @@ class AsyncParser<J>(
                         }
 
                         else -> {
-                            when (state) {
-                                ASYNC_END -> die(offset, "expected eof")
-                                ASYNC_POSTVAL -> die(offset, "expected ] or ,")
-                                else -> {
-                                    if (state == ASYNC_PRESTART && streamMode > 0) streamMode = -1
-                                    state = 0
-                                }
+                            if (state == ASYNC_END) {
+                                die(offset, "expected eof")
+                            } else if (state == ASYNC_POSTVAL) {
+                                die(offset, "expected ] or ,")
+                            } else {
+                                if (state == ASYNC_PRESTART && streamMode > 0) streamMode = -1
+                                state = 0
                             }
                         }
                     }
@@ -214,10 +215,12 @@ class AsyncParser<J>(
                     } else {
                         rparse(state, curr, stack, facade)
                     }
-                    state = when {
-                        streamMode > 0 -> ASYNC_POSTVAL
-                        streamMode == 0 -> ASYNC_PREVAL
-                        else -> ASYNC_END
+                    if (streamMode > 0) {
+                        state = ASYNC_POSTVAL
+                    } else if (streamMode == 0) {
+                        state = ASYNC_PREVAL
+                    } else {
+                        state = ASYNC_END
                     }
                     curr = j
                     offset = j
