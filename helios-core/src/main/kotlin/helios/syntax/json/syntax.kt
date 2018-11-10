@@ -18,4 +18,5 @@ fun Long.toJson(): JsLong = JsLong(this)
 
 fun BigInteger.toJson(): JsDecimal = JsNumber.fromDecimalStringUnsafe(this.toString())
 
-fun BigInteger.toJson(radix: Int): JsDecimal = JsNumber.fromDecimalStringUnsafe(this.toString(radix))
+fun BigInteger.toJson(radix: Int): JsDecimal =
+  JsNumber.fromDecimalStringUnsafe(this.toString(radix))

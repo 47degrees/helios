@@ -12,69 +12,68 @@ import helios.meta.json
 import io.kotlintest.properties.Gen
 import io.kotlintest.properties.map
 
-
 @json
 @optics
 data class Friend(
-        val _id: String,
-        val latitude: String,
-        val longitude: String,
-        val tags: List<String>,
-        val range: List<Int>,
-        val greeting: String,
-        val favoriteFruit: String
+  val _id: String,
+  val latitude: String,
+  val longitude: String,
+  val tags: List<String>,
+  val range: List<Int>,
+  val greeting: String,
+  val favoriteFruit: String
 ) {
-    companion object
+  companion object
 }
 
 @higherkind
 @deriving(
-        Functor::class,
-        Applicative::class,
-        Monad::class
+  Functor::class,
+  Applicative::class,
+  Monad::class
 )
 class GenA<A>(val value: Gen<A>) : GenAOf<A>, Gen<A> by value {
 
-    fun <B> map(f: (A) -> B): GenA<B> =
-            GenA(value.map(f))
+  fun <B> map(f: (A) -> B): GenA<B> =
+    GenA(value.map(f))
 
-    fun <B> flatMap(f: (A) -> GenAOf<B>): GenA<B> =
-            map(f).value.generate().fix()
+  fun <B> flatMap(f: (A) -> GenAOf<B>): GenA<B> =
+    map(f).value.generate().fix()
 
-    fun <B> ap(ff: GenAOf<(A) -> B>): GenA<B> =
-            ff.fix().flatMap { this.fix().map(it) }
+  fun <B> ap(ff: GenAOf<(A) -> B>): GenA<B> =
+    ff.fix().flatMap { this.fix().map(it) }
 
-    companion object {
-        fun <A> just(a: A): GenA<A> =
-                GenA(Gen.create { a })
+  companion object {
+    fun <A> just(a: A): GenA<A> =
+      GenA(Gen.create { a })
 
-        tailrec fun <A, B> tailRecM(a: A, f: (A) -> GenAOf<Either<A, B>>): GenA<B> {
-            val r = f(a).fix()
-            val genValue = r.value.generate()
-            return when (genValue) {
-                is Either.Left<A, B> -> tailRecM(genValue.a, f)
-                is Either.Right<A, B> -> just(genValue.b)
-            }
-        }
+    tailrec fun <A, B> tailRecM(a: A, f: (A) -> GenAOf<Either<A, B>>): GenA<B> {
+      val r = f(a).fix()
+      val genValue = r.value.generate()
+      return when (genValue) {
+        is Either.Left<A, B>  -> tailRecM(genValue.a, f)
+        is Either.Right<A, B> -> just(genValue.b)
+      }
     }
+  }
 }
 
 fun <A> Gen<A>.k(): GenA<A> = GenA(this)
 
 object GenFriend : Gen<Friend> {
 
-    override fun generate(): Friend =
-            GenA.applicative().map(
-                    Gen.string().k(),
-                    Gen.string().k(),
-                    Gen.string().k(),
-                    Gen.list(Gen.string()).k(),
-                    Gen.list(Gen.int()).k(),
-                    Gen.string().k(),
-                    Gen.string().k()
-            ) { (_id, latitude, longitude, tags, range, greeting, favoriteFruit) ->
-                Friend(_id, latitude, longitude, tags, range, greeting, favoriteFruit)
-            }.fix().generate()
+  override fun generate(): Friend =
+    GenA.applicative().map(
+      Gen.string().k(),
+      Gen.string().k(),
+      Gen.string().k(),
+      Gen.list(Gen.string()).k(),
+      Gen.list(Gen.int()).k(),
+      Gen.string().k(),
+      Gen.string().k()
+    ) { (_id, latitude, longitude, tags, range, greeting, favoriteFruit) ->
+      Friend(_id, latitude, longitude, tags, range, greeting, favoriteFruit)
+    }.fix().generate()
 
 }
 

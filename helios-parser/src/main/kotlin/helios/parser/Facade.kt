@@ -8,15 +8,15 @@ package helios.parser
  * usually want to define both.
  */
 interface Facade<J> {
-    fun singleContext(): FContext<J>
-    fun arrayContext(): FContext<J>
-    fun objectContext(): FContext<J>
+  fun singleContext(): FContext<J>
+  fun arrayContext(): FContext<J>
+  fun objectContext(): FContext<J>
 
-    fun jnull(): J
-    fun jfalse(): J
-    fun jtrue(): J
-    fun jnum(s: CharSequence, decIndex: Int, expIndex: Int): J
-    fun jstring(s: CharSequence): J
+  fun jnull(): J
+  fun jfalse(): J
+  fun jtrue(): J
+  fun jnum(s: CharSequence, decIndex: Int, expIndex: Int): J
+  fun jstring(s: CharSequence): J
 }
 
 /**
@@ -27,8 +27,8 @@ interface Facade<J> {
  * cases where the entire JSON document consists of "333.33".
  */
 interface FContext<J> {
-    fun add(s: CharSequence): Unit
-    fun add(v: J): Unit
-    fun finish(): J
-    fun isObj(): Boolean
+  fun add(s: CharSequence): Unit
+  fun add(v: J): Unit
+  fun finish(): J
+  fun isObj(): Boolean
 }

@@ -13,19 +13,19 @@ package helios.parser
  * practice.
  */
 class StringParser<J>(val s: String) : SyncParser<J>, CharBasedParser<J> {
-    var line = 0
-    private val charBuilder = CharBuilder()
-    override fun charBuilder(): CharBuilder = charBuilder
-    override fun line(): Int = line
-    override fun column(i: Int) = i
-    override fun newline(i: Int) {
-        line += 1
-    }
+  var line = 0
+  private val charBuilder = CharBuilder()
+  override fun charBuilder(): CharBuilder = charBuilder
+  override fun line(): Int = line
+  override fun column(i: Int) = i
+  override fun newline(i: Int) {
+    line += 1
+  }
 
-    override fun reset(i: Int): Int = i
-    override fun checkpoint(state: Int, i: Int, stack: List<FContext<J>>): Unit = Unit
-    override fun at(i: Int): Char = s[i]
-    override fun at(i: Int, j: Int): CharSequence = s.substring(i, j)
-    override fun atEof(i: Int) = i == s.length
-    override fun close() = Unit
+  override fun reset(i: Int): Int = i
+  override fun checkpoint(state: Int, i: Int, stack: List<FContext<J>>): Unit = Unit
+  override fun at(i: Int): Char = s[i]
+  override fun at(i: Int, j: Int): CharSequence = s.substring(i, j)
+  override fun atEof(i: Int) = i == s.length
+  override fun close() = Unit
 }
