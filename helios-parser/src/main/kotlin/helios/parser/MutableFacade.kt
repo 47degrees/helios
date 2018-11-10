@@ -44,7 +44,7 @@ interface MutableFacade<J : Any> : Facade<J> {
         key = null
       }
 
-    override fun add(v: J): Unit {
+    override fun add(v: J) {
       val k = key
       if (k != null) vs[k] = v
       key = null

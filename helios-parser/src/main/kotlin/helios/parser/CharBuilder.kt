@@ -7,10 +7,10 @@ package helios.parser
  * additional String or Char data to be added to its buffer.
  */
 class CharBuilder {
-  val INITIALSIZE = 32
+  val initialSize = 32
 
-  private var cs = CharArray(INITIALSIZE)
-  private var capacity = INITIALSIZE
+  private var cs = CharArray(initialSize)
+  private var capacity = initialSize
   private var len = 0
 
   fun reset(): CharBuilder {
@@ -20,10 +20,10 @@ class CharBuilder {
 
   fun makeString(): String = String(cs, 0, len)
 
-  fun resizeIfNecessary(goal: Int): Unit {
-    if (goal <= capacity) return Unit
+  fun resizeIfNecessary(goal: Int) {
+    if (goal <= capacity) return
     var cap = capacity
-    while (goal > cap && cap > 0) cap *= 2
+    while (cap in 1..(goal - 1)) cap *= 2
     if (cap > capacity) {
       val ncs = CharArray(cap)
       System.arraycopy(cs, 0, ncs, 0, capacity)
@@ -34,7 +34,7 @@ class CharBuilder {
     }
   }
 
-  fun extend(s: CharSequence): Unit {
+  fun extend(s: CharSequence) {
     val tlen = len + s.length
     resizeIfNecessary(tlen)
     var i = 0
@@ -47,7 +47,7 @@ class CharBuilder {
     }
   }
 
-  fun append(c: Char): Unit {
+  fun append(c: Char) {
     val tlen = len + 1
     resizeIfNecessary(tlen)
     cs[len] = c

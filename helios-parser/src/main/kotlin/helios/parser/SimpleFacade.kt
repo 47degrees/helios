@@ -47,13 +47,13 @@ interface SimpleFacade<J : Any> : Facade<J> {
         key = s.toString()
       } else {
         val k = key
-        if (k != null) vs.put(k, jstring(s))
+        if (k != null) vs[k] = jstring(s)
         key = null
       }
 
-    override fun add(v: J): Unit {
+    override fun add(v: J) {
       val k = key
-      if (k != null) vs.put(k, v)
+      if (k != null) vs[k] = v
       key = null
     }
 

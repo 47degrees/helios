@@ -11,18 +11,18 @@ data class ParseException(val msg: String, val index: Int, val line: Int, val co
 
 data class IncompleteParseException(val msg: String) : Exception(msg)
 
-val utf8 = Charset.forName("UTF-8")
+val utf8: Charset = Charset.forName("UTF-8")
 
 /**
  * Valid parser states.
  */
-internal val ARRBEG = 6
-internal val OBJBEG = 7
-internal val DATA = 1
-internal val KEY = 2
-internal val SEP = 3
-internal val ARREND = 4
-internal val OBJEND = 5
+internal const val ARRBEG = 6
+internal const val OBJBEG = 7
+internal const val DATA = 1
+internal const val KEY = 2
+internal const val SEP = 3
+internal const val ARREND = 4
+internal const val OBJEND = 5
 
 val HexChars: IntArray = {
   val arr = IntArray(128)
@@ -73,14 +73,14 @@ interface Parser<J> {
    * The checkpoint() method is used to allow some parsers to store
    * their progress.
    */
-  fun checkpoint(state: Int, i: Int, stack: List<FContext<J>>): Unit
+  fun checkpoint(state: Int, i: Int, stack: List<FContext<J>>)
 
   /**
    * Should be called when parsing is finished.
    */
-  fun close(): Unit
+  fun close()
 
-  fun newline(i: Int): Unit
+  fun newline(i: Int)
   fun line(): Int
   fun column(i: Int): Int
 
@@ -126,8 +126,8 @@ interface Parser<J> {
     if (c == '0') {
       k += 1
       c = at(k)
-    } else if ('1' <= c && c <= '9') {
-      while ('0' <= c && c <= '9') {
+    } else if (c in '1'..'9') {
+      while (c in '0'..'9') {
         k += 1; c = at(k)
       }
     } else {
@@ -138,8 +138,8 @@ interface Parser<J> {
       decIndex = k - i
       k += 1
       c = at(k)
-      if ('0' <= c && c <= '9') {
-        while ('0' <= c && c <= '9') {
+      if (c in '0'..'9') {
+        while (c in '0'..'9') {
           k += 1; c = at(k)
         }
       } else {
@@ -155,8 +155,8 @@ interface Parser<J> {
         k += 1
         c = at(k)
       }
-      if ('0' <= c && c <= '9') {
-        while ('0' <= c && c <= '9') {
+      if (c in '0'..'9') {
+        while (c in '0'..'9') {
           k += 1; c = at(k)
         }
       } else {
@@ -200,8 +200,8 @@ interface Parser<J> {
         return j
       }
       c = at(j)
-    } else if ('1' <= c && c <= '9') {
-      while ('0' <= c && c <= '9') {
+    } else if (c in '1'..'9') {
+      while (c in '0'..'9') {
         j += 1
         if (atEof(j)) {
           ctxt.add(facade.jnum(at(i, j), decIndex, expIndex))
@@ -218,8 +218,8 @@ interface Parser<J> {
       decIndex = j - i
       j += 1
       c = at(j)
-      if ('0' <= c && c <= '9') {
-        while ('0' <= c && c <= '9') {
+      if (c in '0'..'9') {
+        while (c in '0'..'9') {
           j += 1
           if (atEof(j)) {
             ctxt.add(facade.jnum(at(i, j), decIndex, expIndex))
@@ -241,8 +241,8 @@ interface Parser<J> {
         j += 1
         c = at(j)
       }
-      if ('0' <= c && c <= '9') {
-        while ('0' <= c && c <= '9') {
+      if (c in '0'..'9') {
+        while (c in '0'..'9') {
           j += 1
           if (atEof(j)) {
             ctxt.add(facade.jnum(at(i, j), decIndex, expIndex))

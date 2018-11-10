@@ -65,26 +65,26 @@ class JsonFileGenerator(
   inline val String.encoder: String
     get() = when {
       this == "Boolean"                          -> "BooleanInstances.encoder()"
-      this.startsWith("kotlin.collections.List") -> "${Regex("kotlin.collections.List<(.*)>$").matchEntire(
-        this
-      )!!.groupValues[1]}.encoder()"
+      this.startsWith("kotlin.collections.List") ->
+        "${Regex("kotlin.collections.List<(.*)>$")
+          .matchEntire(this)!!.groupValues[1]}.encoder()"
       else                                       -> "$this.encoder()"
     }
 
   private fun jsonProperties(je: JsonElement): String =
-    je.pairs.map { (p, r) ->
-      """
-                    |"$p" to ${r.encoder}.run { $p.toJson() }
-                """.trimMargin()
-    }.joinToString(",", "JsObject(mapOf(", "))")
+    je.pairs.joinToString(",", "JsObject(mapOf(", "))") { (p, r) ->
+      """|
+         |"$p" to ${r.encoder}.run { $p.toJson() }
+         |""".trimMargin()
+    }
 
   //TODO FIXME
   inline val String.decoder: String
     get() = when {
       this == "Boolean"                          -> "BooleanInstances.decoder()"
-      this.startsWith("kotlin.collections.List") -> "ListDecoderInstance(${Regex("kotlin.collections.List<(.*)>$").matchEntire(
-        this
-      )!!.groupValues[1]}.decoder())"
+      this.startsWith("kotlin.collections.List") ->
+        "ListDecoderInstance(${Regex("kotlin.collections.List<(.*)>$")
+          .matchEntire(this)!!.groupValues[1]}.decoder())"
       else                                       -> "$this.decoder()"
     }
 
@@ -103,29 +103,28 @@ class JsonFileGenerator(
     separator = ",",
     postfix = if (je.pairs.size > 1) ")" else ""
   ) { (p, _) -> p }} ->
-      |  ${je.name}(${je.pairs.map { (p, _) -> "$p = $p" }.joinToString(",")})
+      |  ${je.name}(${je.pairs.joinToString(",") { (p, _) -> "$p = $p" }})
       |}).fix()
       |""".trimMargin()
 
   private fun genToJson(je: JsonElement): String =
     """|
-               |fun ${je.name}.toJson(): Json = ${jsonProperties(je)}
-               |
-               |fun Json.Companion.to${je.name}(value: Json): Either<DecodingError, ${je.name}> =
-               |  ${createInstance(je)}
-               |""".trimMargin()
+       |fun ${je.name}.toJson(): Json = ${jsonProperties(je)}
+       |
+       |fun Json.Companion.to${je.name}(value: Json): Either<DecodingError, ${je.name}> =
+       |  ${createInstance(je)}
+       |""".trimMargin()
 
   private fun genEncoderInstance(je: JsonElement): String =
-
     """|
-               |fun ${je.name}.Companion.encoder() = object : Encoder<${je.name}> {
-               |  override fun ${je.name}.encode(): Json = this.toJson()
-               |}
-               |
-               |fun ${je.name}.Companion.decoder() = object : Decoder<${je.name}> {
-               |  override fun decode(value: Json): Either<DecodingError, ${je.name}> =
-               |    Json.to${je.name}(value)
-               |}
-               |""".trimMargin()
+       |fun ${je.name}.Companion.encoder() = object : Encoder<${je.name}> {
+       |  override fun ${je.name}.encode(): Json = this.toJson()
+       |}
+       |
+       |fun ${je.name}.Companion.decoder() = object : Decoder<${je.name}> {
+       |  override fun decode(value: Json): Either<DecodingError, ${je.name}> =
+       |    Json.to${je.name}(value)
+       |}
+       |""".trimMargin()
 
 }

@@ -54,13 +54,13 @@ class ChannelParser<J>(val ch: ReadableByteChannel, bufferSize: Int) : SyncParse
       }
   }
 
-  var Bufsize: Int = ChannelParser.computeBufferSize(bufferSize)
-  var Mask: Int = Bufsize - 1
-  var Allsize: Int = Bufsize * 2
+  var bufSize: Int = ChannelParser.computeBufferSize(bufferSize)
+  var mask: Int = bufSize - 1
+  var allSize: Int = bufSize * 2
 
   // these are the actual byte arrays we'll use
-  private var curr = ByteArray(Bufsize)
-  private var next = ByteArray(Bufsize)
+  private var curr = ByteArray(bufSize)
+  private var next = ByteArray(bufSize)
 
   // these are the bytecounts for each array
   private var ncurr = ch.read(ByteBuffer.wrap(curr))
@@ -71,7 +71,7 @@ class ChannelParser<J>(val ch: ReadableByteChannel, bufferSize: Int) : SyncParse
   override fun line(): Int = line
 
   private var pos = 0
-  override fun newline(i: Int): Unit {
+  override fun newline(i: Int) {
     line += 1; pos = i
   }
 
@@ -86,24 +86,24 @@ class ChannelParser<J>(val ch: ReadableByteChannel, bufferSize: Int) : SyncParse
    * the index provided to reset is no longer in the 'curr' buffer, we want to
    * clear that data and swap the buffers.
    */
-  fun swap(): Unit {
-    var tmp = curr; curr = next; next = tmp
-    var ntmp = ncurr; ncurr = nnext; nnext = ntmp
+  fun swap() {
+    val tmp = curr; curr = next; next = tmp
+    val ntmp = ncurr; ncurr = nnext; nnext = ntmp
   }
 
-  fun grow(): Unit {
-    val cc = ByteArray(Allsize)
-    System.arraycopy(curr, 0, cc, 0, Bufsize)
-    System.arraycopy(next, 0, cc, Bufsize, Bufsize)
+  fun grow() {
+    val cc = ByteArray(allSize)
+    System.arraycopy(curr, 0, cc, 0, bufSize)
+    System.arraycopy(next, 0, cc, bufSize, bufSize)
 
     curr = cc
-    ncurr = ncurr + nnext
-    next = ByteArray(Allsize)
+    ncurr += nnext
+    next = ByteArray(allSize)
     nnext = ch.read(ByteBuffer.wrap(next))
 
-    Bufsize = Allsize
-    Mask = Allsize - 1
-    Allsize *= 2
+    bufSize = allSize
+    mask = allSize - 1
+    allSize *= 2
   }
 
   /**
@@ -112,11 +112,11 @@ class ChannelParser<J>(val ch: ReadableByteChannel, bufferSize: Int) : SyncParse
    * continue.
    */
   override fun reset(i: Int): Int =
-    if (i >= Bufsize) {
+    if (i >= bufSize) {
       swap()
       nnext = ch.read(ByteBuffer.wrap(next))
-      pos -= Bufsize
-      i - Bufsize
+      pos -= bufSize
+      i - bufSize
     } else {
       i
     }
@@ -128,8 +128,8 @@ class ChannelParser<J>(val ch: ReadableByteChannel, bufferSize: Int) : SyncParse
    * data are bytes not chars.
    */
   override fun byte(i: Int): Byte =
-    if (i < Bufsize) curr[i]
-    else if (i < Allsize) next[i and Mask]
+    if (i < bufSize) curr[i]
+    else if (i < allSize) next[i and mask]
     else {
       grow(); byte(i)
     }
@@ -140,8 +140,8 @@ class ChannelParser<J>(val ch: ReadableByteChannel, bufferSize: Int) : SyncParse
    * delimiters, which are known to be within ASCII).
    */
   override tailrec fun at(i: Int): Char =
-    if (i < Bufsize) curr[i].toChar()
-    else if (i < Allsize) next[i and Mask].toChar()
+    if (i < bufSize) curr[i].toChar()
+    else if (i < allSize) next[i and mask].toChar()
     else {
       grow(); at(i)
     }
@@ -155,23 +155,23 @@ class ChannelParser<J>(val ch: ReadableByteChannel, bufferSize: Int) : SyncParse
    */
   override tailrec fun at(i: Int, j: Int): CharSequence {
     val len = j - i
-    return if (j > Allsize) {
+    return if (j > allSize) {
       grow()
       at(i, j)
-    } else if (j <= Bufsize) {
+    } else if (j <= bufSize) {
       String(curr, i, len, utf8)
-    } else if (i >= Bufsize) {
-      String(next, i - Bufsize, len, utf8)
+    } else if (i >= bufSize) {
+      String(next, i - bufSize, len, utf8)
     } else {
       val arr = ByteArray(len)
-      val mid = Bufsize - i
+      val mid = bufSize - i
       System.arraycopy(curr, i, arr, 0, mid)
-      System.arraycopy(next, 0, arr, mid, j - Bufsize)
+      System.arraycopy(next, 0, arr, mid, j - bufSize)
       String(arr, utf8)
     }
   }
 
   override fun atEof(i: Int): Boolean =
-    if (i < Bufsize) i >= ncurr
-    else i >= (nnext + Bufsize)
+    if (i < bufSize) i >= ncurr
+    else i >= (nnext + bufSize)
 }

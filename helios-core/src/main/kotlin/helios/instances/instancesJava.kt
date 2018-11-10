@@ -33,8 +33,8 @@ interface ListDecoderInstance<A> : Decoder<List<A>> {
 
   override fun decode(value: Json): Either<DecodingError, List<A>> =
     value.asJsArray().toList()
-      .flatMap {
-        it.value.map { decoderA().decode(it) }
+      .flatMap { arr ->
+        arr.value.map { decoderA().decode(it) }
       }.k().sequence(Either.applicative()).fix().map(ListK<A>::list)
 
   companion object {

@@ -147,6 +147,6 @@ fun Optional<Json, Json>.filterKeys(p: Predicate<String>) =
  */
 @PublishedApi
 internal fun <A> parse(DE: Decoder<A>, EN: Encoder<A>): Prism<Json, A> = Prism(
-  getOrModify = { json -> DE.decode(json).mapLeft { _ -> json } },
+  getOrModify = { json -> DE.decode(json).mapLeft { json } },
   reverseGet = { EN.run { it.encode() } }
 )

@@ -13,7 +13,7 @@ import javax.lang.model.element.TypeElement
 @AutoService(Processor::class)
 class JsonDslSyntaxProcessor : AbstractProcessor() {
 
-  private val jsonAnnotatedList: MutableList<JsonAnnotated> = mutableListOf<JsonAnnotated>()
+  private val jsonAnnotatedList: MutableList<JsonAnnotated> = mutableListOf()
 
   override fun getSupportedSourceVersion(): SourceVersion = SourceVersion.latestSupported()
 
@@ -28,7 +28,7 @@ class JsonDslSyntaxProcessor : AbstractProcessor() {
       .map { element ->
         when (element.kind) {
           ElementKind.CLASS -> processClass(element as TypeElement)
-          else              -> knownError("${jsonAnnotationName} can only be used on immutable data classes")
+          else              -> knownError("$jsonAnnotationName can only be used on immutable data classes")
         }
       }
 

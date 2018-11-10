@@ -162,7 +162,7 @@ sealed class JsNumber : Json() {
     (other as? JsNumber)?.let { this@JsNumber.eqv(it) } ?: false
   }
 
-  override abstract fun hashCode(): Int
+  abstract override fun hashCode(): Int
 
   companion object {
 

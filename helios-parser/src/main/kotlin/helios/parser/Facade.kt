@@ -27,8 +27,8 @@ interface Facade<J> {
  * cases where the entire JSON document consists of "333.33".
  */
 interface FContext<J> {
-  fun add(s: CharSequence): Unit
-  fun add(v: J): Unit
+  fun add(s: CharSequence)
+  fun add(v: J)
   fun finish(): J
   fun isObj(): Boolean
 }

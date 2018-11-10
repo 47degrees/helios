@@ -83,7 +83,7 @@ fun Traversal<Json, Json>.select(name: String) =
   this compose Json.jsObject compose JsObject.index().index(name)
 
 /**
- * Extract field with [name] from [JsObject] from path.
+ * Extract [field] with name from [JsObject] from path.
  */
 fun Traversal<Json, Json>.at(field: String): Traversal<Json, Option<Json>> =
   (this compose Json.jsObject).at(JsObject.at(), field)

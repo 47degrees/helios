@@ -3,11 +3,7 @@ package helios.optics
 import arrow.core.None
 import arrow.core.Some
 import arrow.core.identity
-import arrow.core.some
-import arrow.instance
-import arrow.instances.eq
 import arrow.test.UnitSpec
-import arrow.typeclasses.Eq
 import helios.core.*
 import io.kotlintest.KTestJUnitRunner
 import io.kotlintest.matchers.shouldBe

@@ -2,15 +2,10 @@ package helios.meta.compiler.json
 
 import arrow.common.Package
 import arrow.common.utils.ClassOrPackageDataWrapper
-import arrow.common.utils.fullName
 import arrow.common.utils.simpleName
-import arrow.optics.Optional
 import arrow.optics.Traversal
-import me.eugeniomarletti.kotlin.metadata.KotlinClassMetadata
-import me.eugeniomarletti.kotlin.metadata.kotlinMetadata
 import me.eugeniomarletti.kotlin.metadata.shadow.metadata.ProtoBuf
 import me.eugeniomarletti.kotlin.metadata.shadow.metadata.deserialization.NameResolver
-import me.eugeniomarletti.kotlin.metadata.shadow.name.FqName
 import me.eugeniomarletti.kotlin.metadata.shadow.name.Name
 import me.eugeniomarletti.kotlin.metadata.shadow.serialization.deserialization.getName
 import java.io.File

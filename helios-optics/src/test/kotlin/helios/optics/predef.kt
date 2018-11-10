@@ -28,7 +28,7 @@ fun Gen.Companion.jsNull(): Gen<JsNull> = ConstGen(JsNull)
 fun Gen.Companion.jsArray(): Gen<JsArray> = Gen.list(genJson()).map(::JsArray)
 
 fun <T> Gen.Companion.jsArray(EN: Encoder<T>, valid: Gen<T>): Gen<JsArray> =
-  Gen.list(valid).map { JsArray(it.map { EN.run { it.encode() } }) }
+  Gen.list(valid).map { list -> JsArray(list.map { elem -> EN.run { elem.encode() } }) }
 
 fun Gen.Companion.jsObject(): Gen<JsObject> = Gen.map(Gen.string(), genJson()).map(::JsObject)
 

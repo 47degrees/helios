@@ -1,7 +1,6 @@
 package helios.syntax.json
 
 import helios.core.*
-import helios.typeclasses.*
 import java.math.BigInteger
 
 fun String.toJson(): JsString = JsString(this)

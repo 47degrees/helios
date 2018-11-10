@@ -102,7 +102,7 @@ class AsyncParser<J>(
     return churn(facade)
   }
 
-  fun resizeIfNecessary(need: Int): Unit {
+  fun resizeIfNecessary(need: Int) {
     // if we don't have enough free space available we'll need to grow our
     // data array. we never shrink the data array, assuming users will call
     // feed with similarly-sized buffers.
@@ -143,6 +143,7 @@ class AsyncParser<J>(
   val ASYNC_END = -3
   val ASYNC_POSTVAL = -2
   val ASYNC_PREVAL = -1
+
   //TODO Either from Try
   fun churn(facade: Facade<J>): Either<ParseException, List<J>> {
 
@@ -218,12 +219,12 @@ class AsyncParser<J>(
           } else {
             rparse(state, curr, stack, facade)
           }
-          if (streamMode > 0) {
-            state = ASYNC_POSTVAL
+          state = if (streamMode > 0) {
+            ASYNC_POSTVAL
           } else if (streamMode == 0) {
-            state = ASYNC_PREVAL
+            ASYNC_PREVAL
           } else {
-            state = ASYNC_END
+            ASYNC_END
           }
           curr = j
           offset = j

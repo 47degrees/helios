@@ -21,11 +21,11 @@ interface SyncParser<J> : Parser<J> {
     val (value, i) = super.parse(0, facade)
     var j = i
     while (!atEof(j)) {
-      when (at(j)) {
+      j += when (at(j)) {
         '\n'            -> {
-          newline(j); j += 1
+          newline(j); 1
         }
-        ' ', '\t', '\r' -> j += 1
+        ' ', '\t', '\r' -> 1
         else            -> die(j, "expected whitespace or eof")
       }
     }

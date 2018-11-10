@@ -7,11 +7,11 @@ import helios.parser.Facade
 object HeliosFacade : Facade<Json> {
   override fun singleContext(): FContext<Json> = object : FContext<Json> {
     lateinit var value: Json
-    override fun add(s: CharSequence): Unit {
+    override fun add(s: CharSequence) {
       value = jstring(s.toString())
     }
 
-    override fun add(v: Json): Unit {
+    override fun add(v: Json) {
       value = v
     }
 
@@ -21,11 +21,11 @@ object HeliosFacade : Facade<Json> {
 
   override fun arrayContext(): FContext<Json> = object : FContext<Json> {
     private val vs = arrayListOf<Json>()
-    override fun add(s: CharSequence): Unit {
+    override fun add(s: CharSequence) {
       vs += jstring(s.toString())
     }
 
-    override fun add(v: Json): Unit {
+    override fun add(v: Json) {
       vs += v
     }
 
@@ -42,13 +42,13 @@ object HeliosFacade : Facade<Json> {
         key = s.toString()
       } else {
         val k = key
-        if (k != null) m.put(k, jstring(s))
+        if (k != null) m[k] = jstring(s)
         key = null
       }
 
-    override fun add(v: Json): Unit {
+    override fun add(v: Json) {
       val k = key
-      if (k != null) m.put(k, v)
+      if (k != null) m[k] = v
       key = null
     }
 
