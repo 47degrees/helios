@@ -1,11 +1,11 @@
 package helios.instances
 
 import arrow.core.Either
-import arrow.core.applicative
 import arrow.core.fix
 import arrow.data.ListK
 import arrow.data.k
 import arrow.data.sequence
+import arrow.instances.either.applicative.applicative
 import helios.core.*
 import helios.typeclasses.Decoder
 import helios.typeclasses.DecodingError

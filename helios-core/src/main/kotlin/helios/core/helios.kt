@@ -1,7 +1,12 @@
 package helios.core
 
 import arrow.core.*
+import arrow.instances.option.applicative.applicative
 import helios.instances.HeliosFacade
+import helios.instances.jsarray.eq.eq
+import helios.instances.jsnumber.eq.eq
+import helios.instances.jsobject.eq.eq
+import helios.instances.json.eq.eq
 import helios.parser.Parser
 import helios.typeclasses.Decoder
 import java.io.File
@@ -160,7 +165,7 @@ sealed class JsNumber : Json() {
         (other as? JsNumber)?.let { this@JsNumber.eqv(it) } ?: false
     }
 
-    override abstract fun hashCode(): Int
+    abstract override fun hashCode(): Int
 
     companion object {
 

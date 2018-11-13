@@ -1,11 +1,14 @@
 package helios.instances
 
 import arrow.core.*
-import arrow.instance
-import arrow.instances.BooleanInstances
+import arrow.extension
 import arrow.instances.eq
 import arrow.typeclasses.Eq
 import helios.core.*
+import helios.instances.jsarray.eq.eq
+import helios.instances.jsnumber.eq.eq
+import helios.instances.jsobject.eq.eq
+import helios.instances.json.eq.eq
 import helios.typeclasses.*
 
 fun Int.Companion.encoder() = object : Encoder<Int> {
@@ -17,11 +20,11 @@ fun Int.Companion.decoder() = object : Decoder<Int> {
             value.asJsNumber().flatMap { it.toInt() }.toEither { NumberDecodingError(value) }
 }
 
-fun BooleanInstances.encoder() = object : Encoder<Boolean> {
+fun Boolean.Companion.encoder() = object : Encoder<Boolean> {
     override fun Boolean.encode(): Json = JsBoolean(this)
 }
 
-fun BooleanInstances.decoder() = object : Decoder<Boolean> {
+fun Boolean.Companion.decoder() = object : Decoder<Boolean> {
     override fun decode(value: Json): Either<DecodingError, Boolean> =
             value.asJsBoolean().flatMap { it.value.some() }.toEither { BooleanDecodingError(value) }
 }
@@ -35,7 +38,7 @@ fun String.Companion.decoder() = object : Decoder<String> {
             value.asJsString().flatMap { it.value.toString().some() }.toEither { StringDecodingError(value) }
 }
 
-@instance(Option::class)
+@extension
 interface OptionEncoderInstance<in A> : Encoder<Option<A>> {
 
     fun encoderA(): Encoder<A>
@@ -45,7 +48,7 @@ interface OptionEncoderInstance<in A> : Encoder<Option<A>> {
 
 }
 
-@instance(Tuple2::class)
+@extension
 interface Tuple2EncoderInstance<A, B> : Encoder<Tuple2<A, B>> {
 
     fun encoderA(): Encoder<A>
@@ -61,7 +64,7 @@ interface Tuple2EncoderInstance<A, B> : Encoder<Tuple2<A, B>> {
 
 }
 
-@instance(Tuple3::class)
+@extension
 interface Tuple3EncoderInstance<A, B, C> : Encoder<Tuple3<A, B, C>> {
 
     fun encoderA(): Encoder<A>
@@ -82,7 +85,7 @@ interface Tuple3EncoderInstance<A, B, C> : Encoder<Tuple3<A, B, C>> {
 
 private inline val Json.isNull inline get() = this === JsNull
 
-@instance(JsObject::class)
+@extension
 interface JsObjectEqInstance : Eq<JsObject> {
     override fun JsObject.eqv(b: JsObject): Boolean = with(Json.eq()) {
         this@eqv.value.entries.zip(b.value.entries) { aa, bb ->
@@ -91,7 +94,7 @@ interface JsObjectEqInstance : Eq<JsObject> {
     }
 }
 
-@instance(JsArray::class)
+@extension
 interface JsArrayEqInstance : Eq<JsArray> {
     override fun JsArray.eqv(b: JsArray): Boolean = with(Json.eq()) {
         this@eqv.value.zip(b.value) { a, b -> a.eqv(b) }
@@ -99,20 +102,20 @@ interface JsArrayEqInstance : Eq<JsArray> {
     }
 }
 
-@instance(Json::class)
+@extension
 interface JsonEqInstance : Eq<Json> {
     override fun Json.eqv(b: Json): Boolean = when {
         this is JsObject && b is JsObject -> JsObject.eq().run { this@eqv.eqv(b) }
         this is JsString && b is JsString -> String.eq().run { this@eqv.value.toString().eqv(b.value.toString()) }
         this is JsNumber && b is JsNumber -> JsNumber.eq().run { this@eqv.eqv(b) }
-        this is JsBoolean && b is JsBoolean -> BooleanInstances.eq().run { this@eqv.value.eqv(b.value) }
+        this is JsBoolean && b is JsBoolean -> Boolean.eq().run { this@eqv.value.eqv(b.value) }
         this is JsArray && b is JsArray -> JsArray.eq().run { this@eqv.eqv(b) }
         else -> this.isNull && b.isNull
     }
 
 }
 
-@instance(JsNumber::class)
+@extension
 interface JsNumberEqInstance : Eq<JsNumber> {
     override fun JsNumber.eqv(b: JsNumber): Boolean = when (this) {
         is JsDecimal -> when (b) {

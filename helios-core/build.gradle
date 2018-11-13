@@ -7,7 +7,7 @@ dependencies {
     kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
     kapt project(':helios-meta-compiler')
 
-    testCompile "io.arrow-kt:arrow-test:0.7.1"
+    testCompile "io.arrow-kt:arrow-test:$arrowVersion"
     kaptTest project(':helios-meta-compiler')
     kaptTest "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
     testCompileOnly "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
