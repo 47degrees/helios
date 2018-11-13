@@ -38,7 +38,6 @@ fun String.Companion.decoder() = object : Decoder<String> {
             value.asJsString().flatMap { it.value.toString().some() }.toEither { StringDecodingError(value) }
 }
 
-@extension
 interface OptionEncoderInstance<in A> : Encoder<Option<A>> {
 
     fun encoderA(): Encoder<A>
@@ -48,7 +47,6 @@ interface OptionEncoderInstance<in A> : Encoder<Option<A>> {
 
 }
 
-@extension
 interface Tuple2EncoderInstance<A, B> : Encoder<Tuple2<A, B>> {
 
     fun encoderA(): Encoder<A>
@@ -64,7 +62,6 @@ interface Tuple2EncoderInstance<A, B> : Encoder<Tuple2<A, B>> {
 
 }
 
-@extension
 interface Tuple3EncoderInstance<A, B, C> : Encoder<Tuple3<A, B, C>> {
 
     fun encoderA(): Encoder<A>

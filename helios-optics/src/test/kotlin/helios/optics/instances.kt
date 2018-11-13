@@ -12,6 +12,11 @@ import arrow.test.laws.TraversalLaws
 import arrow.typeclasses.Eq
 import arrow.typeclasses.Monoid
 import helios.core.*
+import helios.optics.jsarray.each.each
+import helios.optics.jsarray.index.index
+import helios.optics.jsobject.at.at
+import helios.optics.jsobject.each.each
+import helios.optics.jsobject.index.index
 import io.kotlintest.KTestJUnitRunner
 import io.kotlintest.properties.Gen
 import org.junit.runner.RunWith

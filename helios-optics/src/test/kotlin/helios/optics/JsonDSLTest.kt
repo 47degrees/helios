@@ -1,6 +1,7 @@
 package helios.optics
 
 import arrow.core.*
+import arrow.instances.option.eq.eq
 import arrow.test.*
 import arrow.test.generators.genFunctionAToB
 import arrow.test.laws.*

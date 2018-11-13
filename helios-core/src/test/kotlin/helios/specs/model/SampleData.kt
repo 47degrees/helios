@@ -1,9 +1,7 @@
 package helios.specs.model
 
+import arrow.*
 import arrow.core.Either
-import arrow.core.fix
-import arrow.deriving
-import arrow.higherkind
 import arrow.optics.optics
 import arrow.typeclasses.Applicative
 import arrow.typeclasses.Functor
@@ -52,8 +50,8 @@ class GenA<A>(val value: Gen<A>) : GenAOf<A>, Gen<A> by value {
             val r = f(a).fix()
             val genValue = r.value.generate()
             return when (genValue) {
-                is Either.Left<A, B> -> tailRecM(genValue.a, f)
-                is Either.Right<A, B> -> just(genValue.b)
+                is Either.Left<A> -> tailRecM(genValue.a, f)
+                is Either.Right<B> -> just(genValue.b)
             }
         }
     }

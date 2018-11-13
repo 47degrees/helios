@@ -54,7 +54,7 @@ class JsonFileGenerator(
     //TODO FIXME
     inline val String.encoder: String
         get() = when {
-            this == "Boolean" -> "BooleanInstances.encoder()"
+            this == "Boolean" -> "Boolean.Companion.encoder()"
             this.startsWith("kotlin.collections.List") -> "${Regex("kotlin.collections.List<(.*)>$").matchEntire(this)!!.groupValues[1]}.encoder()"
             else -> "$this.encoder()"
         }
@@ -69,7 +69,7 @@ class JsonFileGenerator(
     //TODO FIXME
     inline val String.decoder: String
         get() = when {
-            this == "Boolean" -> "BooleanInstances.decoder()"
+            this == "Boolean" -> "Boolean.Companion.decoder()"
             this.startsWith("kotlin.collections.List") -> "ListDecoderInstance(${Regex("kotlin.collections.List<(.*)>$").matchEntire(this)!!.groupValues[1]}.decoder())"
             else -> "$this.decoder()"
         }
@@ -79,14 +79,17 @@ class JsonFileGenerator(
     private fun map(je: JsonElement): String = if (je.pairs.size == 1) "${parse(je)}.map("
     else "Either.applicative<DecodingError>().map(${parse(je)}, "
 
-    private fun createInstance(je: JsonElement): String = """
+    private fun addExtraImport(je: JsonElement) = if(je.pairs.size != 1) "import arrow.instances.either.applicative.*" else ""
+
+        private fun createInstance(je: JsonElement): String = """
       |${map(je)} { ${je.pairs.joinToString(prefix = if (je.pairs.size > 1) "(" else "", separator = ",", postfix = if (je.pairs.size > 1) ")" else "") { (p, _) -> p }} ->
       |  ${je.name}(${je.pairs.map { (p, _) -> "$p = $p" }.joinToString(",")})
       |}).fix()
       |""".trimMargin()
 
     private fun genToJson(je: JsonElement): String =
-            """|
+            """|${addExtraImport(je)}
+               |
                |fun ${je.name}.toJson(): Json = ${jsonProperties(je)}
                |
                |fun Json.Companion.to${je.name}(value: Json): Either<DecodingError, ${je.name}> =

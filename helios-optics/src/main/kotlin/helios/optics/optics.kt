@@ -10,6 +10,8 @@ import arrow.optics.Prism
 import arrow.optics.Traversal
 import arrow.typeclasses.Applicative
 import helios.core.*
+import helios.optics.jsarray.each.each
+import helios.optics.jsobject.each.each
 
 fun <S, A : S> PPrism.Companion.fromOption(getOption: (S) -> Option<A>): Prism<S, A> =
         Prism(getOrModify = { getOption(it).toEither { it } })
