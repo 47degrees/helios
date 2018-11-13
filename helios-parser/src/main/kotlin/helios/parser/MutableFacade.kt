@@ -6,11 +6,11 @@ interface MutableFacade<J : Any> : Facade<J> {
 
   override fun singleContext() = object : FContext<J> {
     lateinit var value: J
-    override fun add(s: CharSequence) {
+    override fun add(s: CharSequence): Unit {
       value = jstring(s)
     }
 
-    override fun add(v: J) {
+    override fun add(v: J): Unit {
       value = v
     }
 
@@ -18,13 +18,13 @@ interface MutableFacade<J : Any> : Facade<J> {
     override fun isObj(): Boolean = false
   }
 
-  override fun arrayContext() = object : FContext<J> {
+  override fun arrayContext(): FContext<J> = object : FContext<J> {
     val vs = arrayListOf<J>()
-    override fun add(s: CharSequence) {
+    override fun add(s: CharSequence): Unit {
       vs.add(jstring(s))
     }
 
-    override fun add(v: J) {
+    override fun add(v: J): Unit {
       vs.add(v)
     }
 
@@ -32,7 +32,7 @@ interface MutableFacade<J : Any> : Facade<J> {
     override fun isObj(): Boolean = false
   }
 
-  override fun objectContext() = object : FContext<J> {
+  override fun objectContext(): FContext<J> = object : FContext<J> {
     var key: String? = null
     val vs = mutableMapOf<String, J>()
     override fun add(s: CharSequence): Unit =
@@ -44,7 +44,7 @@ interface MutableFacade<J : Any> : Facade<J> {
         key = null
       }
 
-    override fun add(v: J) {
+    override fun add(v: J): Unit {
       val k = key
       if (k != null) vs[k] = v
       key = null

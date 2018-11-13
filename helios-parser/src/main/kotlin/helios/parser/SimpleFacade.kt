@@ -13,11 +13,11 @@ interface SimpleFacade<J : Any> : Facade<J> {
 
   override fun singleContext(): FContext<J> = object : FContext<J> {
     lateinit var value: J
-    override fun add(s: CharSequence) {
+    override fun add(s: CharSequence): Unit {
       value = jstring(s)
     }
 
-    override fun add(v: J) {
+    override fun add(v: J): Unit {
       value = v
     }
 
@@ -27,11 +27,11 @@ interface SimpleFacade<J : Any> : Facade<J> {
 
   override fun arrayContext(): FContext<J> = object : FContext<J> {
     val vs = mutableListOf<J>()
-    override fun add(s: CharSequence) {
+    override fun add(s: CharSequence): Unit {
       vs += jstring(s)
     }
 
-    override fun add(v: J) {
+    override fun add(v: J): Unit {
       vs += v
     }
 
@@ -39,7 +39,7 @@ interface SimpleFacade<J : Any> : Facade<J> {
     override fun isObj(): Boolean = false
   }
 
-  override fun objectContext() = object : FContext<J> {
+  override fun objectContext(): FContext<J> = object : FContext<J> {
     var key: String? = null
     var vs = mutableMapOf<String, J>()
     override fun add(s: CharSequence): Unit =
@@ -51,13 +51,13 @@ interface SimpleFacade<J : Any> : Facade<J> {
         key = null
       }
 
-    override fun add(v: J) {
+    override fun add(v: J): Unit {
       val k = key
       if (k != null) vs[k] = v
       key = null
     }
 
-    override fun finish() = jobject(vs)
-    override fun isObj() = true
+    override fun finish(): J = jobject(vs)
+    override fun isObj(): Boolean = true
   }
 }

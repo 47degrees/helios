@@ -20,7 +20,7 @@ class CharBuilder {
 
   fun makeString(): String = String(cs, 0, len)
 
-  fun resizeIfNecessary(goal: Int) {
+  fun resizeIfNecessary(goal: Int): Unit {
     if (goal <= capacity) return
     var cap = capacity
     while (cap in 1..(goal - 1)) cap *= 2
@@ -34,7 +34,7 @@ class CharBuilder {
     }
   }
 
-  fun extend(s: CharSequence) {
+  fun extend(s: CharSequence): Unit {
     val tlen = len + s.length
     resizeIfNecessary(tlen)
     var i = 0
@@ -47,7 +47,7 @@ class CharBuilder {
     }
   }
 
-  fun append(c: Char) {
+  fun append(c: Char): Unit {
     val tlen = len + 1
     resizeIfNecessary(tlen)
     cs[len] = c

@@ -10,8 +10,8 @@ class CharSequenceParser<J>(val cs: CharSequence) : SyncParser<J>, CharBasedPars
   private val charBuilder = CharBuilder()
   override fun charBuilder(): CharBuilder = charBuilder
   override fun line(): Int = line
-  override fun column(i: Int) = i
-  override fun newline(i: Int) {
+  override fun column(i: Int): Int = i
+  override fun newline(i: Int): Unit {
     line += 1
   }
 
@@ -19,6 +19,6 @@ class CharSequenceParser<J>(val cs: CharSequence) : SyncParser<J>, CharBasedPars
   override fun checkpoint(state: Int, i: Int, stack: List<FContext<J>>): Unit = Unit
   override fun at(i: Int): Char = cs[i]
   override fun at(i: Int, j: Int): CharSequence = cs.subSequence(i, j)
-  override fun atEof(i: Int) = i == cs.length
-  override fun close() = Unit
+  override fun atEof(i: Int): Boolean = i == cs.length
+  override fun close(): Unit = Unit
 }

@@ -66,12 +66,12 @@ class ChannelParser<J>(val ch: ReadableByteChannel, bufferSize: Int) : SyncParse
   private var ncurr = ch.read(ByteBuffer.wrap(curr))
   private var nnext = ch.read(ByteBuffer.wrap(next))
 
-  var line = 0
+  private var line = 0
 
   override fun line(): Int = line
 
   private var pos = 0
-  override fun newline(i: Int) {
+  override fun newline(i: Int): Unit {
     line += 1; pos = i
   }
 
@@ -86,12 +86,12 @@ class ChannelParser<J>(val ch: ReadableByteChannel, bufferSize: Int) : SyncParse
    * the index provided to reset is no longer in the 'curr' buffer, we want to
    * clear that data and swap the buffers.
    */
-  fun swap() {
+  fun swap(): Unit {
     val tmp = curr; curr = next; next = tmp
     val ntmp = ncurr; ncurr = nnext; nnext = ntmp
   }
 
-  fun grow() {
+  fun grow(): Unit {
     val cc = ByteArray(allSize)
     System.arraycopy(curr, 0, cc, 0, bufSize)
     System.arraycopy(next, 0, cc, bufSize, bufSize)
