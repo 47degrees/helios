@@ -24,57 +24,65 @@ import org.junit.runner.RunWith
 @RunWith(KTestJUnitRunner::class)
 class InstancesTest : UnitSpec() {
 
-    init {
+  init {
 
-        testLaws(OptionalLaws.laws(
-                optional = JsObject.index().index(Gen.string().generate()),
-                aGen = Gen.jsObject(),
-                bGen = Gen.json(),
-                funcGen = genFunctionAToB(Gen.json()),
-                EQA = Eq.any(),
-                EQOptionB = Eq.any()
-        ))
+    testLaws(
+      OptionalLaws.laws(
+        optional = JsObject.index().index(Gen.string().generate()),
+        aGen = Gen.jsObject(),
+        bGen = Gen.json(),
+        funcGen = genFunctionAToB(Gen.json()),
+        EQA = Eq.any(),
+        EQOptionB = Eq.any()
+      )
+    )
 
-        testLaws(OptionalLaws.laws(
-                optional = JsArray.index().index(1),
-                aGen = Gen.jsArray(),
-                bGen = Gen.json(),
-                funcGen = genFunctionAToB(Gen.json()),
-                EQA = Eq.any(),
-                EQOptionB = Eq.any()
-        ))
+    testLaws(
+      OptionalLaws.laws(
+        optional = JsArray.index().index(1),
+        aGen = Gen.jsArray(),
+        bGen = Gen.json(),
+        funcGen = genFunctionAToB(Gen.json()),
+        EQA = Eq.any(),
+        EQOptionB = Eq.any()
+      )
+    )
 
-        testLaws(TraversalLaws.laws(
-                traversal = JsObject.each().each(),
-                aGen = Gen.jsObject(),
-                bGen = Gen.json(),
-                funcGen = genFunctionAToB(Gen.json()),
-                EQA = Eq.any(),
-                EQOptionB = Eq.any(),
-                EQListB = Eq.any()
-        ))
+    testLaws(
+      TraversalLaws.laws(
+        traversal = JsObject.each().each(),
+        aGen = Gen.jsObject(),
+        bGen = Gen.json(),
+        funcGen = genFunctionAToB(Gen.json()),
+        EQA = Eq.any(),
+        EQOptionB = Eq.any(),
+        EQListB = Eq.any()
+      )
+    )
 
-        testLaws(TraversalLaws.laws(
-                traversal = JsArray.each().each(),
-                aGen = Gen.jsArray(),
-                bGen = Gen.json(),
-                funcGen = genFunctionAToB(Gen.json()),
-                EQA = Eq.any(),
-                EQOptionB = Eq.any(),
-                EQListB = Eq.any()
-        ))
+    testLaws(
+      TraversalLaws.laws(
+        traversal = JsArray.each().each(),
+        aGen = Gen.jsArray(),
+        bGen = Gen.json(),
+        funcGen = genFunctionAToB(Gen.json()),
+        EQA = Eq.any(),
+        EQOptionB = Eq.any(),
+        EQListB = Eq.any()
+      )
+    )
 
-        testLaws(LensLaws.laws(
-                lens = JsObject.at().at(Gen.string().generate()),
-                aGen = Gen.jsObject(),
-                bGen = genOption(Gen.json()),
-                funcGen = genFunctionAToB(genOption(Gen.json())),
-                EQA = Eq.any(),
-                EQB = Eq.any(),
-                MB = object : Monoid<Option<Json>> {
-                    override fun Option<Json>.combine(b: Option<Json>) = orElse { b }
-                    override fun empty(): Option<Json> = None
-                }
-        ))
-    }
+    testLaws(LensLaws.laws(
+      lens = JsObject.at().at(Gen.string().generate()),
+      aGen = Gen.jsObject(),
+      bGen = genOption(Gen.json()),
+      funcGen = genFunctionAToB(genOption(Gen.json())),
+      EQA = Eq.any(),
+      EQB = Eq.any(),
+      MB = object : Monoid<Option<Json>> {
+        override fun Option<Json>.combine(b: Option<Json>) = orElse { b }
+        override fun empty(): Option<Json> = None
+      }
+    ))
+  }
 }

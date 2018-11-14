@@ -16,7 +16,8 @@ fun Gen.Companion.jsDouble(): Gen<JsDouble> = Gen.double().map(::JsDouble)
 
 fun Gen.Companion.jsDecimal(): Gen<JsDecimal> = Gen.double().map { JsDecimal(it.toString()) }
 
-fun Gen.Companion.jsNumber(): Gen<JsNumber> = Gen.oneOf(Gen.jsInt(), Gen.jsLong(), Gen.jsFloat(), Gen.jsDouble())
+fun Gen.Companion.jsNumber(): Gen<JsNumber> =
+  Gen.oneOf(Gen.jsInt(), Gen.jsLong(), Gen.jsFloat(), Gen.jsDouble())
 
 fun Gen.Companion.jsString(): Gen<JsString> = Gen.string().map(::JsString)
 
@@ -27,21 +28,22 @@ fun Gen.Companion.jsNull(): Gen<JsNull> = ConstGen(JsNull)
 fun Gen.Companion.jsArray(): Gen<JsArray> = Gen.list(genJson()).map(::JsArray)
 
 fun <T> Gen.Companion.jsArray(EN: Encoder<T>, valid: Gen<T>): Gen<JsArray> =
-    Gen.list(valid).map { JsArray(it.map { EN.run { it.encode() } }) }
+  Gen.list(valid).map { list -> JsArray(list.map { elem -> EN.run { elem.encode() } }) }
 
 fun Gen.Companion.jsObject(): Gen<JsObject> = Gen.map(Gen.string(), genJson()).map(::JsObject)
 
-fun <T> Gen.Companion.json(EN: Encoder<T>, valid: Gen<T>): Gen<Json> = valid.map { EN.run { it.encode() } }
+fun <T> Gen.Companion.json(EN: Encoder<T>, valid: Gen<T>): Gen<Json> =
+  valid.map { EN.run { it.encode() } }
 
 fun Gen.Companion.json(): Gen<Json> = Gen.oneOf(
-        Gen.jsInt(),
-        Gen.jsLong(),
-        Gen.jsDouble(),
-        Gen.jsString(),
-        Gen.jsNull(),
-        Gen.jsArray(),
-        Gen.jsObject()
+  Gen.jsInt(),
+  Gen.jsLong(),
+  Gen.jsDouble(),
+  Gen.jsString(),
+  Gen.jsNull(),
+  Gen.jsArray(),
+  Gen.jsObject()
 )
 
 private fun genJson(): Gen<Json> =
-        Gen.oneOf(Gen.jsInt(), Gen.jsLong(), Gen.jsDouble(), Gen.jsString(), Gen.jsNull())
+  Gen.oneOf(Gen.jsInt(), Gen.jsLong(), Gen.jsDouble(), Gen.jsString(), Gen.jsNull())

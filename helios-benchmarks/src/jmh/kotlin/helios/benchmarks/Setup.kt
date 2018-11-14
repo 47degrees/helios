@@ -15,7 +15,8 @@ val klaxon: Parser = Parser()
 
 val gson = Gson()
 
-val moshi: JsonAdapter<Map<String, Any>> = Moshi.Builder().build().adapter(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
+val moshi: JsonAdapter<Map<String, Any>> = Moshi.Builder().build()
+  .adapter(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
 
-val jackson = ObjectMapper().registerModule(KotlinModule())
+val jackson: ObjectMapper = ObjectMapper().registerModule(KotlinModule())
 

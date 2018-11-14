@@ -3,6 +3,8 @@ dependencies {
     compile project(":helios-meta")
     compile project(":helios-parser")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+
     compile "io.arrow-kt:arrow-optics:$arrowVersion"
     compile "io.arrow-kt:arrow-typeclasses:$arrowVersion"
 

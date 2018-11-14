@@ -36,7 +36,11 @@ inline val Optional<Json, Json>.charseq: Optional<Json, CharSequence> inline get
 /**
  * Extract value as [String] from [Json.Companion.path].
  */
-inline val Optional<Json, Json>.string: Optional<Json, String> inline get() = extract(String.decoder(), String.encoder())
+inline val Optional<Json, Json>.string: Optional<Json, String>
+  inline get() = extract(
+    String.decoder(),
+    String.encoder()
+  )
 
 /**
  * Extract value as [JsNumber] from [Json.Companion.path].
@@ -86,34 +90,42 @@ inline val Optional<Json, Json>.`null`: Optional<Json, JsNull> inline get() = th
 /**
  * Select field with [name] in [JsObject] from [Json.Companion.path].
  */
-fun Optional<Json, Json>.select(name: String): Optional<Json, Json> = this compose Json.jsObject compose JsObject.index().index(name)
+fun Optional<Json, Json>.select(name: String): Optional<Json, Json> =
+  this compose Json.jsObject compose JsObject.index().index(name)
 
 /**
  * Select field with [name] in [JsObject] from [Json.Companion.path].
  */
-operator fun Optional<Json, Json>.get(name: String): Optional<Json, Json> = this compose Json.jsObject compose JsObject.index().index(name)
+operator fun Optional<Json, Json>.get(name: String): Optional<Json, Json> =
+  this compose Json.jsObject compose JsObject.index().index(name)
 
 /**
  * Extract field with [field] from [JsObject] from [Json.Companion.path].
  */
-fun Optional<Json, Json>.at(field: String): Optional<Json, Option<Json>> = (this compose Json.jsObject).at(JsObject.at(), field)
+fun Optional<Json, Json>.at(field: String): Optional<Json, Option<Json>> =
+  (this compose Json.jsObject).at(JsObject.at(), field)
 
 /**
  *  Get element at index [i] from [JsArray].
  */
-operator fun Optional<Json, Json>.get(i: Int): Optional<Json, Json> = this compose Json.jsArray compose JsArray.index().index(i)
+operator fun Optional<Json, Json>.get(i: Int): Optional<Json, Json> =
+  this compose Json.jsArray compose JsArray.index().index(i)
 
 /**
  * Extract [A] from [Json.Companion.path].
  */
 fun <A> Optional<Json, Json>.extract(DE: Decoder<A>, EN: Encoder<A>): Optional<Json, A> =
-        this compose parse(DE, EN)
+  this compose parse(DE, EN)
 
 /**
  * Select field with [name] in [JsObject] and extract as [A] from path.
  */
-fun <A> Optional<Json, Json>.selectExtract(DE: Decoder<A>, EN: Encoder<A>, name: String): Optional<Json, A> =
-        select(name).extract(DE, EN)
+fun <A> Optional<Json, Json>.selectExtract(
+  DE: Decoder<A>,
+  EN: Encoder<A>,
+  name: String
+): Optional<Json, A> =
+  select(name).extract(DE, EN)
 
 /**
  * Select every entry in [JsObject] or [JsArray].
@@ -123,12 +135,14 @@ inline val Optional<Json, Json>.every inline get() = this compose Json.traversal
 /**
  * Filter [JsArray] by indices that satisfy the predicate [p].
  */
-fun Optional<Json, Json>.filterIndex(p: Predicate<Int>) = array compose ListFilterIndexInstance<Json>().filter(p)
+fun Optional<Json, Json>.filterIndex(p: Predicate<Int>) =
+  array compose ListFilterIndexInstance<Json>().filter(p)
 
 /**
  * Filter [JsObject] by keys that satisfy the predicate [p].
  */
-fun Optional<Json, Json>.filterKeys(p: Predicate<String>) = `object` compose MapFilterIndexInstance<String, Json>().filter(p)
+fun Optional<Json, Json>.filterKeys(p: Predicate<String>) =
+  `object` compose MapFilterIndexInstance<String, Json>().filter(p)
 
 /**
  * Unsafe optic: needs some investigation because it is required to extract reasonable typed values from Json.
@@ -136,6 +150,6 @@ fun Optional<Json, Json>.filterKeys(p: Predicate<String>) = `object` compose Map
  */
 @PublishedApi
 internal fun <A> parse(DE: Decoder<A>, EN: Encoder<A>): Prism<Json, A> = Prism(
-        getOrModify = { json -> DE.decode(json).mapLeft { _ -> json } },
-        reverseGet = { EN.run { it.encode() } }
+  getOrModify = { json -> DE.decode(json).mapLeft { json } },
+  reverseGet = { EN.run { it.encode() } }
 )

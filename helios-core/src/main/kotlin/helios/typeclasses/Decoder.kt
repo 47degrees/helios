@@ -10,5 +10,5 @@ data class NumberDecodingError(val value: Json) : DecodingError()
 data class KeyNotFound(val name: String) : DecodingError()
 
 interface Decoder<out A> {
-    fun decode(value: Json): Either<DecodingError, A>
+  fun decode(value: Json): Either<DecodingError, A>
 }

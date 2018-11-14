@@ -5,18 +5,18 @@ import io.kotlintest.properties.Gen
 
 @json
 data class City(val streets: List<Street>) {
-    companion object
+  companion object
 }
 
 @json
 data class Street(val name: String) {
-    companion object
+  companion object
 }
 
 fun genStreet(): Gen<Street> = Gen.string().let { stringGen ->
-    Gen.create { Street(stringGen.generate()) }
+  Gen.create { Street(stringGen.generate()) }
 }
 
 fun genCity(): Gen<City> = Gen.list(genStreet()).let { gen ->
-    Gen.create { City(gen.generate()) }
+  Gen.create { City(gen.generate()) }
 }
