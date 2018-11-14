@@ -1,12 +1,13 @@
 dependencies {
     compile project(":helios-core")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    compile 'com.beust:klaxon:2.0.3'
-    compile 'com.tomatobean:jsonparser:1.0.5'
-    compile 'com.squareup.moshi:moshi-kotlin:1.5.0'
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    compile 'com.beust:klaxon:3.0.11'
+    compile 'com.tomatobean:jsonparser:1.0.10'
+    compile 'com.squareup.moshi:moshi-kotlin:1.8.0'
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.0"
-    compile "com.jsoniter:jsoniter:0.9.19"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7"
+    compile "com.jsoniter:jsoniter:0.9.23"
 
     kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
     kapt project(':helios-meta-compiler')

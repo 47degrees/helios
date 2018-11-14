@@ -9,7 +9,6 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import helios.benchmarks.sample.Friends
 import helios.core.Json
-import helios.typeclasses.decoder
 import org.openjdk.jmh.annotations.*
 
 @State(Scope.Benchmark)

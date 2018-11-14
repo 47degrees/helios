@@ -1,9 +1,15 @@
 package helios.core
 
 import arrow.core.*
+import arrow.instances.option.applicative.applicative
 import helios.instances.HeliosFacade
+import helios.instances.jsarray.eq.eq
+import helios.instances.jsnumber.eq.eq
+import helios.instances.jsobject.eq.eq
+import helios.instances.json.eq.eq
 import helios.parser.Parser
 import helios.typeclasses.Decoder
+import helios.typeclasses.DecodingError
 import java.io.File
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -45,7 +51,7 @@ sealed class Json {
     else        -> None
   }
 
-  fun <A> decode(decoder: Decoder<A>) =
+  fun <A> decode(decoder: Decoder<A>): Either<DecodingError, A> =
     decoder.decode(this)
 
   fun <B> fold(
@@ -57,11 +63,11 @@ sealed class Json {
     ifJsNull: () -> B
   ): B =
     when (this) {
-      is JsString -> ifJsString(this)
-      is JsNumber -> ifJsNumber(this)
-      is JsArray -> ifJsArray(this)
-      is JsObject -> ifJsObject(this)
-      is JsNull -> ifJsNull()
+      is JsString  -> ifJsString(this)
+      is JsNumber  -> ifJsNumber(this)
+      is JsArray   -> ifJsArray(this)
+      is JsObject  -> ifJsObject(this)
+      is JsNull    -> ifJsNull()
       is JsBoolean -> ifJsBoolean(this)
     }
 
@@ -310,8 +316,10 @@ data class JsArray(val value: List<Json>) : Json() {
 data class JsObject(val value: Map<String, Json>) : Json() {
 
   companion object {
-    operator fun invoke(vararg keyValues: Pair<String, Json>) = JsObject(keyValues.toMap())
-    operator fun invoke(vararg keyValues: Tuple2<String, Json>) =
+    operator fun invoke(vararg keyValues: Pair<String, Json>): JsObject =
+      JsObject(keyValues.toMap())
+
+    operator fun invoke(vararg keyValues: Tuple2<String, Json>): JsObject =
       JsObject(keyValues.map { it.a to it.b }.toMap())
   }
 

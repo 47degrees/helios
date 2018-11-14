@@ -1,9 +1,7 @@
 package helios.meta.compiler.json
 
 import arrow.common.Package
-import arrow.common.utils.ClassOrPackageDataWrapper
-import arrow.common.utils.extractFullName
-import arrow.common.utils.removeBackticks
+import arrow.common.utils.*
 import me.eugeniomarletti.kotlin.metadata.shadow.metadata.ProtoBuf
 import java.io.File
 
@@ -64,10 +62,9 @@ class JsonFileGenerator(
   //TODO FIXME
   inline val String.encoder: String
     get() = when {
-      this == "Boolean"                          -> "BooleanInstances.encoder()"
+      this == "Boolean"                          -> "Boolean.Companion.encoder()"
       this.startsWith("kotlin.collections.List") ->
-        "${Regex("kotlin.collections.List<(.*)>$")
-          .matchEntire(this)!!.groupValues[1]}.encoder()"
+        "${Regex("kotlin.collections.List<(.*)>$").matchEntire(this)!!.groupValues[1]}.encoder()"
       else                                       -> "$this.encoder()"
     }
 
@@ -81,10 +78,9 @@ class JsonFileGenerator(
   //TODO FIXME
   inline val String.decoder: String
     get() = when {
-      this == "Boolean"                          -> "BooleanInstances.decoder()"
+      this == "Boolean"                          -> "Boolean.Companion.decoder()"
       this.startsWith("kotlin.collections.List") ->
-        "ListDecoderInstance(${Regex("kotlin.collections.List<(.*)>$")
-          .matchEntire(this)!!.groupValues[1]}.decoder())"
+        "ListDecoderInstance(${Regex("kotlin.collections.List<(.*)>$").matchEntire(this)!!.groupValues[1]}.decoder())"
       else                                       -> "$this.decoder()"
     }
 
@@ -97,6 +93,9 @@ class JsonFileGenerator(
   private fun map(je: JsonElement): String = if (je.pairs.size == 1) "${parse(je)}.map("
   else "Either.applicative<DecodingError>().map(${parse(je)}, "
 
+  private fun addExtraImport(je: JsonElement) =
+    if (je.pairs.size != 1) "import arrow.instances.either.applicative.*" else ""
+
   private fun createInstance(je: JsonElement): String = """
       |${map(je)} { ${je.pairs.joinToString(
     prefix = if (je.pairs.size > 1) "(" else "",
@@ -108,7 +107,8 @@ class JsonFileGenerator(
       |""".trimMargin()
 
   private fun genToJson(je: JsonElement): String =
-    """|
+    """|${addExtraImport(je)}
+       |
        |fun ${je.name}.toJson(): Json = ${jsonProperties(je)}
        |
        |fun Json.Companion.to${je.name}(value: Json): Either<DecodingError, ${je.name}> =

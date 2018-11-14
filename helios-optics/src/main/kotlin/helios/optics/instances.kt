@@ -1,24 +1,16 @@
 package helios.optics
 
 import arrow.Kind
-import arrow.core.Option
-import arrow.core.left
-import arrow.core.right
+import arrow.core.*
 import arrow.data.getOption
 import arrow.data.k
-import arrow.instance
-import arrow.optics.Lens
-import arrow.optics.Optional
-import arrow.optics.Traversal
-import arrow.optics.typeclasses.At
-import arrow.optics.typeclasses.Each
-import arrow.optics.typeclasses.Index
+import arrow.extension
+import arrow.optics.*
+import arrow.optics.typeclasses.*
 import arrow.typeclasses.Applicative
-import helios.core.JsArray
-import helios.core.JsObject
-import helios.core.Json
+import helios.core.*
 
-@instance(JsObject::class)
+@extension
 interface JsObjectIndexInstance : Index<JsObject, String, Json> {
   override fun index(i: String): Optional<JsObject, Json> = Optional(
     getOrModify = { it.value[i]?.right() ?: it.left() },
@@ -30,7 +22,7 @@ interface JsObjectIndexInstance : Index<JsObject, String, Json> {
   )
 }
 
-@instance(JsObject::class)
+@extension
 interface JsObjectAtInstance : At<JsObject, String, Option<Json>> {
   override fun at(i: String): Lens<JsObject, Option<Json>> = Lens(
     get = { it.value.getOption(i) },
@@ -47,7 +39,7 @@ interface JsObjectAtInstance : At<JsObject, String, Option<Json>> {
 
 }
 
-@instance(JsObject::class)
+@extension
 interface JsObjectEachInstance : Each<JsObject, Json> {
   override fun each() = object : Traversal<JsObject, Json> {
     override fun <F> modifyF(
@@ -60,7 +52,7 @@ interface JsObjectEachInstance : Each<JsObject, Json> {
   }
 }
 
-@instance(JsArray::class)
+@extension
 interface JsArrayEachInstance : Each<JsArray, Json> {
   override fun each() = object : Traversal<JsArray, Json> {
     override fun <F> modifyF(
@@ -73,7 +65,7 @@ interface JsArrayEachInstance : Each<JsArray, Json> {
   }
 }
 
-@instance(JsArray::class)
+@extension
 interface JsArrayIndexInstance : Index<JsArray, Int, Json> {
   override fun index(i: Int): Optional<JsArray, Json> = Optional(
     getOrModify = { it.value.getOrNull(i)?.right() ?: it.left() },

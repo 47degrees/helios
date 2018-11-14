@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-apply from: 'detekt.gradle'
-
 buildscript {
     ext {
         // Constants
-        gradleVersion = '4.2'
-        gradleVersionsPluginVersion = '0.17.0'
+        gradleVersion = '4.10'
+        gradleVersionsPluginVersion = '0.20.0'
         javaVersion = JavaVersion.VERSION_1_7
         kotlinTestVersion = '2.0.7'
-        kotlinVersion = '1.2.71'
-        arrowVersion = '0.7.2'
-        arrowTestVersion = '0.7.1'
+        kotlinVersion = '1.3.10'
+        arrowVersion = '0.8.1'
     }
-
     repositories {
         jcenter()
         maven { url 'https://jitpack.io' }
@@ -40,12 +36,19 @@ buildscript {
     dependencies {
         classpath "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
-        classpath 'io.arrow-kt:ank-gradle-plugin:0.5.1'
-        classpath 'org.ajoberstar:gradle-git-publish:0.3.2'
-        classpath "me.champeau.gradle:jmh-gradle-plugin:0.4.4"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath 'io.arrow-kt:ank-gradle-plugin:0.7.1'
+        classpath 'org.ajoberstar:gradle-git-publish:1.0.1'
+        classpath "me.champeau.gradle:jmh-gradle-plugin:0.4.7"
     }
 }
+
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.3.0"
+    id "org.jetbrains.kotlin.kapt" version "1.3.0"
+}
+
+apply from: 'detekt.gradle'
 
 subprojects { project ->
 
@@ -69,7 +72,7 @@ subprojects { project ->
     archivesBaseName = POM_ARTIFACT_ID
 
     jacoco {
-        toolVersion '0.7.8'
+        toolVersion '0.8.1'
     }
 
     task codeCoverageReport(type: JacocoReport) {

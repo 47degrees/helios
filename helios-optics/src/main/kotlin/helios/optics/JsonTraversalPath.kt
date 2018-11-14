@@ -2,15 +2,21 @@
 
 package helios.optics
 
-import arrow.core.*
-
-import arrow.optics.*
+import arrow.core.Option
+import arrow.core.Predicate
+import arrow.optics.PTraversal
+import arrow.optics.Traversal
 import arrow.optics.dsl.at
-import arrow.optics.instances.*
+import arrow.optics.instances.ListFilterIndexInstance
+import arrow.optics.instances.MapFilterIndexInstance
 import helios.core.*
 import helios.instances.decoder
 import helios.instances.encoder
-import helios.typeclasses.*
+import helios.optics.jsarray.index.index
+import helios.optics.jsobject.at.at
+import helios.optics.jsobject.index.index
+import helios.typeclasses.Decoder
+import helios.typeclasses.Encoder
 
 /**
  * Extract value as [Boolean] from path.
@@ -79,7 +85,7 @@ inline val Traversal<Json, Json>.`null`: Traversal<Json, JsNull> inline get() = 
 /**
  * Select field with [name] in [JsObject] from path.
  */
-fun Traversal<Json, Json>.select(name: String) =
+fun Traversal<Json, Json>.select(name: String): PTraversal<Json, Json, Json, Json> =
   this compose Json.jsObject compose JsObject.index().index(name)
 
 /**
@@ -91,7 +97,7 @@ fun Traversal<Json, Json>.at(field: String): Traversal<Json, Option<Json>> =
 /**
  *  Get element at index [i] from [JsArray].
  */
-operator fun Traversal<Json, Json>.get(i: Int) =
+operator fun Traversal<Json, Json>.get(i: Int): PTraversal<Json, Json, Json, Json> =
   this compose Json.jsArray compose JsArray.index().index(i)
 
 /**
@@ -113,16 +119,16 @@ fun <A> Traversal<Json, Json>.selectExtract(
 /**
  * Select every entry in [JsObject] or [JsArray].
  */
-inline val Traversal<Json, Json>.every inline get() = this compose Json.traversal()
+inline val Traversal<Json, Json>.every: PTraversal<Json, Json, Json, Json> inline get() = this compose Json.traversal()
 
 /**
  * Filter [JsArray] by indices that satisfy the predicate [p].
  */
-fun Traversal<Json, Json>.filterIndex(p: Predicate<Int>) =
+fun Traversal<Json, Json>.filterIndex(p: Predicate<Int>): PTraversal<Json, Json, Json, Json> =
   array compose ListFilterIndexInstance<Json>().filter(p)
 
 /**
  * Filter [JsObject] by keys that satisfy the predicate [p].
  */
-fun Traversal<Json, Json>.filterKeys(p: Predicate<String>) =
+fun Traversal<Json, Json>.filterKeys(p: Predicate<String>): PTraversal<Json, Json, Json, Json> =
   `object` compose MapFilterIndexInstance<String, Json>().filter(p)

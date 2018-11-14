@@ -1,10 +1,10 @@
 package helios.optics
 
-import arrow.core.None
-import arrow.core.Some
-import arrow.core.identity
+import arrow.core.*
 import arrow.test.UnitSpec
 import helios.core.*
+import helios.instances.jsnumber.eq.eq
+import helios.instances.json.eq.eq
 import io.kotlintest.KTestJUnitRunner
 import io.kotlintest.matchers.shouldBe
 import org.junit.runner.RunWith

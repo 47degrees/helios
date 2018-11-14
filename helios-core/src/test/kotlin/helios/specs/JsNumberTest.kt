@@ -3,11 +3,10 @@ package helios.specs
 import arrow.core.some
 import arrow.test.UnitSpec
 import helios.core.*
+import helios.instances.jsnumber.eq.eq
 import io.kotlintest.KTestJUnitRunner
 import io.kotlintest.matchers.shouldBe
-import io.kotlintest.properties.Gen
-import io.kotlintest.properties.forAll
-import io.kotlintest.properties.map
+import io.kotlintest.properties.*
 import org.junit.runner.RunWith
 
 @RunWith(KTestJUnitRunner::class)

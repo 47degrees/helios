@@ -1,10 +1,8 @@
 package helios.optics
 
 import helios.core.*
-import helios.typeclasses.*
-import io.kotlintest.properties.ConstGen
-import io.kotlintest.properties.Gen
-import io.kotlintest.properties.map
+import helios.typeclasses.Encoder
+import io.kotlintest.properties.*
 
 fun Gen.Companion.jsInt(): Gen<JsInt> = Gen.int().map(::JsInt)
 

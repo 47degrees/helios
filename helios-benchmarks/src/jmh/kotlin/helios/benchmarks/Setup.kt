@@ -4,9 +4,7 @@ import com.beust.klaxon.Parser
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.google.gson.Gson
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
+import com.squareup.moshi.*
 import helios.benchmarks.sample.sampleJson
 
 val jsonString: String = sampleJson
