@@ -2,8 +2,10 @@
 
 package helios.optics
 
-import arrow.core.*
-import arrow.optics.*
+import arrow.core.Option
+import arrow.core.Predicate
+import arrow.optics.Optional
+import arrow.optics.Prism
 import arrow.optics.dsl.at
 import arrow.optics.instances.ListFilterIndexInstance
 import arrow.optics.instances.MapFilterIndexInstance

@@ -2,18 +2,21 @@
 
 package helios.optics
 
-import arrow.core.*
-
-import arrow.optics.*
+import arrow.core.Option
+import arrow.core.Predicate
+import arrow.optics.PTraversal
+import arrow.optics.Traversal
 import arrow.optics.dsl.at
-import arrow.optics.instances.*
+import arrow.optics.instances.ListFilterIndexInstance
+import arrow.optics.instances.MapFilterIndexInstance
 import helios.core.*
 import helios.instances.decoder
 import helios.instances.encoder
 import helios.optics.jsarray.index.index
 import helios.optics.jsobject.at.at
 import helios.optics.jsobject.index.index
-import helios.typeclasses.*
+import helios.typeclasses.Decoder
+import helios.typeclasses.Encoder
 
 /**
  * Extract value as [Boolean] from path.

@@ -4,10 +4,7 @@ package helios.optics
 
 import arrow.Kind
 import arrow.core.*
-import arrow.optics.Iso
-import arrow.optics.PPrism
-import arrow.optics.Prism
-import arrow.optics.Traversal
+import arrow.optics.*
 import arrow.typeclasses.Applicative
 import helios.core.*
 import helios.optics.jsarray.each.each

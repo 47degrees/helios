@@ -7,11 +7,11 @@ import helios.parser.Facade
 object HeliosFacade : Facade<Json> {
   override fun singleContext(): FContext<Json> = object : FContext<Json> {
     lateinit var value: Json
-    override fun add(s: CharSequence):Unit {
+    override fun add(s: CharSequence): Unit {
       value = jstring(s.toString())
     }
 
-    override fun add(v: Json):Unit {
+    override fun add(v: Json): Unit {
       value = v
     }
 

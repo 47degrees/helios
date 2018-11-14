@@ -1,8 +1,6 @@
 package helios.optics
 
-import arrow.core.None
-import arrow.core.Some
-import arrow.core.identity
+import arrow.core.*
 import arrow.test.UnitSpec
 import helios.core.*
 import helios.instances.jsnumber.eq.eq

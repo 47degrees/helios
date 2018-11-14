@@ -1,14 +1,10 @@
 package helios.optics
 
-import arrow.core.None
-import arrow.core.Option
-import arrow.core.orElse
+import arrow.core.*
 import arrow.test.UnitSpec
 import arrow.test.generators.genFunctionAToB
 import arrow.test.generators.genOption
-import arrow.test.laws.LensLaws
-import arrow.test.laws.OptionalLaws
-import arrow.test.laws.TraversalLaws
+import arrow.test.laws.*
 import arrow.typeclasses.Eq
 import arrow.typeclasses.Monoid
 import helios.core.*

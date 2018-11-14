@@ -1,13 +1,10 @@
 package helios.specs.model
 
-import arrow.*
 import arrow.core.Either
 import arrow.deriving
 import arrow.higherkind
 import arrow.optics.optics
-import arrow.typeclasses.Applicative
-import arrow.typeclasses.Functor
-import arrow.typeclasses.Monad
+import arrow.typeclasses.*
 import helios.meta.json
 import io.kotlintest.properties.Gen
 import io.kotlintest.properties.map

@@ -1,7 +1,9 @@
 package helios.parser
 
-import java.lang.Integer.*
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.lang.Integer.bitCount
+import java.lang.Integer.highestOneBit
 import java.nio.ByteBuffer
 import java.nio.channels.ReadableByteChannel
 

@@ -1,9 +1,7 @@
 package helios.meta.compiler.json
 
 import arrow.common.Package
-import arrow.common.utils.ClassOrPackageDataWrapper
-import arrow.common.utils.extractFullName
-import arrow.common.utils.removeBackticks
+import arrow.common.utils.*
 import me.eugeniomarletti.kotlin.metadata.shadow.metadata.ProtoBuf
 import java.io.File
 

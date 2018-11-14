@@ -2,14 +2,11 @@ package helios.instances
 
 import arrow.core.Either
 import arrow.core.fix
-import arrow.data.ListK
-import arrow.data.k
-import arrow.data.sequence
+import arrow.data.*
 import arrow.instances.either.applicative.applicative
-import helios.core.*
-import helios.typeclasses.Decoder
-import helios.typeclasses.DecodingError
-import helios.typeclasses.Encoder
+import helios.core.JsArray
+import helios.core.Json
+import helios.typeclasses.*
 
 interface ListEncoderInstance<in A> : Encoder<List<A>> {
 
