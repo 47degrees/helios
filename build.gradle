@@ -23,8 +23,9 @@ buildscript {
         gradleVersionsPluginVersion = '0.17.0'
         javaVersion = JavaVersion.VERSION_1_7
         kotlinTestVersion = '2.0.7'
-        kotlinVersion = '1.2.51'
+        kotlinVersion = '1.2.71'
         arrowVersion = '0.7.2'
+        arrowTestVersion = '0.7.1'
     }
 
     repositories {
@@ -58,7 +59,6 @@ subprojects { project ->
         maven { url "http://dl.bintray.com/arrow-kt/arrow-kt" }
         maven { url "https://dl.bintray.com/jetbrains/markdown/" }
         maven { url 'https://jitpack.io' }
-        maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local' }
     }
 
     apply plugin: 'kotlin'

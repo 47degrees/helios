@@ -2,12 +2,13 @@ dependencies {
     compile project(":helios-meta")
     compile project(":helios-parser")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     compile "io.arrow-kt:arrow-instances-core:$arrowVersion"
 
     kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
     kapt project(':helios-meta-compiler')
 
-    testCompile "io.arrow-kt:arrow-test:0.7.1"
+    testCompile "io.arrow-kt:arrow-test:$arrowTestVersion"
     kaptTest project(':helios-meta-compiler')
     kaptTest "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
     testCompileOnly "io.arrow-kt:arrow-annotations-processor:$arrowVersion"

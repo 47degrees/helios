@@ -4,5 +4,6 @@ import arrow.common.utils.ClassOrPackageDataWrapper
 import javax.lang.model.element.TypeElement
 
 class JsonAnnotated(
-        val classElement: TypeElement,
-        val classOrPackageProto: ClassOrPackageDataWrapper)
+  val classElement: TypeElement,
+  val classOrPackageProto: ClassOrPackageDataWrapper
+)
