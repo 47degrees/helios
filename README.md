@@ -4,10 +4,16 @@ Json library based on a port of the [Jawn Parser](https://github.com/non/jawn) b
 
 ## How to use it
 
+`Helios` uses kotlin `1.3.10` version and `Arrow` `0.8.1` version.
+
 To import the library on Gradle add to the dependencies:
 
 ```
-
+dependencies {
+    compile "com.47deg:helios-core:0.0.1-SNAPSHOT"
+    compile "com.47deg:helios-meta:0.0.1-SNAPSHOT"
+    compile "com.47deg:helios-parser:0.0.1-SNAPSHOT"
+}
 ```
 
 Once it's imported, we just need to define our module on this way 
