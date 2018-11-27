@@ -7,26 +7,26 @@ import helios.typeclasses.DecodingError
 
 object Sample {
   const val companyJsonString = """
-{
-  "name": "Arrow",
-  "address": {
-    "city": "Functional Town",
-    "street": {
-      "number": 1337,
-      "name": "Functional street"
-    }
-  },
-  "employees": [
     {
-      "name": "John",
-      "lastName": "doe"
-    },
-    {
-      "name": "Jane",
-      "lastName": "doe"
-    }
-  ]
-}"""
+      "name": "Arrow",
+      "address": {
+        "city": "Functional Town",
+        "street": {
+          "number": 1337,
+          "name": "Functional street"
+        }
+      },
+      "employees": [
+        {
+          "name": "John",
+          "lastName": "doe"
+        },
+        {
+          "name": "Jane",
+          "lastName": "doe"
+        }
+      ]
+    }"""
 
   @JvmStatic
   fun main(args: Array<String>) {
