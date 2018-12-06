@@ -1,6 +1,6 @@
 package helios.sample
 
-import arrow.core.Either
+import arrow.core.*
 import helios.core.*
 import helios.optics.*
 import helios.typeclasses.DecodingError
@@ -31,7 +31,11 @@ object Sample {
   @JvmStatic
   fun main(args: Array<String>) {
 
-    val companyJson: Json = Json.parseUnsafe(companyJsonString)
+    val companyJson =
+      Json.parseFromString(companyJsonString).getOrHandle {
+        println("Failed creating the Json ${it.localizedMessage}, creating an empty one")
+        JsString("")
+      }
 
     val errorOrCompany: Either<DecodingError, Company> = Company.decoder().decode(companyJson)
 

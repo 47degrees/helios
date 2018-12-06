@@ -8,7 +8,7 @@ Json library based on a port of the [Jawn Parser](https://github.com/non/jawn) b
 
 To import the library on Gradle add the following repository and dependencies:
 
-```
+```groovy
 repositories {
       maven { url "https://jitpack.io" }
  }
@@ -22,7 +22,7 @@ dependencies {
 
 Once it's imported, we just need to define our module on this way 
 
-```kotlin
+```kotlin:ank
 @json
 data class Person(val name: String, val age: Int) {
   companion object
@@ -33,14 +33,18 @@ The `@json` annotation will provide the decoder and encoder for that data class,
 
 ### Decode
 
-```kotlin
+```kotlin:ank
 val jsonStr = 
 """{
      "name": "Simon",
      "age": 30
    }"""
     
-val jsonFromString : Json = Json.parseUnsafe(companyJsonString)
+val jsonFromString : Json = 
+  Json.parseFromString(jsonStr).getOrHandle {
+    println("Failed creating the Json ${it.localizedMessage}, creating an empty one")
+    JsString("")
+  }
 
 val personOrError: Either<DecodingError, Person> = Person.decoder().decode(jsonFromString)
 
@@ -53,12 +57,12 @@ personOrError.fold({
 
 ### Encode
 
-```kotlin
+```kotlin:ank
 val person = Person("Raul", 34)
 
 val jsonFromPerson = with(Person.encoder()) {
   person.encode()
 }
 
-println(streetJson.toJsonString())
+println(jsonFromPerson.toJsonString())
 ```
