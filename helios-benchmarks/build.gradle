@@ -1,9 +1,14 @@
+repositories {
+    maven { url "https://kotlin.bintray.com/kotlinx" }
+}
+
 dependencies {
     compile project(":helios-core")
     compile project(":helios-meta")
     compile project(":helios-parser")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.9.0"
     compile 'com.beust:klaxon:3.0.11'
     compile 'com.tomatobean:jsonparser:1.0.10'
     compile 'com.squareup.moshi:moshi-kotlin:1.8.0'
@@ -19,6 +24,7 @@ dependencies {
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
 apply plugin: "me.champeau.gradle.jmh"
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlinx-serialization'
 
 jmh {
     resultFormat = 'csv'
