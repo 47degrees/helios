@@ -10,12 +10,12 @@ import org.openjdk.jmh.annotations.*
 
 @State(Scope.Benchmark)
 @Fork(1)
-@Warmup(iterations = 10)
-@Measurement(iterations = 10)
+@Warmup(iterations = 2)
+@Measurement(iterations = 5)
 open class Parsing {
 
   @Benchmark
-  fun klaxon(): JsonObject = klaxon.parse(StringBuilder(jsonString)) as JsonObject
+  fun klaxon(): JsonObject = klaxonParser.parse(StringBuilder(jsonString)) as JsonObject
 
   @Benchmark
   fun kotson(): JsonElement = gson.fromJson(jsonString)
