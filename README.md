@@ -22,4 +22,4 @@ dependencies {
 
 ## QuickStart
 
-You can find a quickstart [here]().
+You can find a quickstart [here](https://github.com/47deg/helios/tree/master/helios-docs/docs/QuickStart.md).
