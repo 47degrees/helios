@@ -1,10 +1,11 @@
 # Helios
 
-Json library based on a port of the [Jawn Parser](https://github.com/non/jawn) built on Arrow.
+**Helios** is a `Json` parser library to `Kotlin` built on `Arrow`, 
+based on a port of the [Jawn Parser](https://github.com/non/jawn)
 
 ## Adding the dependency
 
-`Helios` uses kotlin `1.3.10` version and `Arrow` `0.8.1` version.
+**Helios** uses kotlin `1.3.10` version and `Arrow` `0.8.1` version.
 
 To import the library on Gradle add the following repository and dependencies:
 
