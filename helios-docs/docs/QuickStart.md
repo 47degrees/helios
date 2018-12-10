@@ -53,12 +53,12 @@ personOrError.fold({
 
 We can also encode from a data class instance to a `Json`
 
-```kotlin:ank
+```kotlin:ank:silent
 val person = Person("Raul", 34)
 
 val jsonFromPerson = with(Person.encoder()) {
   person.encode()
 }
 
-println(jsonFromPerson.toJsonString())
+jsonFromPerson.toJsonString()
 ```
