@@ -21,7 +21,8 @@ data class Person(val name: String, val age: Int) {
 }
 ```
 
-The `@json` annotation will provide the decoder and encoder for that data class, so we are able to
+The `@json` annotation will provide the decoder and encoder for that data class, 
+so we are able to read from and write to Json.
 
 ## Decode
 
@@ -53,7 +54,7 @@ personOrError.fold({
 
 We can also encode from a data class instance to a `Json`
 
-```kotlin:ank:silent
+```kotlin:ank
 val person = Person("Raul", 34)
 
 val jsonFromPerson = with(Person.encoder()) {
