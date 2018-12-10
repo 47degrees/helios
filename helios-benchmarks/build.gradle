@@ -29,4 +29,7 @@ apply plugin: 'kotlinx-serialization'
 jmh {
     resultFormat = 'csv'
     resultsFile = file('build/reports/benchmarks.csv')
+    timeOnIteration = '1s'
+    if (project.hasProperty("jmhInclude"))
+        include = [jmhInclude]
 }
