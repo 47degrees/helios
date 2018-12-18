@@ -15,7 +15,7 @@ dependencies {
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7"
     compile "com.jsoniter:jsoniter:0.9.23"
-
+    compile "org.apache.commons:commons-csv:1.5"
     kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
     kapt project(':helios-meta-compiler')
 
@@ -32,4 +32,47 @@ jmh {
     timeOnIteration = '1s'
     if (project.hasProperty("jmhInclude"))
         include = [jmhInclude]
+    if (project.hasProperty("jmhResultsFile"))
+        resultsFile = file(jmhResultsFile)
+}
+
+task updateMasterBenchmark {
+    jmh {
+        resultFormat = 'csv'
+        resultsFile = file('build/reports/benchmarks.csv')
+        timeOnIteration = '1s'
+        if (project.hasProperty("jmhInclude"))
+            include = [helios.benchmarks.HeliosBenchmark]
+        if (project.hasProperty("jmhResultsFile"))
+            resultsFile = file('src/jmh/resources/master_benchmark.csv')
+    }
+    doLast {
+        jmh
+    }
+}
+
+task executeHeliosBenchmark {
+    jmh {
+        resultFormat = 'csv'
+        resultsFile = file('build/reports/benchmarks.csv')
+        timeOnIteration = '1s'
+        if (project.hasProperty("jmhInclude"))
+            include = [helios.benchmarks.HeliosBenchmark]
+        if (project.hasProperty("jmhResultsFile"))
+            resultsFile = file('src/jmh/resources/helios_benchmark.csv')
+    }
+    doLast {
+        jmh
+    }
+}
+
+task executeBenchmarks {
+    jmh {
+        resultFormat = 'csv'
+        resultsFile = file('build/reports/benchmarks.csv')
+        timeOnIteration = '1s'
+    }
+    doLast {
+        jmh
+    }
 }
