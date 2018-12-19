@@ -1,0 +1,25 @@
+apply plugin: 'ank-gradle-plugin'
+
+dependencies {
+    compile project(":helios-core")
+    compile project(":helios-optics")
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
+    kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
+    kapt project(':helios-meta')
+    kapt project(':helios-meta-compiler')
+    kapt project(':helios-dsl-syntax-compiler')
+    implementation "io.arrow-kt:arrow-ank:$arrowVersion"
+}
+
+ank {
+    source = file("${projectDir}/docs")
+    target = file("${projectDir}/build/site")
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+apply plugin: 'kotlin-kapt'
