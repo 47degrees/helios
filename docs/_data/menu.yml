@@ -1,0 +1,9 @@
+nav:
+    - title: Documentation
+      url: /docs/parser/
+
+    - title: Github
+      url: https://github.com/47deg/helios
+
+    - title: License
+      url: https://github.com/47deg/helios/blob/master/LICENSE

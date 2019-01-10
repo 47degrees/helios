@@ -1,0 +1,18 @@
+<main id="content">
+    <section class="features">
+        <div class="wrap container-fluid">
+            <div class="row">
+               {% for item in site.data.docs.content %}
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="feature-item">
+                        <img src={{ item.icon }} title="{{ item.title }}" />
+                        <h2 class="feature-title">{{ item.title }}</h2>
+                        <p>{{ item.description }}</p>
+                        <a class="button button-small" href="{{ item.url }}">{{ site.data.docs.cta }}</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</main>

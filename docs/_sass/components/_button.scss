@@ -1,0 +1,54 @@
+// Buttons 
+// -----------------------------------------------
+// -----------------------------------------------
+.button {
+    display: inline-block;
+    color: $white;
+    font-weight: $font-semibold;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background $base-duration $base-timing;
+
+    &.button-line {
+        padding: ($base-point-grid * 1.5) ($base-point-grid * 5);
+        background: none;
+        border: 2px solid $white;
+        font-size: 0.875rem;
+
+        &:visited {
+            color: $white;
+        }
+        &:hover {
+            color: $brand-secondary;
+            background: $white;
+            text-decoration: none;
+        }
+        &:active {
+            background:  rgba($white, 0.9);
+        }
+
+
+    }
+
+
+    &.button-small {
+        padding: ($base-point-grid - 1) ($base-point-grid * 3);
+        border: 2px solid $brand-secondary;
+        font-size: 0.75rem;
+        font-weight: $font-bold;
+        color: $brand-secondary;
+        
+         &:visited {
+            color: $brand-secondary;
+        }
+        &:hover {
+            color: $white;
+            background: $brand-secondary;
+            text-decoration: none;
+        }
+        &:active {
+            background: $brand-secondary;
+        }
+
+    }
+}

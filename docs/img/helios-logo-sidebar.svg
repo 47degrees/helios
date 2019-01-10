@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 72 72">
+  <g fill="none" fill-rule="evenodd">
+    <polygon stroke="#FFF" stroke-width="1.6" points="35.881 6.334 27.892 12.099 43.868 12.099"/>
+    <polygon stroke="#FFF" stroke-width="1.6" points="6.977 27.191 10.026 36.518 14.964 21.425"/>
+    <polygon stroke="#FFF" stroke-width="1.6" points="53.745 60.935 56.795 51.609 43.869 60.935"/>
+    <polygon stroke="#FFF" stroke-width="1.6" points="18.017 60.935 27.891 60.935 14.966 51.609"/>
+    <polygon stroke="#FFF" stroke-width="1.6" points="64.785 27.191 56.796 21.425 61.734 36.518"/>
+    <polygon stroke="#FFF" stroke-width="1.6" points="35.881 66.701 43.868 60.935 27.892 60.935"/>
+    <polygon stroke="#FFF" stroke-width="1.6" points="61.733 36.517 56.795 51.609 64.785 45.844"/>
+    <polygon stroke="#FFF" stroke-width="1.6" points="18.017 12.099 14.966 21.426 27.891 12.099"/>
+    <polygon stroke="#FFF" stroke-width="1.6" points="6.977 45.844 14.964 51.609 10.026 36.517"/>
+    <polygon stroke="#FFF" stroke-width="1.6" points="53.745 12.099 43.869 12.099 56.795 21.426"/>
+    <polygon stroke="#FFF" stroke-width="1.6" points="61.878 17.97 45.881 6.427 26.109 6.427 10.111 17.97 4 36.645 10.111 55.322 26.109 66.863 45.881 66.863 61.878 55.322 67.99 36.645"/>
+    <path stroke="#FFF" stroke-width="1.8" d="M27.8909852 27.1909734L27.8909852 45.8441762M43.8691651 27.1909734L43.8691651 45.8441762M27.8909852 36.5172336L43.8695087 36.5172336"/>
+  </g>
+</svg>

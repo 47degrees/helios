@@ -1,0 +1,61 @@
+// Navigation
+// -----------------------------------------------
+// -----------------------------------------------
+#navigation {
+    position: fixed;
+    @include flexbox;
+    @include justify-content(space-between);
+    @include align-items(center);
+    width: 100%;
+    padding: ($base-point-grid * 5)/*40px*/
+    ($base-point-grid * 4)/*32px*/
+    ;
+    //background: rgba($gray-primary, 0.5);
+    z-index: 2;
+    .navigation-brand {
+        font-family: $header-font-family;
+        font-size: 1.25rem;
+        a {
+            color: $white;
+             text-decoration: none; 
+        }
+            
+    }
+    .navigation-menu {
+
+        .navigation-menu-item {
+            display: inline-block;
+            &:nth-child(-n+2) {
+                margin-right: ($base-point-grid * 4);
+            }
+            a {
+                color: $white;
+                text-decoration: none;
+
+                &:visited {
+                    color: $white;
+                }
+                &:hover {
+                    color: rgba($white, 0.5);
+                }
+                &:active {
+                    color: $white;
+                }
+            }
+        }
+    }
+}
+
+// Responsive mode
+@include bp(small) {
+    #navigation {
+        .navigation-menu {
+            .navigation-menu-item {
+                &:nth-child(-n+2) {
+                    margin-right: ($base-point-grid * 2);
+                }
+                font-size: 12px;
+            }
+        }
+    }
+}

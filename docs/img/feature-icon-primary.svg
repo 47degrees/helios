@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <g fill="none" fill-rule="evenodd">
+    <polygon stroke="#FF6F00" stroke-width="2" points="40.36 4.394 30.998 11.199 49.721 11.199"/>
+    <polygon stroke="#FF6F00" stroke-width="2" points="61.295 68.842 64.869 57.833 49.722 68.842"/>
+    <polygon stroke="#FF6F00" stroke-width="2" points="19.426 68.842 30.997 68.842 15.85 57.833"/>
+    <polygon stroke="#FF6F00" stroke-width="2" points="74.233 29.012 64.87 22.207 70.657 40.021"/>
+    <polygon stroke="#FF6F00" stroke-width="2" points="70.656 40.02 64.87 57.834 74.232 51.029"/>
+    <polygon stroke="#FF6F00" stroke-width="2" points="19.426 11.199 15.85 22.208 30.997 11.199"/>
+    <polygon stroke="#FF6F00" stroke-width="2" points="6.488 51.029 15.849 57.834 10.062 40.02"/>
+    <polygon stroke="#FF6F00" stroke-width="2" points="61.295 11.199 49.722 11.199 64.869 22.208"/>
+    <polygon stroke="#FF6F00" stroke-width="2" points="70.826 18.128 52.079 4.503 28.909 4.503 10.162 18.128 3 40.171 10.162 62.216 28.909 75.839 52.079 75.839 70.826 62.216 77.988 40.171"/>
+    <rect width="14" height="4" x="37" y="31" stroke="#FF6F00" stroke-width="2"/>
+    <rect width="14" height="4" x="37" y="39" stroke="#FF6F00" stroke-width="2"/>
+    <rect width="14" height="4" x="37" y="47" stroke="#FF6F00" stroke-width="2"/>
+    <polyline stroke="#FF6F00" stroke-width="2" points="29 27 29 49 37 49"/>
+    <path stroke="#FF6F00" stroke-width="2" d="M37.0240479 41.0300293L29 41M37.0240479 33.0300293L29 33"/>
+  </g>
+</svg>
