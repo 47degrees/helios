@@ -1,9 +1,9 @@
-// Masthead 
+// Masthead
 // -----------------------------------------------
 // -----------------------------------------------
 #masthead {
     position: relative;
-    padding-top: ($base-point-grid * 20)/*176px*/; 
+    padding-top: ($base-point-grid * 20)/*176px*/;
     background-color: $brand-secondary;
     background-image: url("../img/helios-background-masthead.svg");
     background-position: center center;
@@ -21,6 +21,7 @@
     }
 
     > svg {
+        margin-bottom: -8px;
         width: 100%;
         height: auto
     }
