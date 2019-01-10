@@ -5,7 +5,7 @@ name: '{Helios}'
 description: '{Helios} is a purely functional JSON library for Kotlin built on Arrow'
 #-------------------------
 author: 47 Degrees
-keywords: functional-programming, kotlin-library, monads, monad-transformers, functional-data-structure, kotlin, fp-types, adt, free-monads, tagless-final, mtl, for-comprehension, category-theory
+keywords: functional-programming, kotlin-library, arrow, monads, monad-transformers, functional-data-structure, kotlin, fp-types, adt, free-monads, tagless-final, mtl, for-comprehension, category-theory
 #-------------------------
 url: https://www.47deg.com
 #-------------------------
@@ -17,4 +17,3 @@ sass:
 permalink: pretty
 #-------------------------
 exclude: ['config.ru', 'Gemfile', 'Gemfile.lock', 'vendor', 'Procfile', 'Rakefile']
-    
