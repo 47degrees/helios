@@ -15,7 +15,6 @@ dependencies {
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7"
     compile "com.jsoniter:jsoniter:0.9.23"
-    compile "org.apache.commons:commons-csv:1.5"
     kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
     kapt project(':helios-meta-compiler')
 
