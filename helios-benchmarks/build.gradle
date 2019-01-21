@@ -41,10 +41,8 @@ task updateMasterBenchmark {
         resultFormat = 'csv'
         resultsFile = file('build/reports/benchmarks.csv')
         timeOnIteration = '1s'
-        if (project.hasProperty("jmhInclude"))
-            include = [helios.benchmarks.HeliosBenchmark]
-        if (project.hasProperty("jmhResultsFile"))
-            resultsFile = file('src/jmh/resources/master_benchmark.csv')
+        include = [helios.benchmarks.HeliosBenchmark]
+        resultsFile = file('src/jmh/resources/master_benchmark.csv')
     }
     doLast {
         jmh
@@ -56,10 +54,8 @@ task executeHeliosBenchmark {
         resultFormat = 'csv'
         resultsFile = file('build/reports/benchmarks.csv')
         timeOnIteration = '1s'
-        if (project.hasProperty("jmhInclude"))
-            include = [helios.benchmarks.HeliosBenchmark]
-        if (project.hasProperty("jmhResultsFile"))
-            resultsFile = file('src/jmh/resources/helios_benchmark.csv')
+        include = [helios.benchmarks.HeliosBenchmark]
+        resultsFile = file('src/jmh/resources/helios_benchmark.csv')
     }
     doLast {
         jmh
