@@ -5,8 +5,10 @@ import arrow.test.UnitSpec
 import helios.core.*
 import helios.instances.jsnumber.eq.eq
 import io.kotlintest.KTestJUnitRunner
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.properties.*
+import io.kotlintest.properties.Gen
+import io.kotlintest.properties.forAll
+import io.kotlintest.properties.map
+import io.kotlintest.shouldBe
 import org.junit.runner.RunWith
 
 @RunWith(KTestJUnitRunner::class)
@@ -14,13 +16,13 @@ class JsNumberTest : UnitSpec() {
 
   init {
 
-    fun jsLongs(): Gen<JsArray> =
+    val jsLongs: Gen<JsArray> =
       Gen.list(
         Gen.long().map(::JsLong)
       ).map(::JsArray)
 
     "helios serialization works both ways" {
-      forAll(jsLongs()) { longs ->
+      forAll(jsLongs) { longs: JsArray ->
         val string = longs.toJsonString()
         Json.parseUnsafe(string).asJsArray() == longs.some()
       }

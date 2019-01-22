@@ -11,13 +11,14 @@ dependencies {
     kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
     kapt project(':helios-meta-compiler')
 
-    testCompile "io.arrow-kt:arrow-test:$arrowVersion"
+    testImplementation "io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion"
+    testImplementation "io.arrow-kt:arrow-test:$arrowVersion"
+    
     kaptTest project(':helios-meta-compiler')
     kaptTest "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
+    
     testCompileOnly "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
-
     testCompileOnly project(':helios-meta-compiler')
-    testCompile "io.kotlintest:kotlintest:$kotlinTestVersion"
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
