@@ -4,10 +4,11 @@ import arrow.core.Either
 import arrow.deriving
 import arrow.higherkind
 import arrow.optics.optics
-import arrow.typeclasses.*
+import arrow.typeclasses.Applicative
+import arrow.typeclasses.Functor
+import arrow.typeclasses.Monad
 import helios.meta.json
 import io.kotlintest.properties.Gen
-import io.kotlintest.properties.map
 
 @json
 @optics
@@ -31,48 +32,44 @@ data class Friend(
 )
 class GenA<A>(val value: Gen<A>) : GenAOf<A>, Gen<A> by value {
 
-  fun <B> map(f: (A) -> B): GenA<B> =
+  override fun <B> map(f: (A) -> B): GenA<B> =
     GenA(value.map(f))
 
-  fun <B> flatMap(f: (A) -> GenAOf<B>): GenA<B> =
-    map(f).value.generate().fix()
+  fun <B> flatMapA(f: (A) -> GenAOf<B>): GenA<B> =
+    GenA(value.flatMap { f(it).fix() })
 
   fun <B> ap(ff: GenAOf<(A) -> B>): GenA<B> =
-    ff.fix().flatMap { this.fix().map(it) }
+    ff.fix().flatMapA { this.fix().map(it) }
 
   companion object {
     fun <A> just(a: A): GenA<A> =
       GenA(Gen.create { a })
 
-    tailrec fun <A, B> tailRecM(a: A, f: (A) -> GenAOf<Either<A, B>>): GenA<B> {
-      val r = f(a).fix()
-      val genValue = r.value.generate()
-      return when (genValue) {
-        is Either.Left<A>  -> tailRecM(genValue.a, f)
-        is Either.Right<B> -> just(genValue.b)
+    tailrec fun <A, B> tailRecM(a: A, f: (A) -> GenAOf<Either<A, B>>): GenA<B> =
+      f(a).fix().flatMapA { genValue: Either<A, B> ->
+        when (genValue) {
+          is Either.Right<B> -> just(genValue.b)
+          is Either.Left<A> -> tailRecM(genValue.a, f)
+        }
       }
-    }
   }
+
 }
 
 fun <A> Gen<A>.k(): GenA<A> = GenA(this)
 
-object GenFriend : Gen<Friend> {
-
-  override fun generate(): Friend =
-    GenA.applicative().map(
-      Gen.string().k(),
-      Gen.string().k(),
-      Gen.string().k(),
-      Gen.list(Gen.string()).k(),
-      Gen.list(Gen.int()).k(),
-      Gen.string().k(),
-      Gen.string().k()
-    ) { (_id, latitude, longitude, tags, range, greeting, favoriteFruit) ->
-      Friend(_id, latitude, longitude, tags, range, greeting, favoriteFruit)
-    }.fix().generate()
-
-}
+val genFriend: Gen<Friend> =
+  GenA.applicative().map(
+    Gen.string().k(),
+    Gen.string().k(),
+    Gen.string().k(),
+    Gen.list(Gen.string()).k(),
+    Gen.list(Gen.int()).k(),
+    Gen.string().k(),
+    Gen.string().k()
+  ) { (_id, latitude, longitude, tags, range, greeting, favoriteFruit) ->
+    Friend(_id, latitude, longitude, tags, range, greeting, favoriteFruit)
+  }.fix()
 
 val sampleJson: String = """
         {

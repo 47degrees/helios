@@ -4,14 +4,10 @@ import arrow.core.some
 import arrow.test.UnitSpec
 import helios.core.*
 import helios.instances.jsnumber.eq.eq
-import io.kotlintest.KTestJUnitRunner
 import io.kotlintest.properties.Gen
 import io.kotlintest.properties.forAll
-import io.kotlintest.properties.map
 import io.kotlintest.shouldBe
-import org.junit.runner.RunWith
 
-@RunWith(KTestJUnitRunner::class)
 class JsNumberTest : UnitSpec() {
 
   init {

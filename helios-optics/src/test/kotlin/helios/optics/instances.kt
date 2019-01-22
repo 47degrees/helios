@@ -13,18 +13,15 @@ import helios.optics.jsarray.index.index
 import helios.optics.jsobject.at.at
 import helios.optics.jsobject.each.each
 import helios.optics.jsobject.index.index
-import io.kotlintest.KTestJUnitRunner
 import io.kotlintest.properties.Gen
-import org.junit.runner.RunWith
 
-@RunWith(KTestJUnitRunner::class)
 class InstancesTest : UnitSpec() {
 
   init {
 
     testLaws(
       OptionalLaws.laws(
-        optional = JsObject.index().index(Gen.string().generate()),
+        optional = Gen.string().map{ JsObject.index().index(it) },
         aGen = Gen.jsObject(),
         bGen = Gen.json(),
         funcGen = genFunctionAToB(Gen.json()),
@@ -69,7 +66,7 @@ class InstancesTest : UnitSpec() {
     )
 
     testLaws(LensLaws.laws(
-      lens = JsObject.at().at(Gen.string().generate()),
+      lens = Gen.string().map{ JsObject.at().at(it) },
       aGen = Gen.jsObject(),
       bGen = genOption(Gen.json()),
       funcGen = genFunctionAToB(genOption(Gen.json())),

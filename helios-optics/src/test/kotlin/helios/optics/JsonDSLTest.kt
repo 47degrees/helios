@@ -1,19 +1,19 @@
 package helios.optics
 
-import arrow.core.*
+import arrow.core.Option
+import arrow.core.identity
+import arrow.core.none
+import arrow.core.some
 import arrow.instances.option.eq.eq
 import arrow.test.UnitSpec
 import arrow.test.generators.genFunctionAToB
 import arrow.test.laws.PrismLaws
 import arrow.typeclasses.Eq
 import helios.core.*
-import io.kotlintest.KTestJUnitRunner
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.properties.Gen
 import io.kotlintest.properties.forAll
-import org.junit.runner.RunWith
 
-@RunWith(KTestJUnitRunner::class)
 class JsonDSLTest : UnitSpec() {
 
   init {

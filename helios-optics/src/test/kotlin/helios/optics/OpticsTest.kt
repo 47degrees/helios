@@ -5,11 +5,8 @@ import arrow.test.UnitSpec
 import helios.core.*
 import helios.instances.jsnumber.eq.eq
 import helios.instances.json.eq.eq
-import io.kotlintest.KTestJUnitRunner
-import io.kotlintest.matchers.shouldBe
-import org.junit.runner.RunWith
+import io.kotlintest.shouldBe
 
-@RunWith(KTestJUnitRunner::class)
 class OpticsTest : UnitSpec() {
 
   init {

@@ -11,9 +11,11 @@ dependencies {
     kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
     kapt project(':helios-meta-compiler')
 
-    testImplementation "io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion"
-    testImplementation "io.arrow-kt:arrow-test:$arrowVersion"
-    
+    testImplementation("io.arrow-kt:arrow-test:$arrowVersion"){
+        exclude module: 'kotlintest'
+    }
+    testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
+
     kaptTest project(':helios-meta-compiler')
     kaptTest "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
     
