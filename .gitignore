@@ -48,5 +48,3 @@ _site
 /docs/vendor/
 /lib/bundler/man/
 
-### Benchmarks
-!/helios-benchmarks/src/jmh/resources/master_benchmark.csv
