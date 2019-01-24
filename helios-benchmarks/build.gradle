@@ -15,7 +15,6 @@ dependencies {
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7"
     compile "com.jsoniter:jsoniter:0.9.23"
-
     kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
     kapt project(':helios-meta-compiler')
 
@@ -32,4 +31,30 @@ jmh {
     timeOnIteration = '1s'
     if (project.hasProperty("jmhInclude"))
         include = [jmhInclude]
+    if (project.hasProperty("jmhResultsFile"))
+        resultsFile = file(jmhResultsFile)
+}
+
+task updateMasterBenchmark {
+    doLast {
+        jmh.resultsFile = file('src/jmh/resources/master_benchmark.csv')
+        jmh.include = ["helios.benchmarks.HeliosBenchmark"]
+    }
+    finalizedBy 'jmh'
+}
+
+task executeHeliosBenchmark {
+    doLast {
+        jmh.resultsFile = file('src/jmh/resources/helios_benchmark.csv')
+        jmh.include = ["helios.benchmarks.HeliosBenchmark"]
+    }
+    finalizedBy 'jmh'
+}
+
+task executeBenchmarks {
+    doLast {
+        jmh.resultsFile = file('build/reports/benchmarks.csv')
+        jmh.include = ["helios.benchmarks.HeliosBenchmark", "helios.benchmarks.Decoding", "helios.benchmarks.DecodingFromRaw", "helios.benchmarks.Parsing"]
+    }
+    finalizedBy 'jmh'
 }
