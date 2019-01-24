@@ -36,36 +36,25 @@ jmh {
 }
 
 task updateMasterBenchmark {
-    jmh {
-        resultFormat = 'csv'
-        timeOnIteration = '1s'
-        include = ["helios.benchmarks.HeliosBenchmark"]
-        resultsFile = file('src/jmh/resources/master_benchmark.csv')
-    }
     doLast {
-        jmh
+        jmh.resultsFile = file('src/jmh/resources/master_benchmark.csv')
+        jmh.include = ["helios.benchmarks.HeliosBenchmark"]
     }
+    finalizedBy 'jmh'
 }
 
 task executeHeliosBenchmark {
-    jmh {
-        resultFormat = 'csv'
-        timeOnIteration = '1s'
-        include = ["helios.benchmarks.HeliosBenchmark"]
-        resultsFile = file('src/jmh/resources/helios_benchmark.csv')
-    }
     doLast {
-        jmh
+        jmh.resultsFile = file('src/jmh/resources/helios_benchmark.csv')
+        jmh.include = ["helios.benchmarks.HeliosBenchmark"]
     }
+    finalizedBy 'jmh'
 }
 
 task executeBenchmarks {
-    jmh {
-        resultFormat = 'csv'
-        resultsFile = file('build/reports/benchmarks.csv')
-        timeOnIteration = '1s'
-    }
     doLast {
-        jmh
+        jmh.resultsFile = file('build/reports/benchmarks.csv')
+        jmh.include = ["helios.benchmarks.HeliosBenchmark", "helios.benchmarks.Decoding", "helios.benchmarks.DecodingFromRaw", "helios.benchmarks.Parsing"]
     }
+    finalizedBy 'jmh'
 }
