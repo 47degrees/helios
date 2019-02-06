@@ -58,3 +58,10 @@ task executeBenchmarks {
     }
     finalizedBy 'jmh'
 }
+
+task uploadMasterBenchmark{
+    dependsOn 'updateMasterBenchmark'
+    doLast{
+        //TODO hood upload benchmark task
+    }
+}
