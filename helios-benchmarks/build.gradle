@@ -24,6 +24,7 @@ apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
 apply plugin: "me.champeau.gradle.jmh"
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlinx-serialization'
+apply plugin: 'com.47deg.hood'
 
 jmh {
     resultFormat = 'csv'
@@ -35,7 +36,7 @@ jmh {
         resultsFile = file(jmhResultsFile)
 }
 
-task updateMasterBenchmark {
+task executeMasterBenchmark {
     doLast {
         jmh.resultsFile = file('src/jmh/resources/master_benchmark.csv')
         jmh.include = ["helios.benchmarks.HeliosBenchmark"]
@@ -59,9 +60,13 @@ task executeBenchmarks {
     finalizedBy 'jmh'
 }
 
-task uploadMasterBenchmark{
-    dependsOn 'updateMasterBenchmark'
-    doLast{
-        //TODO hood upload benchmark task
-    }
+compareBenchmark {
+    previousBenchmarkPath = file('src/jmh/resources/master_benchmark.csv')
+    currentBenchmarkPath = [file('src/jmh/resources/helios_benchmark.csv')]
+}
+
+compareBenchmarkCI {
+    previousBenchmarkPath = file('src/jmh/resources/master_benchmark.csv')
+    currentBenchmarkPath = [file('src/jmh/resources/helios_benchmark.csv')]
+    token = GITHUB_ACCESS_TOKEN
 }
