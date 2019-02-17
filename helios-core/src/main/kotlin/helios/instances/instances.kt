@@ -121,38 +121,38 @@ interface JsNumberEqInstance : Eq<JsNumber> {
   override fun JsNumber.eqv(b: JsNumber): Boolean = when (this) {
     is JsDecimal -> when (b) {
       is JsDecimal -> String.eq().run { this@eqv.value.eqv(b.value) }
-      is JsLong    -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
-      is JsDouble  -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
-      is JsFloat   -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
-      is JsInt     -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
+      is JsLong -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
+      is JsDouble -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
+      is JsFloat -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
+      is JsInt -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
     }
-    is JsLong    -> when (b) {
+    is JsLong -> when (b) {
       is JsDecimal -> String.eq().run { this@eqv.value.toString().eqv(b.value) }
-      is JsLong    -> Long.eq().run { this@eqv.value.eqv(b.value) }
-      is JsDouble  -> Double.eq().run { this@eqv.value.toDouble().eqv(b.value) }
-      is JsFloat   -> Float.eq().run { this@eqv.value.toFloat().eqv(b.value) }
-      is JsInt     -> Long.eq().run { this@eqv.value.eqv(b.value.toLong()) }
+      is JsLong -> Long.eq().run { this@eqv.value.eqv(b.value) }
+      is JsDouble -> Double.eq().run { this@eqv.value.toDouble().eqv(b.value) }
+      is JsFloat -> Float.eq().run { this@eqv.value.toFloat().eqv(b.value) }
+      is JsInt -> Long.eq().run { this@eqv.value.eqv(b.value.toLong()) }
     }
-    is JsDouble  -> when (b) {
+    is JsDouble -> when (b) {
       is JsDecimal -> String.eq().run { this@eqv.value.toString().eqv(b.value) }
-      is JsLong    -> Double.eq().run { this@eqv.value.eqv(b.value.toDouble()) }
-      is JsDouble  -> Double.eq().run { this@eqv.value.eqv(b.value) }
-      is JsFloat   -> Double.eq().run { this@eqv.value.eqv(b.value.toDouble()) }
-      is JsInt     -> Double.eq().run { this@eqv.value.eqv(b.value.toDouble()) }
+      is JsLong -> Double.eq().run { this@eqv.value.eqv(b.value.toDouble()) }
+      is JsDouble -> Double.eq().run { this@eqv.value.eqv(b.value) }
+      is JsFloat -> Double.eq().run { this@eqv.value.eqv(b.value.toDouble()) }
+      is JsInt -> Double.eq().run { this@eqv.value.eqv(b.value.toDouble()) }
     }
-    is JsFloat   -> when (b) {
+    is JsFloat -> when (b) {
       is JsDecimal -> String.eq().run { this@eqv.value.toString().eqv(b.value) }
-      is JsLong    -> Float.eq().run { this@eqv.value.eqv(b.value.toFloat()) }
-      is JsDouble  -> Double.eq().run { this@eqv.value.toDouble().eqv(b.value) }
-      is JsFloat   -> Float.eq().run { this@eqv.value.eqv(b.value) }
-      is JsInt     -> Float.eq().run { this@eqv.value.eqv(b.value.toFloat()) }
+      is JsLong -> Float.eq().run { this@eqv.value.eqv(b.value.toFloat()) }
+      is JsDouble -> Double.eq().run { this@eqv.value.toDouble().eqv(b.value) }
+      is JsFloat -> Float.eq().run { this@eqv.value.eqv(b.value) }
+      is JsInt -> Float.eq().run { this@eqv.value.eqv(b.value.toFloat()) }
     }
-    is JsInt     -> when (b) {
+    is JsInt -> when (b) {
       is JsDecimal -> String.eq().run { this@eqv.value.toString().eqv(b.value) }
-      is JsLong    -> Long.eq().run { this@eqv.value.toLong().eqv(b.value) }
-      is JsDouble  -> Double.eq().run { this@eqv.value.toDouble().eqv(b.value) }
-      is JsFloat   -> Float.eq().run { this@eqv.value.toFloat().eqv(b.value) }
-      is JsInt     -> Int.eq().run { this@eqv.value.eqv(b.value) }
+      is JsLong -> Long.eq().run { this@eqv.value.toLong().eqv(b.value) }
+      is JsDouble -> Double.eq().run { this@eqv.value.toDouble().eqv(b.value) }
+      is JsFloat -> Float.eq().run { this@eqv.value.toFloat().eqv(b.value) }
+      is JsInt -> Int.eq().run { this@eqv.value.eqv(b.value) }
     }
   }
 }

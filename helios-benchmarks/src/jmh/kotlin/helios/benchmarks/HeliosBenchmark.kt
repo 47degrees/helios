@@ -1,9 +1,7 @@
 package helios.benchmarks
 
-import arrow.core.flatMap
-import helios.benchmarks.sample.*
+import helios.benchmarks.sample.Friends
 import helios.core.Json
-import kotlinx.serialization.json.JSON
 import org.openjdk.jmh.annotations.*
 import java.util.concurrent.TimeUnit
 

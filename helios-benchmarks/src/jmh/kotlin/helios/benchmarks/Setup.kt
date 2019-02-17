@@ -1,12 +1,17 @@
 package helios.benchmarks
 
-import com.beust.klaxon.*
+import com.beust.klaxon.Klaxon
+import com.beust.klaxon.Parser
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.ObjectReader
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.google.gson.Gson
-import com.squareup.moshi.*
-import helios.benchmarks.sample.*
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import helios.benchmarks.sample.Friends
+import helios.benchmarks.sample.decoder
+import helios.benchmarks.sample.sampleJson
 
 val jsonString: String = sampleJson
 
