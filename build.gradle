@@ -30,14 +30,14 @@ buildscript {
         maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
         maven { url "https://dl.bintray.com/jetbrains/markdown/" }
         maven { url "https://dl.bintray.com/arrow-kt/arrow-kt/" }
-        maven { url "https://adrianrafo.bintray.com/hood" }
+        maven { url "https://dl.bintray.com/47deg/hood" }
         maven { url "https://plugins.gradle.org/m2/" }
     }
 
     dependencies {
         classpath "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath 'com.47deg:hood:0.1.8'
+        classpath 'com.47deg:hood:0.1.0'
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath "io.arrow-kt:arrow-ank-gradle:$arrowVersion"

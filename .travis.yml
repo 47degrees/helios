@@ -8,5 +8,5 @@ script:
 - ./gradlew :helios-docs:runAnk
 - ./gradlew :helios-benchmarks:executeHeliosBenchmark
 - ./gradlew :helios-benchmarks:executeMasterBenchmark
-- ./gradlew :helios-benchmarks:compareBenchmark
+- ./gradlew :helios-benchmarks:compareBenchmarkCI
 - if [ "$TRAVIS_BRANCH" = "master" ]; then ./gradlew :helios-benchmarks:executeMasterBenchmark; fi
