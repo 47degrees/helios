@@ -8,7 +8,7 @@ def findProperty(String key) {
 }
 
 def getReleaseRepositoryUrl() {
-    return findProperty('RELEASE_REPOSITORY_URL') ?: "https://api.bintray.com/maven/com.47deg/helios/"+POM_ARTIFACT_ID
+    return findProperty('RELEASE_REPOSITORY_URL') ?: "https://api.bintray.com/maven/com.47deg/helios/" + POM_ARTIFACT_ID
 }
 
 def getSnapshotRepositoryUrl() {
