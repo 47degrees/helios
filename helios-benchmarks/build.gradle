@@ -2,6 +2,11 @@ repositories {
     maven { url "https://kotlin.bintray.com/kotlinx" }
 }
 
+apply plugin: "me.champeau.gradle.jmh"
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlinx-serialization'
+apply plugin: 'com.47deg.hood'
+
 dependencies {
     compile project(":helios-core")
     compile project(":helios-meta")
@@ -21,10 +26,6 @@ dependencies {
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
-apply plugin: "me.champeau.gradle.jmh"
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlinx-serialization'
-apply plugin: 'com.47deg.hood'
 
 jmh {
     resultFormat = 'csv'
@@ -68,5 +69,10 @@ compareBenchmark {
 compareBenchmarkCI {
     previousBenchmarkPath = file('src/jmh/resources/master_benchmark.csv')
     currentBenchmarkPath = [file('src/jmh/resources/helios_benchmark.csv')]
+    token = GITHUB_ACCESS_TOKEN
+}
+
+uploadBenchmark{
+    benchmarkFile = file('src/jmh/resources/master_benchmark.csv')
     token = GITHUB_ACCESS_TOKEN
 }
