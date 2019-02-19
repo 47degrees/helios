@@ -6,8 +6,8 @@ jdk:
 script:
 - ./gradlew clean build test
 - ./gradlew :helios-docs:runAnk
-- ./gradlew :helios-benchmarks:executeHeliosBenchmark
 - ./gradlew :helios-benchmarks:executeMasterBenchmark
+- ./gradlew :helios-benchmarks:executeHeliosBenchmark
 - ./gradlew :helios-benchmarks:compareBenchmarkCI
 - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
   ./gradlew :helios-benchmarks:executeMasterBenchmark;
