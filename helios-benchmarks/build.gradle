@@ -69,10 +69,10 @@ compareBenchmark {
 compareBenchmarkCI {
     previousBenchmarkPath = file('src/jmh/resources/master_benchmark.csv')
     currentBenchmarkPath = [file('src/jmh/resources/helios_benchmark.csv')]
-    token = GITHUB_ACCESS_TOKEN
+    token = System.getenv('GITHUB_ACCESS_TOKEN')
 }
 
 uploadBenchmark{
     benchmarkFile = file('src/jmh/resources/master_benchmark.csv')
-    token = GITHUB_ACCESS_TOKEN
+    token = System.getenv('GITHUB_ACCESS_TOKEN')
 }
