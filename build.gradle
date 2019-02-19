@@ -37,7 +37,7 @@ buildscript {
     dependencies {
         classpath "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath 'com.47deg:hood:0.2.0'
+        classpath 'com.47deg:hood:0.3.0'
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath "io.arrow-kt:arrow-ank-gradle:$arrowVersion"
