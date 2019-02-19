@@ -64,15 +64,18 @@ task executeBenchmarks {
 compareBenchmark {
     previousBenchmarkPath = file('src/jmh/resources/master_benchmark.csv')
     currentBenchmarkPath = [file('src/jmh/resources/helios_benchmark.csv')]
+    threshold = 600
 }
 
 compareBenchmarkCI {
     previousBenchmarkPath = file('src/jmh/resources/master_benchmark.csv')
     currentBenchmarkPath = [file('src/jmh/resources/helios_benchmark.csv')]
+    threshold = 600
     token = System.getenv('GITHUB_ACCESS_TOKEN')
 }
 
 uploadBenchmark{
     benchmarkFile = file('src/jmh/resources/master_benchmark.csv')
+    benchmarkDestinationFromProjectRoot = "benchmarks/master_benchmark"
     token = System.getenv('GITHUB_ACCESS_TOKEN')
 }

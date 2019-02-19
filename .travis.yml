@@ -9,7 +9,7 @@ script:
 - ./gradlew :helios-benchmarks:executeHeliosBenchmark
 - ./gradlew :helios-benchmarks:executeMasterBenchmark
 - ./gradlew :helios-benchmarks:compareBenchmarkCI
-- if [ "$TRAVIS_BRANCH" = "master" ]; then
-  echo $TRAVIS_BRANCH;
-  echo $TRAVIS_PULL_REQUEST;
+- if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
+  ./gradlew :helios-benchmarks:executeMasterBenchmark;
+  ./gradlew :helios-benchmarks:uploadBenchmark;
   fi
