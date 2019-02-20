@@ -1,6 +1,8 @@
 package helios.parser
 
-import arrow.core.*
+import arrow.core.Either
+import arrow.core.Left
+import arrow.core.Right
 import java.nio.ByteBuffer
 
 sealed class Mode(val start: Int, val value: Int)
@@ -154,13 +156,13 @@ class AsyncParser<J>(
       while (true) {
         if (state < 0) {
           when (at(offset)) {
-            '\n'            -> {
+            '\n' -> {
               newline(offset)
               offset += 1
             }
 
             ' ', '\t', '\r' -> offset += 1
-            '['             -> {
+            '[' -> {
               if (state == ASYNC_PRESTART) {
                 offset += 1
                 state = ASYNC_START
@@ -173,7 +175,7 @@ class AsyncParser<J>(
               }
             }
 
-            ','             -> {
+            ',' -> {
               if (state == ASYNC_POSTVAL) {
                 offset += 1
                 state = ASYNC_PREVAL
@@ -184,7 +186,7 @@ class AsyncParser<J>(
               }
             }
 
-            ']'             -> {
+            ']' -> {
               if (state == ASYNC_POSTVAL || state == ASYNC_START) {
                 if (streamMode > 0) {
                   offset += 1
@@ -199,7 +201,7 @@ class AsyncParser<J>(
               }
             }
 
-            else            -> {
+            else -> {
               if (state == ASYNC_END) {
                 die(offset, "expected eof")
               } else if (state == ASYNC_POSTVAL) {

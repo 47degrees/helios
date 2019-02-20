@@ -1,6 +1,9 @@
 package helios.optics
 
-import arrow.core.*
+import arrow.core.Option
+import arrow.core.identity
+import arrow.core.none
+import arrow.core.some
 import arrow.instances.option.eq.eq
 import arrow.test.UnitSpec
 import arrow.test.generators.genFunctionAToB
