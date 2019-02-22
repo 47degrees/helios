@@ -97,7 +97,7 @@ subprojects { project ->
         publish = true
         user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
         key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-        setConfigurations(['archives'])
+        configurations = ['archives']
         pkg {
             repo = 'maven'
             name = project.name
