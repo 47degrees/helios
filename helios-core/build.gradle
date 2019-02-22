@@ -1,3 +1,5 @@
+apply plugin: 'kotlin-kapt'
+
 dependencies {
     compile project(":helios-meta")
     compile project(":helios-parser")
@@ -19,4 +21,3 @@ dependencies {
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
 apply from: rootProject.file('gradle/generated-kotlin-sources.gradle')
-apply plugin: 'kotlin-kapt'
