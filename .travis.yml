@@ -17,8 +17,9 @@ jobs:
       script:
         - ./gradlew :helios-benchmarks:executeMasterBenchmark
         - ./gradlew :helios-benchmarks:uploadBenchmark
-    stages:
-    - Test
-    - Benchmark
-    - name: Upload
-      if: env(TRAVIS_BRANCH) = master AND env(TRAVIS_PULL_REQUEST) = false AND env(TRAVIS_COMMIT_MESSAGE) != 'Upload benchmark'
+
+stages:
+  - Test
+  - Benchmark
+  - name: Upload
+    if: env(TRAVIS_BRANCH) = master AND env(TRAVIS_PULL_REQUEST) = false AND env(TRAVIS_COMMIT_MESSAGE) != 'Upload benchmark'
