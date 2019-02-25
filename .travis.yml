@@ -2,13 +2,26 @@ language: java
 
 jdk:
 - oraclejdk8
+jobs:
+  include:
 
-script:
-- ./gradlew clean build test
-- ./gradlew :helios-docs:runAnk
-- ./gradlew :helios-benchmarks:executeHeliosBenchmark
-- ./gradlew :helios-benchmarks:compareBenchmarkCI
-- if [ ("$TRAVIS_BRANCH" = "master") && ("$TRAVIS_PULL_REQUEST" = "false") && ("$TRAVIS_COMMIT_MESSAGE" != "Upload benchmark") ]; then
-  ./gradlew :helios-benchmarks:executeMasterBenchmark;
-  ./gradlew :helios-benchmarks:uploadBenchmark;
-  fi
+    - stage: Test
+      script:
+        - ./gradlew clean build test
+        - ./gradlew :helios-docs:runAnk
+
+    - stage: Benchmark
+      script:
+        - ./gradlew :helios-benchmarks:executeHeliosBenchmark
+        - ./gradlew :helios-benchmarks:compareBenchmarkCI
+
+    - stage: Upload
+      script:
+        - ./gradlew :helios-benchmarks:executeMasterBenchmark
+        - ./gradlew :helios-benchmarks:uploadBenchmark
+
+    stages:
+    - Test
+    - Benchmark
+    - name: Upload
+      if: env(TRAVIS_BRANCH) = master AND env(TRAVIS_PULL_REQUEST) = false AND env(TRAVIS_COMMIT_MESSAGE) != 'Upload benchmark'
