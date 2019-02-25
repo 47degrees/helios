@@ -2,6 +2,11 @@ repositories {
     maven { url "https://kotlin.bintray.com/kotlinx" }
 }
 
+apply plugin: "me.champeau.gradle.jmh"
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlinx-serialization'
+apply plugin: 'com.47deg.hood'
+
 dependencies {
     compile project(":helios-core")
     compile project(":helios-meta")
@@ -21,9 +26,6 @@ dependencies {
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
-apply plugin: "me.champeau.gradle.jmh"
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlinx-serialization'
 
 jmh {
     resultFormat = 'csv'
@@ -35,9 +37,9 @@ jmh {
         resultsFile = file(jmhResultsFile)
 }
 
-task updateMasterBenchmark {
+task executeMasterBenchmark {
     doLast {
-        jmh.resultsFile = file('src/jmh/resources/master_benchmark.csv')
+        jmh.resultsFile = file('build/reports/master_benchmark.csv')
         jmh.include = ["helios.benchmarks.HeliosBenchmark"]
     }
     finalizedBy 'jmh'
@@ -45,7 +47,7 @@ task updateMasterBenchmark {
 
 task executeHeliosBenchmark {
     doLast {
-        jmh.resultsFile = file('src/jmh/resources/helios_benchmark.csv')
+        jmh.resultsFile = file('build/reports/helios_benchmark.csv')
         jmh.include = ["helios.benchmarks.HeliosBenchmark"]
     }
     finalizedBy 'jmh'
@@ -57,4 +59,10 @@ task executeBenchmarks {
         jmh.include = ["helios.benchmarks.HeliosBenchmark", "helios.benchmarks.Decoding", "helios.benchmarks.DecodingFromRaw", "helios.benchmarks.Parsing"]
     }
     finalizedBy 'jmh'
+}
+
+uploadBenchmark {
+    benchmarkFile = file('build/reports/master_benchmark.csv')
+    benchmarkDestinationFromProjectRoot = "benchmarks/master_benchmark"
+    token = System.getenv('GITHUB_ACCESS_TOKEN')
 }
