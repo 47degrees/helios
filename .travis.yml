@@ -2,24 +2,21 @@ language: java
 
 jdk:
 - oraclejdk8
+
 jobs:
   include:
-
     - stage: Test
       script:
         - ./gradlew clean build test
         - ./gradlew :helios-docs:runAnk
-
     - stage: Benchmark
       script:
         - ./gradlew :helios-benchmarks:executeHeliosBenchmark
         - ./gradlew :helios-benchmarks:compareBenchmarkCI
-
     - stage: Upload
       script:
         - ./gradlew :helios-benchmarks:executeMasterBenchmark
         - ./gradlew :helios-benchmarks:uploadBenchmark
-
     stages:
     - Test
     - Benchmark
