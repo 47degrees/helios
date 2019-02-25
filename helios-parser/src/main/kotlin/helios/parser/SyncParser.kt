@@ -22,11 +22,11 @@ interface SyncParser<J> : Parser<J> {
     var j = i
     while (!atEof(j)) {
       j += when (at(j)) {
-        '\n'            -> {
+        '\n' -> {
           newline(j); 1
         }
         ' ', '\t', '\r' -> 1
-        else            -> die(j, "expected whitespace or eof")
+        else -> die(j, "expected whitespace or eof")
       }
     }
     if (!atEof(j)) die(j, "expected eof")

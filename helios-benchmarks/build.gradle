@@ -39,7 +39,7 @@ jmh {
 
 task executeMasterBenchmark {
     doLast {
-        jmh.resultsFile = file('src/jmh/resources/master_benchmark.csv')
+        jmh.resultsFile = file('build/reports/master_benchmark.csv')
         jmh.include = ["helios.benchmarks.HeliosBenchmark"]
     }
     finalizedBy 'jmh'
@@ -47,7 +47,7 @@ task executeMasterBenchmark {
 
 task executeHeliosBenchmark {
     doLast {
-        jmh.resultsFile = file('src/jmh/resources/helios_benchmark.csv')
+        jmh.resultsFile = file('build/reports/helios_benchmark.csv')
         jmh.include = ["helios.benchmarks.HeliosBenchmark"]
     }
     finalizedBy 'jmh'
@@ -62,20 +62,20 @@ task executeBenchmarks {
 }
 
 compareBenchmark {
-    previousBenchmarkPath = file('src/jmh/resources/master_benchmark.csv')
-    currentBenchmarkPath = [file('src/jmh/resources/helios_benchmark.csv')]
+    previousBenchmarkPath = file('benchmarks/master_benchmark.csv')
+    currentBenchmarkPath = [file('build/reports/helios_benchmark.csv')]
     threshold = 600
 }
 
 compareBenchmarkCI {
-    previousBenchmarkPath = file('src/jmh/resources/master_benchmark.csv')
-    currentBenchmarkPath = [file('src/jmh/resources/helios_benchmark.csv')]
+    previousBenchmarkPath = file('benchmarks/master_benchmark.csv')
+    currentBenchmarkPath = [file('build/reports/helios_benchmark.csv')]
     threshold = 600
     token = System.getenv('GITHUB_ACCESS_TOKEN')
 }
 
-uploadBenchmark{
-    benchmarkFile = file('src/jmh/resources/master_benchmark.csv')
+uploadBenchmark {
+    benchmarkFile = file('build/reports/master_benchmark.csv')
     benchmarkDestinationFromProjectRoot = "benchmarks/master_benchmark"
     token = System.getenv('GITHUB_ACCESS_TOKEN')
 }

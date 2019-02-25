@@ -4,7 +4,7 @@ import com.beust.klaxon.JsonObject
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.JsonElement
-import helios.benchmarks.sample.*
+import helios.benchmarks.sample.Friends
 import helios.core.Json
 import org.openjdk.jmh.annotations.*
 
