@@ -8,7 +8,7 @@ script:
 - ./gradlew :helios-docs:runAnk
 - ./gradlew :helios-benchmarks:executeHeliosBenchmark
 - ./gradlew :helios-benchmarks:compareBenchmarkCI
-- if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
+- if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" -a "$TRAVIS_COMMIT_MESSAGE" != "Upload benchmark"]; then
   ./gradlew :helios-benchmarks:executeMasterBenchmark;
   ./gradlew :helios-benchmarks:uploadBenchmark;
   fi
