@@ -3,12 +3,23 @@ language: java
 jdk:
 - oraclejdk8
 
-script:
-- ./gradlew clean build test
-- ./gradlew :helios-docs:runAnk
-- ./gradlew :helios-benchmarks:executeHeliosBenchmark
-- ./gradlew :helios-benchmarks:compareBenchmarkCI
-- if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" -a "$TRAVIS_COMMIT_MESSAGE" != "Upload benchmark"]; then
-  ./gradlew :helios-benchmarks:executeMasterBenchmark;
-  ./gradlew :helios-benchmarks:uploadBenchmark;
-  fi
+stages:
+  - name: build
+  - name: benchmark
+  - name: upload
+    if: branch = master AND type != pull_request AND sender != 47degdev
+
+jobs:
+  include:
+    - stage: build
+      script:
+        - ./gradlew clean build test
+        - ./gradlew :helios-docs:runAnk
+    - stage: benchmark
+      script:
+        - ./gradlew :helios-benchmarks:executeHeliosBenchmark
+        - ./gradlew :helios-benchmarks:compareBenchmarkCI
+    - stage: upload
+      script:
+        - ./gradlew :helios-benchmarks:executeMasterBenchmark
+        - ./gradlew :helios-benchmarks:uploadBenchmark
