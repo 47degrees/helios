@@ -7,7 +7,7 @@ stages:
   - name: build
   - name: benchmark
   - name: upload
-    if: branch = master AND type != pull_request AND commit_message != 'Upload benchmark'
+    if: branch = master AND type != pull_request AND sender != 47degdev
 
 jobs:
   include:
