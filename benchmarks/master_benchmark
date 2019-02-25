@@ -1,3 +1,0 @@
-"Benchmark","Mode","Threads","Samples","Score","Score Error (99.9%)","Unit"
-"helios.benchmarks.HeliosBenchmark.decoding","thrpt",1,20,11258.079718,248.406089,"ops/s"
-"helios.benchmarks.HeliosBenchmark.parsing","thrpt",1,20,22899.285566,284.737084,"ops/s"

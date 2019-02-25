@@ -99,11 +99,11 @@ subprojects { project ->
         key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
         configurations = ['archives']
         pkg {
-            repo = 'maven'
+            repo = 'helios'
             name = project.name
             userOrg = POM_DEVELOPER_ID
             licenses = ['Apache-2.0']
-            vcsUrl = 'https://github.com/arrow-kt/arrow.git'
+            vcsUrl = 'https://github.com/47deg/helios.git'
         }
     }
 

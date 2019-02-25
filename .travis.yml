@@ -6,7 +6,9 @@ jdk:
 script:
 - ./gradlew clean build test
 - ./gradlew :helios-docs:runAnk
-- if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
+- ./gradlew :helios-benchmarks:executeHeliosBenchmark
+- ./gradlew :helios-benchmarks:compareBenchmarkCI
+- if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" -a "$TRAVIS_COMMIT_MESSAGE" != "Upload benchmark"]; then
   ./gradlew :helios-benchmarks:executeMasterBenchmark;
   ./gradlew :helios-benchmarks:uploadBenchmark;
   fi
