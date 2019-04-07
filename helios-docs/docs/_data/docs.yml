@@ -1,18 +1,11 @@
 content:
     - title: Parser
-      description: Lorem ip amet, consectetur adipiscing elit. Nullam blandit odio nec button amet, consectetur adip.
-      icon: /img/feature-icon-primary.svg
-      cta: learn more
       url: /docs/parser/
 
     - title: DSL
-      description: Lorem ip amet, consectetur adipiscing elit. Nullam blandit odio nec button amet, consectetur adip.
-      icon: /img/feature-icon-secondary.svg
       url: /docs/dsl/
 
-    - title: Integrations
-      description: Lorem ip amet, consectetur adipiscing elit. Nullam blandit odio nec button amet, consectetur adip.
-      icon: /img/feature-icon-tertiary.svg
-      url: /docs/integrations/
+    - title: Benchmarks
+      url: /docs/benchmarks/
           
 cta: learn more

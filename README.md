@@ -4,6 +4,13 @@
 It's based on a part of the [Jawn Parser](https://github.com/non/jawn) built on `Arrow`, 
 a Functional companion to Kotlin's Standard Library.
 
+Learn more on the **Helios** [microsite]().
+
+## Why Helios
+
+**Helios** is the one of the fastest `Json` parser library on `Kotlin` 
+with the advantage of the `Arrow` functional programming
+
 ## Adding the dependency
 
 **Helios** uses kotlin `1.3.10` version and `Arrow` `0.8.1` version.
@@ -21,15 +28,6 @@ dependencies {
     compile "com.47deg:helios-parser:0.0.1-SNAPSHOT"
 }
 ```
-
-## QuickStart
-
-You can find a quick-start [here](helios-docs/docs/docs/quickstart/README.md).
-
-## Why Helios
-
-**Helios** is the one of the fastest `Json` parser library on `Kotlin` 
-with the advantage of the `Arrow` functional programming
 
 ## Running Benchmarks
 

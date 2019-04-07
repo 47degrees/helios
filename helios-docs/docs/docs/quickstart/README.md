@@ -1,3 +1,9 @@
+---
+layout: docs
+title: Evaluation
+permalink: /docs/quickstart/
+---
+
 # QuickStart
 
 Once added helios to you project, let's start to add the needed imports:
