@@ -21,7 +21,7 @@ buildscript {
         gradleVersionsPluginVersion = '0.20.0'
         javaVersion = JavaVersion.VERSION_1_7
         kotlinTestVersion = '2.0.7'
-        kotlinVersion = '1.3.10'
+        kotlinVersion = '1.3.21'
         arrowVersion = '0.8.1'
     }
     repositories {
@@ -30,12 +30,14 @@ buildscript {
         maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
         maven { url "https://dl.bintray.com/jetbrains/markdown/" }
         maven { url "https://dl.bintray.com/arrow-kt/arrow-kt/" }
+        maven { url "https://dl.bintray.com/47deg/hood" }
         maven { url "https://plugins.gradle.org/m2/" }
     }
 
     dependencies {
         classpath "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath 'com.47deg:hood:0.3.0'
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath "io.arrow-kt:arrow-ank-gradle:$arrowVersion"
@@ -67,8 +69,6 @@ subprojects { project ->
 
     apply plugin: 'kotlin'
     apply plugin: 'jacoco'
-    apply plugin: 'me.champeau.gradle.jmh'
-
 
     archivesBaseName = POM_ARTIFACT_ID
 
@@ -84,11 +84,10 @@ subprojects { project ->
             csv.enabled false
         }
 
-        classDirectories = fileTree(
-                dir: 'build/classes/main/helios',
-        )
+        getClassDirectories().setFrom(fileTree(dir: 'build/classes/main/helios'))
 
-        sourceDirectories = files('src/main/kotlin')
+        getSourceDirectories().setFrom(files('src/main/kotlin'))
+
         executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
     }
 
@@ -100,11 +99,11 @@ subprojects { project ->
         key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
         configurations = ['archives']
         pkg {
-            repo = 'maven'
+            repo = 'helios'
             name = project.name
             userOrg = POM_DEVELOPER_ID
             licenses = ['Apache-2.0']
-            vcsUrl = 'https://github.com/arrow-kt/arrow.git'
+            vcsUrl = 'https://github.com/47deg/helios.git'
         }
     }
 
@@ -120,10 +119,6 @@ subprojects { project ->
 
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
-}
-
-task wrapper(type: Wrapper) {
-    distributionUrl = "https://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
 }
 
 apply plugin: 'com.github.ben-manes.versions'

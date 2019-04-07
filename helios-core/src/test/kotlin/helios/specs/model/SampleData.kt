@@ -4,7 +4,9 @@ import arrow.core.Either
 import arrow.deriving
 import arrow.higherkind
 import arrow.optics.optics
-import arrow.typeclasses.*
+import arrow.typeclasses.Applicative
+import arrow.typeclasses.Functor
+import arrow.typeclasses.Monad
 import helios.meta.json
 import io.kotlintest.properties.Gen
 import io.kotlintest.properties.map
@@ -48,7 +50,7 @@ class GenA<A>(val value: Gen<A>) : GenAOf<A>, Gen<A> by value {
       val r = f(a).fix()
       val genValue = r.value.generate()
       return when (genValue) {
-        is Either.Left<A>  -> tailRecM(genValue.a, f)
+        is Either.Left<A> -> tailRecM(genValue.a, f)
         is Either.Right<B> -> just(genValue.b)
       }
     }

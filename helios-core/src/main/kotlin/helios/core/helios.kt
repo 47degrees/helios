@@ -48,7 +48,7 @@ sealed class Json {
 
   operator fun get(key: String): Option<Json> = when (this) {
     is JsObject -> Option.fromNullable(this.value[key])
-    else        -> None
+    else -> None
   }
 
   fun <A> decode(decoder: Decoder<A>): Either<DecodingError, A> =
@@ -63,11 +63,11 @@ sealed class Json {
     ifJsNull: () -> B
   ): B =
     when (this) {
-      is JsString  -> ifJsString(this)
-      is JsNumber  -> ifJsNumber(this)
-      is JsArray   -> ifJsArray(this)
-      is JsObject  -> ifJsObject(this)
-      is JsNull    -> ifJsNull()
+      is JsString -> ifJsString(this)
+      is JsNumber -> ifJsNumber(this)
+      is JsArray -> ifJsArray(this)
+      is JsObject -> ifJsObject(this)
+      is JsNull -> ifJsNull()
       is JsBoolean -> ifJsBoolean(this)
     }
 
@@ -138,7 +138,7 @@ sealed class JsNumber : Json() {
         val asByte: Byte = ml.t.toByte()
         if (asByte.compareTo(ml.t) == 0) Some(asByte) else None
       }
-      is None       -> None
+      is None -> None
     }
   }
 
@@ -149,7 +149,7 @@ sealed class JsNumber : Json() {
         val asShort: Short = ml.t.toShort()
         if (asShort.compareTo(ml.t) == 0) Some(asShort) else None
       }
-      is None       -> None
+      is None -> None
     }
   }
 
@@ -160,7 +160,7 @@ sealed class JsNumber : Json() {
         val asInt: Int = ml.t.toInt()
         if (asInt.compareTo(ml.t) == 0) Some(asInt) else None
       }
-      is None       -> None
+      is None -> None
     }
   }
 

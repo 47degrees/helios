@@ -61,7 +61,7 @@ interface ByteBasedParser<J> : Parser<J> {
     while (c != 34) { // "
       if (c == 92) { // \
         when (byte(j + 1).toInt()) {
-          98  -> {
+          98 -> {
             sb.append('\b'); j += 2
           }
           102 -> {
@@ -77,13 +77,13 @@ interface ByteBasedParser<J> : Parser<J> {
             sb.append('\t'); j += 2
           }
 
-          34  -> {
+          34 -> {
             sb.append('"'); j += 2
           }
-          47  -> {
+          47 -> {
             sb.append('/'); j += 2
           }
-          92  -> {
+          92 -> {
             sb.append('\\'); j += 2
           }
 
@@ -92,7 +92,7 @@ interface ByteBasedParser<J> : Parser<J> {
             sb.append(descape(at(j + 2, j + 6))); j += 6
           }
 
-          c   -> die(j, "invalid escape sequence (\\${c.toChar()})")
+          c -> die(j, "invalid escape sequence (\\${c.toChar()})")
         }
       } else if (c < 32) {
         die(j, "control char ($c) in string")
