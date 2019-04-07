@@ -24,7 +24,7 @@ dependencies {
 
 ## QuickStart
 
-You can find a quick-start [here](https://github.com/47deg/helios/tree/master/helios-docs/docs/QuickStart.md).
+You can find a quick-start [here](helios-docs/docs/docs/quickstart/README.md).
 
 ## Why Helios
 
