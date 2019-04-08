@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Evaluation
+title: Benchmarking
 permalink: /docs/benchmarks/
 ---
 

@@ -1,0 +1,12 @@
+options:
+  - title: Quickstart
+    url: /docs/quickstart/
+
+  - title: Parser
+    url: /docs/parser/
+
+  - title: DSL
+    url: /docs/dsl/
+
+  - title: Benchmarks
+    url: /docs/benchmarks/

@@ -10,7 +10,7 @@
         </a>
     </div>
     <ul class="sidebar-nav">
-        {% for item in site.data.docs.content %}
+        {% for item in site.data.sidebar.options %}
         <li class="{% if item.url == page.url %}active{% endif %}">
             <a href="{{ item.url }}" alt="{{ item.title }}">{{ item.title }}</a>
         </li>

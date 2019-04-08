@@ -33,8 +33,26 @@ dependencies {
 
 To run the benchmarks comparing Helios with other Json libraries execute the following command:
 
-`./gradlew :helios-benchmarks: executeBenchmarks`
+```bash
+./gradlew :helios-benchmarks: executeBenchmarks
+```
 
 To run the benchmarks with Helios performance execute the following command:
 
-`./gradlew :helios-benchmarks: executeHeliosBenchmark`
+```bash
+./gradlew :helios-benchmarks: executeHeliosBenchmark
+```
+
+## Running Microsite
+
+To run locally the **Helios** microsite you need to execute first this:
+
+```bash
+bundle install --gemfile ./helios-docs/Gemfile --path vendor/bundle
+```
+
+and then you will be able to run the following command:
+
+```bash
+BUNDLE_GEMFILE=helios-docs/Gemfile bundle exec jekyll serve -s helios-docs/build/site/
+```
