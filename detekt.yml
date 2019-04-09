@@ -1,8 +1,7 @@
 autoCorrect: true
 
 build:
-  warningThreshold: 1
-  failThreshold: 1
+  maxIssues: 1
 
 potential-bugs:
   active: true
@@ -34,12 +33,20 @@ code-smell:
     weight: 0.45
     base: 0.5
 
+test-pattern: # Configure exclusions for build sources
+  active: true
+  patterns:
+    - '.*/build/.*'
+  exclude-rule-sets:
+    - 'formatting'
+
 formatting:
   active: true
   useTabs: false
   Indentation:
     active: true
     autoCorrect: true
+    indentSize: 2
   ConsecutiveBlankLines:
     active: true
     autoCorrect: true

@@ -1,7 +1,9 @@
 package helios.meta.compiler.json
 
 import arrow.common.Package
-import arrow.common.utils.*
+import arrow.common.utils.ClassOrPackageDataWrapper
+import arrow.common.utils.extractFullName
+import arrow.common.utils.removeBackticks
 import me.eugeniomarletti.kotlin.metadata.shadow.metadata.ProtoBuf
 import java.io.File
 
@@ -62,10 +64,10 @@ class JsonFileGenerator(
   //TODO FIXME
   inline val String.encoder: String
     get() = when {
-      this == "Boolean"                          -> "Boolean.Companion.encoder()"
+      this == "Boolean" -> "Boolean.Companion.encoder()"
       this.startsWith("kotlin.collections.List") ->
         "${Regex("kotlin.collections.List<(.*)>$").matchEntire(this)!!.groupValues[1]}.encoder()"
-      else                                       -> "$this.encoder()"
+      else -> "$this.encoder()"
     }
 
   private fun jsonProperties(je: JsonElement): String =
@@ -78,10 +80,10 @@ class JsonFileGenerator(
   //TODO FIXME
   inline val String.decoder: String
     get() = when {
-      this == "Boolean"                          -> "Boolean.Companion.decoder()"
+      this == "Boolean" -> "Boolean.Companion.decoder()"
       this.startsWith("kotlin.collections.List") ->
         "ListDecoderInstance(${Regex("kotlin.collections.List<(.*)>$").matchEntire(this)!!.groupValues[1]}.decoder())"
-      else                                       -> "$this.decoder()"
+      else -> "$this.decoder()"
     }
 
   private fun parse(je: JsonElement): String = je.pairs.joinToString(

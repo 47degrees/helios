@@ -1,13 +1,19 @@
 package helios.optics
 
-import arrow.core.*
+import arrow.core.None
+import arrow.core.Option
+import arrow.core.orElse
 import arrow.test.UnitSpec
 import arrow.test.generators.genFunctionAToB
 import arrow.test.generators.genOption
-import arrow.test.laws.*
+import arrow.test.laws.LensLaws
+import arrow.test.laws.OptionalLaws
+import arrow.test.laws.TraversalLaws
 import arrow.typeclasses.Eq
 import arrow.typeclasses.Monoid
-import helios.core.*
+import helios.core.JsArray
+import helios.core.JsObject
+import helios.core.Json
 import helios.optics.jsarray.each.each
 import helios.optics.jsarray.index.index
 import helios.optics.jsobject.at.at

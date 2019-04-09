@@ -16,7 +16,6 @@ repositories {
         def reports = "helios:$project.projectDir.absolutePath/reports/report.detekt"
         def baseline = "$project.projectDir.absolutePath/reports/baseline.xml"
         def filters = ".*test.*"
-        def rulesets = ""
         def params = ['-i', input, '-c', config, '-f', filters, '-r', reports, '-b', baseline]
         args(params)
     }
@@ -30,13 +29,12 @@ repositories {
         def reports = "helios:$project.projectDir.absolutePath/reports/report.detekt"
         def baseline = "$project.projectDir.absolutePath/reports/baseline.xml"
         def filters = ".*test.*"
-        def rulesets = ""
         def params = ['-i', input, '-c', config, '-f', filters, '-r', reports, '-b', baseline, '-cb']
         args(params)
     }
 
     dependencies {
-
         detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.RC9'
+        detekt 'io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.RC9'
     }
 }
