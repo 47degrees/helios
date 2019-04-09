@@ -45,7 +45,7 @@ To run the benchmarks with Helios performance execute the following command:
 
 ## Running Microsite
 
-To run locally the **Helios** microsite you need to execute first this:
+To run the **Helios** microsite locally, you need to execute the following command:
 
 ```bash
 bundle install --gemfile ./helios-docs/Gemfile --path vendor/bundle
