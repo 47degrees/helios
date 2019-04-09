@@ -6,7 +6,7 @@ permalink: /docs/quickstart/
 
 # QuickStart
 
-Once added helios to your project, let's start to add the needed imports:
+Once Helios is added to your project, let's start to add the needed imports:
 
 ```kotlin:ank:silent
 import arrow.core.*
