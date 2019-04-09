@@ -42,7 +42,7 @@ val jObject = JsObject(
 
 ## Custom Encoders
 
-To create a custom Encoder just just need to inherit from the Encoder interface and implement the `encode` method.
+To create a custom `Encoder`, you need to inherit from the `Encoder` interface and implement the `encode` method.
 
 ```kotlin:ank
 val personCustomEncoder = object : Encoder<Person> {
