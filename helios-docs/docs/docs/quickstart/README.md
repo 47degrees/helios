@@ -12,7 +12,6 @@ Once added helios to your project, let's start to add the needed imports:
 import arrow.core.*
 import helios.core.*
 import helios.meta.*
-import helios.optics.*
 import helios.typeclasses.*
 ```
 
@@ -69,3 +68,5 @@ val jsonFromPerson = with(Person.encoder()) {
 
 jsonFromPerson.toJsonString()
 ```
+
+You can find more on the [`samples` module](helios-sample/src/main/kotlin/helios/sample).
