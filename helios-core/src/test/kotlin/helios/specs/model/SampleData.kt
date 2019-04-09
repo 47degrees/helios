@@ -1,12 +1,6 @@
 package helios.specs.model
 
-import arrow.core.Either
-import arrow.deriving
-import arrow.higherkind
 import arrow.optics.optics
-import arrow.typeclasses.Applicative
-import arrow.typeclasses.Functor
-import arrow.typeclasses.Monad
 import helios.meta.json
 import io.kotlintest.properties.Gen
 
@@ -24,52 +18,18 @@ data class Friend(
   companion object
 }
 
-@higherkind
-@deriving(
-  Functor::class,
-  Applicative::class,
-  Monad::class
-)
-class GenA<A>(val value: Gen<A>) : GenAOf<A>, Gen<A> by value {
-
-  override fun <B> map(f: (A) -> B): GenA<B> =
-    GenA(value.map(f))
-
-  fun <B> flatMapA(f: (A) -> GenAOf<B>): GenA<B> =
-    GenA(value.flatMap { f(it).fix() })
-
-  fun <B> ap(ff: GenAOf<(A) -> B>): GenA<B> =
-    ff.fix().flatMapA { this.fix().map(it) }
-
-  companion object {
-    fun <A> just(a: A): GenA<A> =
-      GenA(Gen.create { a })
-
-    tailrec fun <A, B> tailRecM(a: A, f: (A) -> GenAOf<Either<A, B>>): GenA<B> =
-      f(a).fix().flatMapA { genValue: Either<A, B> ->
-        when (genValue) {
-          is Either.Right<B> -> just(genValue.b)
-          is Either.Left<A> -> tailRecM(genValue.a, f)
-        }
-      }
-  }
-
-}
-
-fun <A> Gen<A>.k(): GenA<A> = GenA(this)
-
 val genFriend: Gen<Friend> =
-  GenA.applicative().map(
-    Gen.string().k(),
-    Gen.string().k(),
-    Gen.string().k(),
-    Gen.list(Gen.string()).k(),
-    Gen.list(Gen.int()).k(),
-    Gen.string().k(),
-    Gen.string().k()
-  ) { (_id, latitude, longitude, tags, range, greeting, favoriteFruit) ->
-    Friend(_id, latitude, longitude, tags, range, greeting, favoriteFruit)
-  }.fix()
+  Gen.bind(
+    Gen.string(),
+    Gen.string(),
+    Gen.string(),
+    Gen.list(Gen.string()),
+    Gen.list(Gen.int()),
+    Gen.string(),
+    Gen.string()
+  ) { id, latitude, longitude, tags, range, greeting, favoriteFruit ->
+    Friend(id, latitude, longitude, tags, range, greeting, favoriteFruit)
+  }
 
 val sampleJson: String = """
         {

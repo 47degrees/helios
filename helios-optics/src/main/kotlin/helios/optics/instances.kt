@@ -55,7 +55,7 @@ interface JsObjectEachInstance : Each<JsObject, Json> {
       s: JsObject,
       f: (Json) -> Kind<F, Json>
     ): Kind<F, JsObject> = FA.run {
-      s.value.k().traverse(FA, f).map { JsObject(it.map) }
+      s.value.k().traverse(FA, f).map { JsObject(it.toMap()) }
     }
   }
 }
@@ -68,7 +68,7 @@ interface JsArrayEachInstance : Each<JsArray, Json> {
       s: JsArray,
       f: (Json) -> Kind<F, Json>
     ): Kind<F, JsArray> = FA.run {
-      s.value.k().traverse(FA, f).map { JsArray(it.list) }
+      s.value.k().traverse(FA, f).map { JsArray(it.toList()) }
     }
   }
 }

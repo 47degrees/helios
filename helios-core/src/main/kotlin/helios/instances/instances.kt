@@ -1,8 +1,8 @@
 package helios.instances
 
 import arrow.core.*
+import arrow.core.extensions.eq
 import arrow.extension
-import arrow.instances.eq
 import arrow.typeclasses.Eq
 import helios.core.*
 import helios.instances.jsarray.eq.eq

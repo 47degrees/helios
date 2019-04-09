@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 dependencies {
     compile project(":helios-meta")
-    compile "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
+    compile "io.arrow-kt:arrow-meta:$arrowVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     compile "me.eugeniomarletti.kotlin.metadata:kotlin-metadata:$kotlinMetadata"
     compileOnly "com.google.auto.service:auto-service:$autoService"

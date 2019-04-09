@@ -20,6 +20,7 @@ import helios.optics.jsobject.at.at
 import helios.optics.jsobject.each.each
 import helios.optics.jsobject.index.index
 import io.kotlintest.properties.Gen
+import io.kotlintest.properties.map
 
 class InstancesTest : UnitSpec() {
 

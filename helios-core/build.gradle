@@ -5,9 +5,13 @@ dependencies {
     compile project(":helios-parser")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-    compile "io.arrow-kt:arrow-instances-core:$arrowVersion"
+    compile "io.arrow-kt:arrow-core-data:$arrowVersion"
+    compile "io.arrow-kt:arrow-core-extensions:$arrowVersion"
+    compile "io.arrow-kt:arrow-syntax:$arrowVersion"
+    compile "io.arrow-kt:arrow-extras-data:$arrowVersion"
+    compile "io.arrow-kt:arrow-extras-extensions:$arrowVersion"
 
-    kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
+    kapt "io.arrow-kt:arrow-meta:$arrowVersion"
     kapt project(':helios-meta-compiler')
 
     testImplementation("io.arrow-kt:arrow-test:$arrowVersion") {
@@ -16,9 +20,9 @@ dependencies {
     testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
     
     kaptTest project(':helios-meta-compiler')
-    kaptTest "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
+    kaptTest "io.arrow-kt:arrow-meta:$arrowVersion"
     
-    testCompileOnly "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
+    testCompileOnly "io.arrow-kt:arrow-meta:$arrowVersion"
     testCompileOnly project(':helios-meta-compiler')  
     
 }

@@ -96,7 +96,7 @@ class JsonFileGenerator(
   else "Either.applicative<DecodingError>().map(${parse(je)}, "
 
   private fun addExtraImport(je: JsonElement) =
-    if (je.pairs.size != 1) "import arrow.instances.either.applicative.*" else ""
+    if (je.pairs.size != 1) "\n" + "import arrow.core.extensions.either.applicative.applicative" else ""
 
   private fun createInstance(je: JsonElement): String = """
       |${map(je)} { ${je.pairs.joinToString(
