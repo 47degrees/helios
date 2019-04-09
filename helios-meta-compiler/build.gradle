@@ -7,12 +7,12 @@ dependencies {
     compile project(":helios-meta")
     compile "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    compile 'me.eugeniomarletti.kotlin.metadata:kotlin-metadata:1.4.0'
-    compileOnly 'com.google.auto.service:auto-service:1.0-rc4'
-    kapt 'com.google.auto.service:auto-service:1.0-rc4'
+    compile "me.eugeniomarletti.kotlin.metadata:kotlin-metadata:$kotlinMetadata"
+    compileOnly "com.google.auto.service:auto-service:$autoService"
+    kapt "com.google.auto.service:auto-service:$autoService"
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile "com.google.testing.compile:compile-testing:0.15"
+    testCompile "com.google.testing.compile:compile-testing:$googleTesting"
     testCompile fileTree(dir: './src/test/libs', includes: ['*.jar'])
     testCompile files(Jvm.current().getToolsJar())
 }
