@@ -80,7 +80,7 @@ personCustomDecoder.decode(personCustomJson)
 
 ## Navigation through Json
 
-You can also navigate through the Json using optics.
+You can navigate `Json` using the `Json.path` DSL to select keys or traverse collections.
 
 ```kotlin:ank
 import helios.optics.*
