@@ -5,8 +5,8 @@ options:
   - title: Parser
     url: /docs/parser/
 
-  - title: DSL
-    url: /docs/dsl/
+  - title: Coding/Encoding
+    url: /docs/coding/
 
   - title: Benchmarks
     url: /docs/benchmarks/
