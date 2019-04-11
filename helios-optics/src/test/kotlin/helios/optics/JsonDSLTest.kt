@@ -1,18 +1,17 @@
 package helios.optics
 
 import arrow.core.Option
+import arrow.core.extensions.option.eq.eq
 import arrow.core.identity
-import arrow.core.none
 import arrow.core.some
-import arrow.instances.option.eq.eq
 import arrow.test.UnitSpec
-import arrow.test.generators.genFunctionAToB
+import arrow.test.generators.functionAToB
 import arrow.test.laws.PrismLaws
 import arrow.typeclasses.Eq
 import helios.core.*
-import io.kotlintest.matchers.shouldBe
 import io.kotlintest.properties.Gen
 import io.kotlintest.properties.forAll
+import io.kotlintest.assertions.arrow.option.*
 
 class JsonDSLTest : UnitSpec() {
 
@@ -21,9 +20,9 @@ class JsonDSLTest : UnitSpec() {
     testLaws(
       PrismLaws.laws(
         prism = parse(Street.decoder(), Street.encoder()),
-        aGen = Gen.json(Street.encoder(), genStreet()),
+        aGen = Gen.json(genStreet(), Street.encoder()),
         bGen = genStreet(),
-        funcGen = genFunctionAToB(genStreet()),
+        funcGen = Gen.functionAToB(genStreet()),
         EQA = Eq.any(),
         EQOptionB = Option.eq(Eq.any())
       )
@@ -34,7 +33,7 @@ class JsonDSLTest : UnitSpec() {
         Json.path.boolean.getOption(jsBool) == jsBool.value.some()
       }
 
-      Json.path.boolean.getOption(JsString("false")) shouldBe none<Boolean>()
+      Json.path.boolean.getOption(JsString("false")).shouldBeNone()
     }
 
     "string prism" {
@@ -42,7 +41,7 @@ class JsonDSLTest : UnitSpec() {
         Json.path.string.getOption(jsString) == jsString.value.some()
       }
 
-      Json.path.string.getOption(JsFalse) shouldBe none<String>()
+      Json.path.string.getOption(JsFalse).shouldBeNone()
     }
 
     "number prism" {
@@ -50,7 +49,7 @@ class JsonDSLTest : UnitSpec() {
         Json.path.jsnumber.getOption(jsNumber) == jsNumber.some()
       }
 
-      Json.path.jsnumber.getOption(JsFalse) shouldBe none<JsNumber>()
+      Json.path.jsnumber.getOption(JsFalse).shouldBeNone()
     }
 
     "decimal prism" {
@@ -58,7 +57,7 @@ class JsonDSLTest : UnitSpec() {
         Json.path.decimal.getOption(jsDecimal) == jsDecimal.value.some()
       }
 
-      Json.path.decimal.getOption(JsFalse) shouldBe none<JsDecimal>()
+      Json.path.decimal.getOption(JsFalse).shouldBeNone()
     }
 
     "long prism" {
@@ -66,7 +65,7 @@ class JsonDSLTest : UnitSpec() {
         Json.path.long.getOption(jsLong) == jsLong.value.some()
       }
 
-      Json.path.long.getOption(JsFalse) shouldBe none<JsLong>()
+      Json.path.long.getOption(JsFalse).shouldBeNone()
     }
 
     "float prism" {
@@ -74,7 +73,7 @@ class JsonDSLTest : UnitSpec() {
         Json.path.float.getOption(jsFloat) == jsFloat.value.some()
       }
 
-      Json.path.float.getOption(JsFalse) shouldBe none<JsFloat>()
+      Json.path.float.getOption(JsFalse).shouldBeNone()
     }
 
     "int prism" {
@@ -82,7 +81,7 @@ class JsonDSLTest : UnitSpec() {
         Json.path.int.getOption(jsInt) == jsInt.value.some()
       }
 
-      Json.path.int.getOption(JsString("5")) shouldBe none<Int>()
+      Json.path.int.getOption(JsString("5")).shouldBeNone()
     }
 
     "array prism" {
@@ -90,7 +89,7 @@ class JsonDSLTest : UnitSpec() {
         Json.path.array.getOption(jsArray) == jsArray.value.some()
       }
 
-      Json.path.array.getOption(JsString("5")) shouldBe none<JsArray>()
+      Json.path.array.getOption(JsString("5")).shouldBeNone()
     }
 
     "object prism" {
@@ -98,7 +97,7 @@ class JsonDSLTest : UnitSpec() {
         Json.path.`object`.getOption(jsObj) == jsObj.value.some()
       }
 
-      Json.path.`object`.getOption(JsString("5")) shouldBe none<JsObject>()
+      Json.path.`object`.getOption(JsString("5")).shouldBeNone()
     }
 
     "null prism" {
@@ -106,23 +105,23 @@ class JsonDSLTest : UnitSpec() {
         Json.path.`null`.getOption(jsNull) == jsNull.some()
       }
 
-      Json.path.`null`.getOption(JsString("5")) shouldBe none<JsNull>()
+      Json.path.`null`.getOption(JsString("5")).shouldBeNone()
     }
 
     "at from object" {
-      forAll(Gen.json(City.encoder(), genCity())) { cityJson ->
+      forAll(Gen.json(genCity(), City.encoder())) { cityJson ->
         Json.path.at("streets").getOption(cityJson).flatMap(::identity) == cityJson["streets"]
       }
     }
 
     "select from object" {
-      forAll(Gen.json(City.encoder(), genCity())) { cityJson ->
+      forAll(Gen.json(genCity(), City.encoder())) { cityJson ->
         Json.path.select("streets").getOption(cityJson) == cityJson["streets"]
       }
     }
 
     "extract from object" {
-      forAll(Gen.json(City.encoder(), genCity())) { cityJson ->
+      forAll(Gen.json(genCity(), City.encoder())) { cityJson ->
         Json.path.extract(
           City.decoder(),
           City.encoder()
@@ -131,17 +130,13 @@ class JsonDSLTest : UnitSpec() {
     }
 
     "get from array" {
-      forAll(Gen.json(City.encoder(), genCity())) { cityJson ->
-        Json.path.select("streets")[0].extract(Street.decoder(), Street.encoder()).getOption(
-          cityJson
-        ) ==
-            City.decoder().decode(cityJson).toOption().flatMap {
-              Option.fromNullable(
-                it.streets.getOrNull(
-                  0
-                )
-              )
-            }
+      forAll(Gen.json(genCity(), City.encoder())) { cityJson ->
+        Json.path.select("streets")[0].extract(
+          Street.decoder(),
+          Street.encoder()
+        ).getOption(cityJson) == City.decoder().decode(cityJson).toOption().flatMap {
+          Option.fromNullable(it.streets.getOrNull(0))
+        }
       }
     }
 

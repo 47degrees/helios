@@ -4,8 +4,8 @@ import arrow.core.None
 import arrow.core.Option
 import arrow.core.orElse
 import arrow.test.UnitSpec
-import arrow.test.generators.genFunctionAToB
-import arrow.test.generators.genOption
+import arrow.test.generators.functionAToB
+import arrow.test.generators.option
 import arrow.test.laws.LensLaws
 import arrow.test.laws.OptionalLaws
 import arrow.test.laws.TraversalLaws
@@ -20,7 +20,6 @@ import helios.optics.jsobject.at.at
 import helios.optics.jsobject.each.each
 import helios.optics.jsobject.index.index
 import io.kotlintest.properties.Gen
-import io.kotlintest.properties.map
 
 class InstancesTest : UnitSpec() {
 
@@ -28,10 +27,10 @@ class InstancesTest : UnitSpec() {
 
     testLaws(
       OptionalLaws.laws(
-        optional = Gen.string().map{ JsObject.index().index(it) },
+        optionalGen = Gen.string().map { JsObject.index().index(it) },
         aGen = Gen.jsObject(),
         bGen = Gen.json(),
-        funcGen = genFunctionAToB(Gen.json()),
+        funcGen = Gen.functionAToB(Gen.json()),
         EQA = Eq.any(),
         EQOptionB = Eq.any()
       )
@@ -42,7 +41,7 @@ class InstancesTest : UnitSpec() {
         optional = JsArray.index().index(1),
         aGen = Gen.jsArray(),
         bGen = Gen.json(),
-        funcGen = genFunctionAToB(Gen.json()),
+        funcGen = Gen.functionAToB(Gen.json()),
         EQA = Eq.any(),
         EQOptionB = Eq.any()
       )
@@ -53,7 +52,7 @@ class InstancesTest : UnitSpec() {
         traversal = JsObject.each().each(),
         aGen = Gen.jsObject(),
         bGen = Gen.json(),
-        funcGen = genFunctionAToB(Gen.json()),
+        funcGen = Gen.functionAToB(Gen.json()),
         EQA = Eq.any(),
         EQOptionB = Eq.any(),
         EQListB = Eq.any()
@@ -65,7 +64,7 @@ class InstancesTest : UnitSpec() {
         traversal = JsArray.each().each(),
         aGen = Gen.jsArray(),
         bGen = Gen.json(),
-        funcGen = genFunctionAToB(Gen.json()),
+        funcGen = Gen.functionAToB(Gen.json()),
         EQA = Eq.any(),
         EQOptionB = Eq.any(),
         EQListB = Eq.any()
@@ -73,10 +72,10 @@ class InstancesTest : UnitSpec() {
     )
 
     testLaws(LensLaws.laws(
-      lens = Gen.string().map{ JsObject.at().at(it) },
+      lensGen = Gen.string().map { JsObject.at().at(it) },
       aGen = Gen.jsObject(),
-      bGen = genOption(Gen.json()),
-      funcGen = genFunctionAToB(genOption(Gen.json())),
+      bGen = Gen.option(Gen.json()),
+      funcGen = Gen.functionAToB(Gen.option(Gen.json())),
       EQA = Eq.any(),
       EQB = Eq.any(),
       MB = object : Monoid<Option<Json>> {

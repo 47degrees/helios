@@ -18,6 +18,7 @@ dependencies {
         exclude module: 'kotlintest'
     }
     testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
+    testImplementation("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
     
     kaptTest project(':helios-meta-compiler')
     kaptTest "io.arrow-kt:arrow-meta:$arrowVersion"

@@ -2,7 +2,6 @@ package helios.optics
 
 import helios.meta.json
 import io.kotlintest.properties.Gen
-import io.kotlintest.properties.map
 
 @json
 data class City(val streets: List<Street>) {

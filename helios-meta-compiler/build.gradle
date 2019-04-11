@@ -12,6 +12,7 @@ dependencies {
     kapt "com.google.auto.service:auto-service:$autoService"
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
+    testImplementation("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
     testCompile "com.google.testing.compile:compile-testing:$googleTesting"
     testCompile fileTree(dir: './src/test/libs', includes: ['*.jar'])
     testCompile files(Jvm.current().getToolsJar())

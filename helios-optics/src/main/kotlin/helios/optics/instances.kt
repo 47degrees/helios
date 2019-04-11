@@ -22,10 +22,8 @@ import helios.core.Json
 interface JsObjectIndexInstance : Index<JsObject, String, Json> {
   override fun index(i: String): Optional<JsObject, Json> = Optional(
     getOrModify = { it.value[i]?.right() ?: it.left() },
-    set = { js ->
-      { (map) ->
-        JsObject(map.map { (key, oldValue) -> key to if (key == i) js else oldValue }.toMap())
-      }
+    set = { map, js ->
+      JsObject(map.value.map { (key, oldValue) -> key to if (key == i) js else oldValue }.toMap())
     }
   )
 }
@@ -34,14 +32,12 @@ interface JsObjectIndexInstance : Index<JsObject, String, Json> {
 interface JsObjectAtInstance : At<JsObject, String, Option<Json>> {
   override fun at(i: String): Lens<JsObject, Option<Json>> = Lens(
     get = { it.value.getOption(i) },
-    set = { optJs ->
-      { js ->
-        optJs.fold({
-          js.copy(value = js.value - i)
-        }, {
-          js.copy(value = js.value + (i to it))
-        })
-      }
+    set = { js, optJs ->
+      optJs.fold({
+        js.copy(value = js.value - i)
+      }, {
+        js.copy(value = js.value + (i to it))
+      })
     }
   )
 
@@ -77,6 +73,6 @@ interface JsArrayEachInstance : Each<JsArray, Json> {
 interface JsArrayIndexInstance : Index<JsArray, Int, Json> {
   override fun index(i: Int): Optional<JsArray, Json> = Optional(
     getOrModify = { it.value.getOrNull(i)?.right() ?: it.left() },
-    set = { js -> { jsArr -> jsArr.copy(jsArr.value.mapIndexed { index, t -> if (index == i) js else t }) } }
+    set = { jsArr, js -> jsArr.copy(jsArr.value.mapIndexed { index, t -> if (index == i) js else t }) }
   )
 }
