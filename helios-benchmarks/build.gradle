@@ -62,7 +62,7 @@ task executeBenchmarks {
 }
 
 compareBenchmark {
-    previousBenchmarkPath = file("$rootDir/benchmarks/master_benchmark.csv")
+    previousBenchmarkPath = file("$rootDir/benchmarks/master_benchmark.json")
     currentBenchmarkPath = [file("build/reports/helios_benchmark.json")]
     outputFormat = "json"
 }
