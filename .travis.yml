@@ -17,6 +17,8 @@ jobs:
         - ./gradlew :helios-docs:runAnk
     - stage: benchmark
       script:
+        - git clone https://github.com/47deg/helios helios_master
+        - cd helios_master && ./gradlew :helios-benchmarks:executeMasterBenchmark && cd ..
         - ./gradlew :helios-benchmarks:executeHeliosBenchmark
         - ./gradlew :helios-benchmarks:compareBenchmarkCI
     - stage: upload
