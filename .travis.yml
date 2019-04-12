@@ -28,5 +28,5 @@ jobs:
         - ./gradlew :helios-benchmarks:executeMasterBenchmark
         - ./gradlew :helios-benchmarks:uploadBenchmark
     - stage: deploy
-    script:
-      - ./deploy-scripts/deploy.sh
+      script:
+        - ./deploy-scripts/deploy.sh
