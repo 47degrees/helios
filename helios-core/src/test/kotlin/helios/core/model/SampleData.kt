@@ -1,7 +1,8 @@
-package helios.specs.model
+package helios.core.model
 
 import arrow.optics.optics
 import helios.meta.json
+import helios.test.generators.alphaStr
 import io.kotlintest.properties.Gen
 
 @json
@@ -20,13 +21,13 @@ data class Friend(
 
 val genFriend: Gen<Friend> =
   Gen.bind(
-    Gen.string(),
-    Gen.string(),
-    Gen.string(),
-    Gen.list(Gen.string()),
+    Gen.alphaStr(),
+    Gen.alphaStr(),
+    Gen.alphaStr(),
+    Gen.list(Gen.alphaStr()),
     Gen.list(Gen.int()),
-    Gen.string(),
-    Gen.string()
+    Gen.alphaStr(),
+    Gen.alphaStr()
   ) { id, latitude, longitude, tags, range, greeting, favoriteFruit ->
     Friend(id, latitude, longitude, tags, range, greeting, favoriteFruit)
   }

@@ -9,6 +9,7 @@ import arrow.test.generators.functionAToB
 import arrow.test.laws.PrismLaws
 import arrow.typeclasses.Eq
 import helios.core.*
+import helios.test.generators.*
 import io.kotlintest.properties.Gen
 import io.kotlintest.properties.forAll
 import io.kotlintest.assertions.arrow.option.*

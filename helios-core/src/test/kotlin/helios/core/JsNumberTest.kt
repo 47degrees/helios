@@ -1,8 +1,7 @@
-package helios.specs
+package helios.core
 
 import arrow.core.some
 import arrow.test.UnitSpec
-import helios.core.*
 import helios.instances.jsnumber.eq.eq
 import io.kotlintest.properties.Gen
 import io.kotlintest.properties.forAll

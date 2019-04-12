@@ -14,15 +14,14 @@ dependencies {
     kapt "io.arrow-kt:arrow-meta:$arrowVersion"
     kapt project(':helios-meta-compiler')
 
-    testImplementation("io.arrow-kt:arrow-test:$arrowVersion") {
-        exclude module: 'kotlintest'
-    }
+    testImplementation("io.arrow-kt:arrow-test:$arrowVersion")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
     testImplementation("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
     
     kaptTest project(':helios-meta-compiler')
     kaptTest "io.arrow-kt:arrow-meta:$arrowVersion"
-    
+
+    testCompile project(':helios-test')
     testCompileOnly "io.arrow-kt:arrow-meta:$arrowVersion"
     testCompileOnly project(':helios-meta-compiler')  
     

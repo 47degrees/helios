@@ -1,11 +1,11 @@
-package helios.specs
+package helios.core
 
 import arrow.core.Right
 import arrow.test.UnitSpec
-import helios.specs.model.Friend
-import helios.specs.model.decoder
-import helios.specs.model.genFriend
-import helios.specs.model.toJson
+import helios.core.model.Friend
+import helios.core.model.decoder
+import helios.core.model.genFriend
+import helios.core.model.toJson
 import io.kotlintest.properties.forAll
 
 class HeliosTest : UnitSpec() {
