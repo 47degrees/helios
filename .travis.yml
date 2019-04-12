@@ -6,6 +6,7 @@ jdk:
 stages:
   - name: build
   - name: benchmark
+    if: type == pull_request
   - name: upload
     if: branch = master AND type != pull_request AND sender != 47degdev
 
