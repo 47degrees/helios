@@ -8,6 +8,8 @@ stages:
   - name: benchmark
   - name: upload
     if: branch = master AND type != pull_request AND sender != 47degdev
+  - name: deploy
+    if: branch = master AND type != pull_request
 
 jobs:
   include:
@@ -23,3 +25,6 @@ jobs:
       script:
         - ./gradlew :helios-benchmarks:executeMasterBenchmark
         - ./gradlew :helios-benchmarks:uploadBenchmark
+    - stage: deploy
+    script:
+      - ./deploy-scripts/deploy.sh

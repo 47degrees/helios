@@ -1,126 +1,82 @@
-apply plugin: 'maven'
-
 version = VERSION_NAME
 group = GROUP
 
-def findProperty(String key) {
-    [project.properties[key], System.getenv(key)].find { it != null }
-}
-
 def getReleaseRepositoryUrl() {
-    return findProperty('RELEASE_REPOSITORY_URL') ?: "https://api.bintray.com/maven/com.47deg/helios/" + POM_ARTIFACT_ID
+  return findProperty("RELEASE_REPOSITORY_URL") ?: "https://api.bintray.com/maven/47deg/helios/helios"
 }
 
 def getSnapshotRepositoryUrl() {
-    return findProperty('SNAPSHOT_REPOSITORY_URL') ?: "https://oss.jfrog.org/artifactory/oss-snapshot-local"
-}
-
-def getRepositoryUsername() {
-    return findProperty('BINTRAY_USER') ?: "no.bintray.user"
-}
-
-def getRepositoryPassword() {
-    return findProperty('BINTRAY_API_KEY') ?: "no.bintray.api.key"
-}
-
-uploadArchives {
-    repositories.mavenDeployer {
-        pom.groupId = GROUP
-        pom.artifactId = POM_ARTIFACT_ID
-        pom.version = VERSION_NAME
-
-        repository(url: getReleaseRepositoryUrl()) {
-            authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
-        }
-        snapshotRepository(url: getSnapshotRepositoryUrl()) {
-            authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
-        }
-
-        pom.project {
-            name POM_NAME
-            packaging POM_PACKAGING
-            description POM_DESCRIPTION
-            url POM_URL
-
-            scm {
-                url POM_SCM_URL
-                connection POM_SCM_CONNECTION
-                developerConnection POM_SCM_DEV_CONNECTION
-            }
-
-            licenses {
-                license {
-                    name POM_LICENCE_NAME
-                    url POM_LICENCE_URL
-                    distribution POM_LICENCE_DIST
-                }
-            }
-
-            developers {
-                developer {
-                    id POM_DEVELOPER_ID
-                    name POM_DEVELOPER_NAME
-                }
-            }
-        }
-    }
-}
-
-install {
-    repositories.mavenInstaller {
-        pom.groupId = GROUP
-        pom.artifactId = POM_ARTIFACT_ID
-        pom.version = VERSION_NAME
-
-        pom.project {
-            name POM_NAME
-            packaging POM_PACKAGING
-            description POM_DESCRIPTION
-            url POM_URL
-
-            scm {
-                url POM_SCM_URL
-                connection POM_SCM_CONNECTION
-                developerConnection POM_SCM_DEV_CONNECTION
-            }
-
-            licenses {
-                license {
-                    name POM_LICENCE_NAME
-                    url POM_LICENCE_URL
-                    distribution POM_LICENCE_DIST
-                }
-            }
-
-            developers {
-                developer {
-                    id POM_DEVELOPER_ID
-                    name POM_DEVELOPER_NAME
-                }
-            }
-        }
-    }
+  return findProperty("SNAPSHOT_REPOSITORY_URL") ?: "https://oss.jfrog.org/artifactory/oss-snapshot-local"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    getArchiveClassifier().set('sources')
-    from sourceSets.main.allSource
+  archiveClassifier = "sources"
+  from sourceSets.main.allSource,
+      "build/generated/source/kapt/main",
+      "build/generated/source/kapt/debug",
+      "build/generated/source/kapt/release",
+      "build/generated/source/kaptKotlin/main",
+      "build/generated/source/kaptKotlin/debug",
+      "build/generated/source/kaptKotlin/release",
+      "build/tmp/kapt/main/kotlinGenerated"
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    getArchiveClassifier().set('javadoc')
-    from javadoc.destinationDir
+  archiveClassifier = "javadoc"
+  from javadoc.destinationDir
+}
+
+publishing {
+  publications {
+    HeliosPublication(MavenPublication) {
+
+      artifactId = POM_ARTIFACT_ID
+      groupId = group
+      version = version
+
+      artifact sourcesJar
+      artifact javadocJar
+
+      from components.java
+      pom {
+        name = POM_NAME
+        packaging = POM_PACKAGING
+        description = POM_DESCRIPTION
+        url = POM_URL
+        scm {
+          url = POM_SCM_URL
+          connection = POM_SCM_CONNECTION
+          developerConnection = POM_SCM_DEV_CONNECTION
+        }
+        licenses {
+          license {
+            name = POM_LICENCE_NAME
+            url = POM_LICENCE_URL
+            distribution = POM_LICENCE_DIST
+          }
+        }
+        developers {
+          developer {
+            id = POM_DEVELOPER_ID
+            name = POM_DEVELOPER_NAME
+          }
+        }
+      }
+    }
+  }
+  repositories {
+    maven {
+      def releasesRepoUrl = getReleaseRepositoryUrl()
+      def snapshotsRepoUrl = getSnapshotRepositoryUrl()
+      url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+    }
+  }
 }
 
 if (JavaVersion.current().isJava8Compatible()) {
-    allprojects {
-        tasks.withType(Javadoc) {
-            options.addStringOption('Xdoclint:none', '-quiet')
-        }
+  allprojects {
+    tasks.withType(Javadoc) {
+      options.addStringOption("Xdoclint:none", "-quiet")
     }
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
+  }
 }
