@@ -7,8 +7,8 @@ import arrow.core.Predicate
 import arrow.optics.Optional
 import arrow.optics.Prism
 import arrow.optics.dsl.at
-import arrow.optics.instances.ListFilterIndexInstance
-import arrow.optics.instances.MapFilterIndexInstance
+import arrow.optics.extensions.ListFilterIndex
+import arrow.optics.extensions.MapFilterIndex
 import helios.core.*
 import helios.instances.decoder
 import helios.instances.encoder
@@ -138,13 +138,13 @@ inline val Optional<Json, Json>.every inline get() = this compose Json.traversal
  * Filter [JsArray] by indices that satisfy the predicate [p].
  */
 fun Optional<Json, Json>.filterIndex(p: Predicate<Int>) =
-  array compose ListFilterIndexInstance<Json>().filter(p)
+  array compose ListFilterIndex<Json>().filter(p)
 
 /**
  * Filter [JsObject] by keys that satisfy the predicate [p].
  */
 fun Optional<Json, Json>.filterKeys(p: Predicate<String>) =
-  `object` compose MapFilterIndexInstance<String, Json>().filter(p)
+  `object` compose MapFilterIndex<String, Json>().filter(p)
 
 /**
  * Unsafe optic: needs some investigation because it is required to extract reasonable typed values from Json.

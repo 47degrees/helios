@@ -1,7 +1,7 @@
 package helios.core
 
 import arrow.core.*
-import arrow.instances.option.applicative.applicative
+import arrow.core.extensions.option.applicative.applicative
 import helios.instances.HeliosFacade
 import helios.instances.jsarray.eq.eq
 import helios.instances.jsnumber.eq.eq

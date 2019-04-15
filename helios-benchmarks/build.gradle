@@ -20,7 +20,7 @@ dependencies {
     compile "com.github.salomonbrys.kotson:kotson:$kotson"
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson"
     compile "com.jsoniter:jsoniter:$jsoniter"
-    kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
+    kapt "io.arrow-kt:arrow-meta:$arrowVersion"
     kapt project(":helios-meta-compiler")
 
 }
