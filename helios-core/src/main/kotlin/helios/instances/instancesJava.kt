@@ -1,11 +1,10 @@
 package helios.instances
 
 import arrow.core.Either
+import arrow.core.extensions.either.applicative.applicative
 import arrow.core.fix
-import arrow.data.ListK
-import arrow.data.k
-import arrow.data.sequence
-import arrow.instances.either.applicative.applicative
+import arrow.data.extensions.list.traverse.sequence
+import arrow.data.fix
 import helios.core.JsArray
 import helios.core.Json
 import helios.typeclasses.Decoder
@@ -36,7 +35,7 @@ interface ListDecoderInstance<A> : Decoder<List<A>> {
     value.asJsArray().toList()
       .flatMap { arr ->
         arr.value.map { decoderA().decode(it) }
-      }.k().sequence(Either.applicative()).fix().map(ListK<A>::list)
+      }.sequence(Either.applicative()).fix().map { it.fix().toList() }
 
   companion object {
     operator fun <A> invoke(decoderA: Decoder<A>): Decoder<List<A>> =

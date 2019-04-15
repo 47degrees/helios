@@ -1,8 +1,10 @@
 package helios.instances
 
 import arrow.core.*
+import arrow.core.extensions.eq
+import arrow.data.extensions.list.foldable.forAll
 import arrow.extension
-import arrow.instances.eq
+import arrow.higherkind
 import arrow.typeclasses.Eq
 import helios.core.*
 import helios.instances.jsarray.eq.eq
@@ -40,6 +42,7 @@ fun String.Companion.decoder() = object : Decoder<String> {
     }.toEither { StringDecodingError(value) }
 }
 
+@extension
 interface OptionEncoderInstance<in A> : Encoder<Option<A>> {
 
   fun encoderA(): Encoder<A>
@@ -49,6 +52,7 @@ interface OptionEncoderInstance<in A> : Encoder<Option<A>> {
 
 }
 
+@extension
 interface Tuple2EncoderInstance<A, B> : Encoder<Tuple2<A, B>> {
 
   fun encoderA(): Encoder<A>
@@ -64,6 +68,7 @@ interface Tuple2EncoderInstance<A, B> : Encoder<Tuple2<A, B>> {
 
 }
 
+@extension
 interface Tuple3EncoderInstance<A, B, C> : Encoder<Tuple3<A, B, C>> {
 
   fun encoderA(): Encoder<A>
@@ -89,7 +94,7 @@ interface JsObjectEqInstance : Eq<JsObject> {
   override fun JsObject.eqv(b: JsObject): Boolean = with(Json.eq()) {
     this@eqv.value.entries.zip(b.value.entries) { aa, bb ->
       aa.key == bb.key && aa.value.eqv(bb.value)
-    }.fold(true) { b1, b2 -> b1 && b2 }
+    }.forAll { it }
   }
 }
 
@@ -97,7 +102,7 @@ interface JsObjectEqInstance : Eq<JsObject> {
 interface JsArrayEqInstance : Eq<JsArray> {
   override fun JsArray.eqv(b: JsArray): Boolean = with(Json.eq()) {
     this@eqv.value.zip(b.value) { a, b -> a.eqv(b) }
-      .fold(true) { b1, b2 -> b1 && b2 }
+      .forAll { it }
   }
 }
 
