@@ -7,28 +7,27 @@ import arrow.test.UnitSpec
 import helios.core.*
 import helios.instances.jsnumber.eq.eq
 import helios.instances.json.eq.eq
-import io.kotlintest.KTestJUnitRunner
-import io.kotlintest.matchers.shouldBe
-import org.junit.runner.RunWith
+import io.kotlintest.assertions.arrow.option.shouldBeNone
+import io.kotlintest.assertions.arrow.option.shouldBeSome
+import io.kotlintest.shouldBe
 
-@RunWith(KTestJUnitRunner::class)
 class OpticsTest : UnitSpec() {
 
   init {
 
     "You should be able to extract int from Json" {
       val json = JsObject("age" to JsInt(25))
-      Json.path.select("age").int.getOption(json) shouldBe Some(25)
+      Json.path.select("age").int.getOption(json).shouldBeSome(25)
     }
 
     "You should be able to extract int JsLong if valid Int value" {
       val json = JsObject("age" to JsLong(25))
-      Json.path.select("age").int.getOption(json) shouldBe Some(25)
+      Json.path.select("age").int.getOption(json).shouldBeSome(25)
     }
 
     "You should not be able to extract int JsLong if invalid Int value" {
       val json = JsObject("age" to JsLong(Long.MAX_VALUE))
-      Json.path.select("age").int.getOption(json) shouldBe None
+      Json.path.select("age").int.getOption(json).shouldBeNone()
     }
 
     "JsInt should be equal to JsLong underlying numbers are equal" {

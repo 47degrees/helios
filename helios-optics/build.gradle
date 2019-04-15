@@ -10,16 +10,19 @@ dependencies {
     compile "io.arrow-kt:arrow-optics:$arrowVersion"
     compile "io.arrow-kt:arrow-typeclasses:$arrowVersion"
 
-    kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
+    kapt "io.arrow-kt:arrow-meta:$arrowVersion"
     kapt project(':helios-meta-compiler')
 
-    testCompile "io.arrow-kt:arrow-test:$arrowVersion"
-    kaptTest project(':helios-meta-compiler')
-    kaptTest "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
-    testCompileOnly "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
+    testImplementation("io.arrow-kt:arrow-test:$arrowVersion")
+    testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
+    testImplementation("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
 
+    kaptTest project(':helios-meta-compiler')
+    kaptTest "io.arrow-kt:arrow-meta:$arrowVersion"
+
+    testCompile project(':helios-test')
+    testCompileOnly "io.arrow-kt:arrow-meta:$arrowVersion"
     testCompileOnly project(':helios-meta-compiler')
-    testCompile "io.kotlintest:kotlintest:$kotlinTestVersion"
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
