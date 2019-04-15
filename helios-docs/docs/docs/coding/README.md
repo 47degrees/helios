@@ -62,7 +62,7 @@ val personCustomJson = with(personCustomEncoder) { Person("Abc", 10).encode() }
 Also, you can follow the same approach to create a custom Decoder
 
 ```kotlin:ank
-import arrow.instances.either.applicative.applicative
+import arrow.core.extensions.either.applicative.applicative
 import helios.instances.decoder
 
 val personCustomDecoder = object : Decoder<Person> {
