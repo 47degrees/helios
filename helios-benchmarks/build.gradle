@@ -65,6 +65,7 @@ compareBenchmark {
     previousBenchmarkPath = file("$rootDir/benchmarks/master_benchmark.json")
     currentBenchmarkPath = [file("$rootDir/build/reports/helios_benchmark.json")]
     outputFormat = "json"
+    benchmarkThreshold = ["Parsing": 500.00]
 }
 
 compareBenchmarkCI {
@@ -72,6 +73,7 @@ compareBenchmarkCI {
     currentBenchmarkPath = [file("$rootDir/build/reports/helios_benchmark.json")]
     outputToFile = true
     outputFormat = "json"
+    benchmarkThreshold = ["Parsing": 500.00]
     token = System.getenv("GITHUB_ACCESS_TOKEN")
 }
 
