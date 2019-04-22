@@ -13,23 +13,23 @@ dependencies {
     compile project(":helios-parser")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinx"
-    compile "com.beust:klaxon:$klaxon"
-    compile "com.tomatobean:jsonparser:$jsonparser"
-    compile "com.squareup.moshi:moshi-kotlin:$moshi"
-    compile "com.github.salomonbrys.kotson:kotson:$kotson"
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson"
-    compile "com.jsoniter:jsoniter:$jsoniter"
+    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinxVersion"
+    compile "com.beust:klaxon:$klaxonVersion"
+    compile "com.tomatobean:jsonparser:$jsonparserVersion"
+    compile "com.squareup.moshi:moshi-kotlin:$moshiVersion"
+    compile "com.github.salomonbrys.kotson:kotson:$kotsonVersion"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+    compile "com.jsoniter:jsoniter:$jsoniterVersion"
+
     kapt "io.arrow-kt:arrow-meta:$arrowVersion"
     kapt project(":helios-meta-compiler")
-
 }
 
 apply from: rootProject.file("gradle/gradle-mvn-push.gradle")
 
 jmh {
     resultFormat = "JSON"
-    resultsFile = file("build/reports/benchmarks.json")
+    resultsFile = file("$rootDir/build/reports/benchmarks.json")
     timeOnIteration = "1s"
     if (project.hasProperty("jmhInclude"))
         include = [jmhInclude]
@@ -39,7 +39,7 @@ jmh {
 
 task executeMasterBenchmark {
     doLast {
-        jmh.resultsFile = file("build/reports/master_benchmark.json")
+        jmh.resultsFile = file("$rootDir/build/reports/master_benchmark.json")
         jmh.include = ["helios.benchmarks.HeliosBenchmark"]
     }
     finalizedBy "jmh"
@@ -47,7 +47,7 @@ task executeMasterBenchmark {
 
 task executeHeliosBenchmark {
     doLast {
-        jmh.resultsFile = file("build/reports/helios_benchmark.json")
+        jmh.resultsFile = file("$rootDir/build/reports/helios_benchmark.json")
         jmh.include = ["helios.benchmarks.HeliosBenchmark"]
     }
     finalizedBy "jmh"
@@ -55,7 +55,7 @@ task executeHeliosBenchmark {
 
 task executeBenchmarks {
     doLast {
-        jmh.resultsFile = file("build/reports/benchmarks.json")
+        jmh.resultsFile = file("$rootDir/build/reports/benchmarks.json")
         jmh.include = ["helios.benchmarks.HeliosBenchmark", "helios.benchmarks.Decoding", "helios.benchmarks.DecodingFromRaw", "helios.benchmarks.Parsing"]
     }
     finalizedBy "jmh"
@@ -63,20 +63,20 @@ task executeBenchmarks {
 
 compareBenchmark {
     previousBenchmarkPath = file("$rootDir/benchmarks/master_benchmark.json")
-    currentBenchmarkPath = [file("build/reports/helios_benchmark.json")]
+    currentBenchmarkPath = [file("$rootDir/build/reports/helios_benchmark.json")]
     outputFormat = "json"
 }
 
 compareBenchmarkCI {
     previousBenchmarkPath = file("$rootDir/helios_master/benchmarks/master_benchmark.json")
-    currentBenchmarkPath = [file("build/reports/helios_benchmark.json")]
+    currentBenchmarkPath = [file("$rootDir/build/reports/helios_benchmark.json")]
     outputToFile = true
     outputFormat = "json"
     token = System.getenv("GITHUB_ACCESS_TOKEN")
 }
 
 uploadBenchmark {
-    benchmarkFile = file("build/reports/master_benchmark.json")
+    benchmarkFile = file("$rootDir/build/reports/master_benchmark.json")
     benchmarkDestinationFromProjectRoot = "benchmarks/master_benchmark.json"
     token = System.getenv("GITHUB_ACCESS_TOKEN")
 }
