@@ -3,7 +3,7 @@ package helios.benchmarks
 import arrow.core.flatMap
 import helios.benchmarks.sample.Friends
 import helios.core.Json
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json as Jsonx
 import org.openjdk.jmh.annotations.*
 
 @State(Scope.Benchmark)
@@ -31,7 +31,7 @@ open class DecodingFromRaw {
       .fold({ throw RuntimeException(it.toString()) }, { it })
 
   @Benchmark
-  fun kotlinx(): Friends = JSON.parse(kotlinxFriendsSerializer, jsonString)
+  fun kotlinx(): Friends = Jsonx.parse(kotlinxFriendsSerializer, jsonString)
 
 }
 
