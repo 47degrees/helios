@@ -6,30 +6,30 @@ permalink: /docs/parser/
 
 ## Parsing to Json
 
-We can decode from a `String`, a `File`, etc
+We can decode from a `String`, a `File`, etc:
 
 ```kotlin:ank:silent
 import arrow.core.*
 import helios.core.*
 import helios.meta.*
 import helios.typeclasses.*
-val jsonStr = 
+val jsonStr =
 """{
      "name": "Simon",
      "age": 30
    }"""
-    
-val jsonFromString : Json = 
+
+val jsonFromString : Json =
   Json.parseFromString(jsonStr).getOrHandle {
     println("Failed creating the Json ${it.localizedMessage}, creating an empty one")
     JsString("")
   }
-  
+
 ```
 
 ## From Json to the ADT
 
-Once we have a Json we can parsing it to an ADT
+Once we have a Json, we can parse it to an ADT:
 
 ```kotlin:ank
 
@@ -44,7 +44,7 @@ personOrError.fold({
 
 ## Encoding to a Json
 
-We can also encode from a data class instance to a `Json`
+We can also encode from a data class instance to a `Json`:
 
 ```kotlin:ank
 val person = Person("Raul", 34)

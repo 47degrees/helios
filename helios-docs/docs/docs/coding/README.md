@@ -6,7 +6,7 @@ permalink: /docs/coding/
 
 ## Automatic Encoding/Decoding
 
-The `@json` annotation will provide the decoder and encoder for that data class, 
+The `@json` annotation will provide the decoder and encoder for that data class,
 so we are able to read from and write to Json.
 
 ```kotlin
@@ -16,7 +16,7 @@ data class Person(val name: String, val age: Int) {
 }
 ```
 
-So you will able to encode and decode using the following
+You will be able to encode and decode using the following:
 
 ```kotlin:ank
 import arrow.core.*
@@ -31,7 +31,7 @@ Person.decoder().decode(personJson)
 
 ## Building a Json
 
-You can build your own Json object like this
+You can build your own Json object like this:
 
 ```kotlin:ank:silent
 val jObject = JsObject(
@@ -59,7 +59,7 @@ val personCustomJson = with(personCustomEncoder) { Person("Abc", 10).encode() }
 
 ## Custom Decoders
 
-Also, you can follow the same approach to create a custom Decoder
+You can follow the same approach to create a custom Decoder:
 
 ```kotlin:ank
 import arrow.core.extensions.either.applicative.applicative
@@ -93,4 +93,3 @@ Note that the code generation will give you an accessor for each json field.
 ```kotlin:ank
 Json.path.name.string.modify(jObject, String::toUpperCase)
 ```
-

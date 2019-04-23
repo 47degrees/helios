@@ -6,7 +6,7 @@ permalink: /docs/quickstart/
 
 # QuickStart
 
-Once Helios is added to your project, let's start to add the needed imports:
+Once Helios is added to your project, you can start adding the necessary imports:
 
 ```kotlin:ank:silent
 import arrow.core.*
@@ -26,21 +26,21 @@ data class Person(val name: String, val age: Int) {
 }
 ```
 
-The `@json` annotation will provide the decoder and encoder for that data class, 
+The `@json` annotation will provide the decoder and encoder for that data class,
 so we are able to read from and write to Json.
 
 ## Decode
 
-We can decode from a `String`, a `File`, etc
+We can decode from a `String`, a `File`, etc.
 
 ```kotlin:ank
-val jsonStr = 
+val jsonStr =
 """{
      "name": "Simon",
      "age": 30
    }"""
-    
-val jsonFromString : Json = 
+
+val jsonFromString : Json =
   Json.parseFromString(jsonStr).getOrHandle {
     println("Failed creating the Json ${it.localizedMessage}, creating an empty one")
     JsString("")
@@ -57,7 +57,7 @@ personOrError.fold({
 
 ## Encode
 
-We can also encode from a data class instance to a `Json`
+We can also encode from a data class instance to a `Json`:
 
 ```kotlin:ank
 val person = Person("Raul", 34)
