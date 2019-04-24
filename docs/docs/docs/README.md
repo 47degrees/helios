@@ -58,11 +58,11 @@ To run the benchmarks with Helios' performance, execute the following command:
 To run the **Helios** microsite locally, you need to execute the following command:
 
 ```bash
-bundle install --gemfile ./helios-docs/Gemfile --path vendor/bundle
+bundle install --gemfile ./docs/Gemfile --path vendor/bundle
 ```
 
 Next, you'll be able to run the following command:
 
 ```bash
-BUNDLE_GEMFILE=helios-docs/Gemfile bundle exec jekyll serve -s helios-docs/build/site/
+BUNDLE_GEMFILE=docs/Gemfile bundle exec jekyll serve -s docs/docs
 ```
