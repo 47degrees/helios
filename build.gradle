@@ -66,6 +66,10 @@ plugins {
 
 apply from: 'detekt.gradle'
 
+def findPropertyOrEnv(String key) {
+    [project.properties[key], System.getenv(key)].find { it != null }
+}
+
 subprojects { project ->
 
     group = GROUP
