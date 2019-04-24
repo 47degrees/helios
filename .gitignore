@@ -47,7 +47,7 @@ _site
 .DS_Store
 
 ## Ruby environment normalization:
-/docs/.bundle/
-/docs/vendor/
+.bundle/
+vendor/
 /lib/bundler/man/
 
