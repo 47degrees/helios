@@ -2,6 +2,8 @@
 // -----------------------------------------------
 // -----------------------------------------------
 #sidebar {
+    left: 0;
+    display: block;
     width: ($base-point-grid * 32);
     height: 100%;
     background-color: $brand-secondary;
@@ -50,5 +52,13 @@
 
             }
         }
+    }
+}
+
+// Responsive mode
+@include bp(large) {
+    #sidebar {
+        left: -300px;
+        transition: left 266ms ease-out;
     }
 }
