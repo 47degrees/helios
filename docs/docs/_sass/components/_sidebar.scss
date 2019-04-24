@@ -9,11 +9,8 @@
     background-position: center center;
     background-repeat: no-repeat;
     @extend .w3-sidebar;
-    @extend .w3-bar-block;
     @extend .w3-collapse;
-     @extend .w3-animate-left;
-    transition: all $base-duration $base-timing;
-
+    @extend .w3-bar-block;
 
     .sidebar-brand {
         @include flexbox;
