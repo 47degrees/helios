@@ -1,7 +1,7 @@
 <div id="sidebar">
     <div class="sidebar-brand">
-        <a href="/">
-            <img src="/img/helios-logo-sidebar.svg" alt="">
+        <a href="{{ site.baseurl }}/">
+            <img src="{{ site.baseurl }}/img/helios-logo-sidebar.svg" alt="">
         </a>
         <a class="w3-hide-large" href="#" onclick="w3_close()">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
@@ -12,7 +12,7 @@
     <ul class="sidebar-nav">
         {% for item in site.data.sidebar.options %}
         <li class="{% if item.url == page.url %}active{% endif %}">
-            <a href="{{ item.url }}" alt="{{ item.title }}">{{ item.title }}</a>
+            <a href="{{ item.url | relative_url }}" alt="{{ item.title }}">{{ item.title }}</a>
         </li>
         {% endfor %}
     </ul>
