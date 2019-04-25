@@ -1,6 +1,6 @@
 nav:
     - title: Documentation
-      url: /docs/
+      url: docs/
 
     - title: Github
       url: https://github.com/47deg/helios

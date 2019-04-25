@@ -5,7 +5,7 @@
     <ul class="navigation-menu">
         {% for item in site.data.menu.nav%}
         <li class="navigation-menu-item">
-            <a href="{{ site.baseurl }}{{ item.url }}" alt="{{ item.title }}">{{ item.title }}</a>
+            <a href="{{ item.url }}" alt="{{ item.title }}">{{ item.title }}</a>
         </li>
         {% endfor %}
     </ul>
