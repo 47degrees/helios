@@ -54,5 +54,5 @@ bundle install --gemfile ./docs/Gemfile --path vendor/bundle
 Next, you'll be able to run the following command:
 
 ```bash
-BUNDLE_GEMFILE=docs/Gemfile bundle exec jekyll serve -s docs/build/site/
+BUNDLE_GEMFILE=docs/Gemfile bundle exec jekyll serve -s docs
 ```
