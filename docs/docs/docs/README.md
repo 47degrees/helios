@@ -1,4 +1,14 @@
+---
+layout: docs
+title: Helios
+permalink: /docs/
+---
+
 # Helios
+
+[![Build Status](https://travis-ci.org/47deg/helios.svg?branch=master)](https://travis-ci.org/47deg/helios/)
+[![Kotlin version badge](https://img.shields.io/badge/kotlin-1.3-blue.svg)](https://kotlinlang.org/docs/reference/whatsnew13.html)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 **Helios** is a library used to transform `Json` text into a model and vice versa.
 It's based on part of the [Jawn Parser](https://github.com/non/jawn) built on `Arrow`,
@@ -54,5 +64,5 @@ bundle install --gemfile ./docs/Gemfile --path vendor/bundle
 Next, you'll be able to run the following command:
 
 ```bash
-BUNDLE_GEMFILE=docs/Gemfile bundle exec jekyll serve -s docs/build/site/
+BUNDLE_GEMFILE=docs/Gemfile bundle exec jekyll serve -s docs/docs
 ```
