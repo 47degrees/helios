@@ -4,5 +4,4 @@ dependencies {
     compile "io.arrow-kt:arrow-core-extensions:$arrowVersion"
 }
 
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
 apply from: rootProject.file('gradle/generated-kotlin-sources.gradle')

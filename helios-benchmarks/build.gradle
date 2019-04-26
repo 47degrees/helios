@@ -78,5 +78,3 @@ uploadBenchmark {
     benchmarkDestinationFromProjectRoot = "benchmarks/master_benchmark.json"
     token = System.getenv("GITHUB_ACCESS_TOKEN")
 }
-
-apply from: rootProject.file("gradle/gradle-mvn-push.gradle")

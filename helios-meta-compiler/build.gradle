@@ -17,5 +17,3 @@ dependencies {
     testCompile fileTree(dir: './src/test/libs', includes: ['*.jar'])
     testCompile files(Jvm.current().getToolsJar())
 }
-
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
