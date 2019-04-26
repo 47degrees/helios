@@ -19,7 +19,7 @@ jobs:
     - stage: build
       script:
         - ./gradlew clean build test
-        - ./gradlew :helios-docs:runAnk
+        - ./gradlew :docs:runAnk
     - stage: benchmark
       script:
         - git clone https://github.com/47deg/helios helios_master

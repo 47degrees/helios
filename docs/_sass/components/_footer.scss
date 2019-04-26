@@ -3,14 +3,16 @@
 // -----------------------------------------------
 
 #footer {
+    background: $border-color;
     padding: ($base-point-grid * 6) /*48px*/ 0;
     font-size: 0.875rem;
-    
+    flex: 0 0 0;
+
     .footer-navigation-menu {
         li {
             display: inline-block;
         }
-        
+
         li+li {
             margin-left: ($base-point-grid * 2); /*16px*/
         }
@@ -22,7 +24,7 @@
 @include bp(medium) {
     #footer {
         text-align: center;
-        
+
         p {
             margin-bottom: ($base-point-grid * 2); /*16px*/
         }
