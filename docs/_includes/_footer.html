@@ -8,7 +8,7 @@
                 <ul class="footer-navigation-menu">
                     {% for item in site.data.nav.nav %}
                     <li>
-                        <a href="{{ item.url }}" alt="{{ item.title }}">{{ item.title }}</a>
+                        <a href="{{ site.baseurl }}{{ item.url }}" alt="{{ item.title }}">{{ item.title }}</a>
                     </li>
                     {% endfor %}
                 </ul>

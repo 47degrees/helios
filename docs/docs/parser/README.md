@@ -1,42 +1,57 @@
 ---
 layout: docs
-title: Compile
+title: Parser
 permalink: /docs/parser/
-description: Our experts enhance large-scale data processing to help your team handle Big Data, increase productivity and speed so you can focus on deriving real value from your data.
-
 ---
 
-# Parser h1
-## Parser h2
-### Parser h3
-#### Parser h4
-##### Parser h5
-###### Parser h6
+## Parsing to Json
 
-Lorem ipsum dolor sit amet, [consectetur adipiscing](#) elit. Nam lacinia auctor nunc, in commodo ante faucibus ut. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nunc vel neque ut nisi sodales aliquet. Ut nunc velit, feugiat et elit eget, lobortis sodales est. Integer turpis tellus, semper nec neque ut, elementum mollis metus. Ut `faucibus lorem` felis porta lorem vehicula accumsan. Duis sed tempor enim, ac porttitor mi. Maecenas non sollicitudin quam. Nam mollis scelerisque sapien eu viverra. Etiam tempor bibendum eros, a faucibus tellus ullamcorper a. Aliquam id lorem est. Vivamus in ipsum condimentum, vulputate nisl et, rutrum tellus.
-
-- item 1
-- item 2
-- item 3
-- item 4
-
-```kotlin:ank
-val idj = IdJ(1)
-
-val id: Kind2<ForConvert, ForIdJ, A> = idj.fromKindedJ()
-.attempt().unsafeRunSync()
-```
+We can decode from a `String`, a `File`, etc:
 
 ```kotlin:ank:silent
-// Exception Style
+import arrow.core.*
+import helios.core.*
+import helios.meta.*
+import helios.typeclasses.*
+val jsonStr =
+"""{
+     "name": "Simon",
+     "age": 30
+   }"""
 
-fun parse(s: String): Int =
-    if (s.matches(Regex("-?[0-9]+"))) s.toInt()
-    else throw NumberFormatException("$s is not a valid integer.")
+val jsonFromString : Json =
+  Json.parseFromString(jsonStr).getOrHandle {
+    println("Failed creating the Json ${it.localizedMessage}, creating an empty one")
+    JsString("")
+  }
 
-fun reciprocal(i: Int): Double =
-    if (i == 0) throw IllegalArgumentException("Cannot take reciprocal of 0.")
-    else 1.0 / i
+```
 
-fun stringify(d: Double): String = d.toString()
+## From Json to the ADT
+
+Once we have a Json, we can parse it to an ADT:
+
+```kotlin:ank
+
+val personOrError: Either<DecodingError, Person> = Person.decoder().decode(jsonFromString)
+
+personOrError.fold({
+  "Something went wrong during decoding: $it"
+}, {
+  "Successfully decode the json: $it"
+})
+```
+
+## Encoding to a Json
+
+We can also encode from a data class instance to a `Json`:
+
+```kotlin:ank
+val person = Person("Raul", 34)
+
+val jsonFromPerson = with(Person.encoder()) {
+  person.encode()
+}
+
+jsonFromPerson.toJsonString()
 ```

@@ -8,7 +8,7 @@
                         <img src={{ item.icon }} title="{{ item.title }}" />
                         <h2 class="feature-title">{{ item.title }}</h2>
                         <p>{{ item.description }}</p>
-                        <a class="button button-small" href="{{ item.url }}">{{ site.data.docs.cta }}</a>
+                        <a class="button button-small" href="{{ site.baseurl}}{{ item.url }}">{{ site.data.docs.cta }}</a>
                     </div>
                 </div>
                 {% endfor %}
