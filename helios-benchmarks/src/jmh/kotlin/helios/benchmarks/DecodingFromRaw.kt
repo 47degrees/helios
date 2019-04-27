@@ -13,6 +13,12 @@ import org.openjdk.jmh.annotations.*
 open class DecodingFromRaw {
 
   @Benchmark
+  fun helios(): Friends =
+    Json.parseFromString(jsonString)
+      .flatMap { heliosFriendsDecoder.decode(it) }
+      .fold({ throw RuntimeException(it.toString()) }, { it })
+
+  @Benchmark
   fun klaxon(): Friends = klaxon.parse<Friends>(jsonString)!!
 
   @Benchmark
@@ -23,12 +29,6 @@ open class DecodingFromRaw {
 
   @Benchmark
   fun jackson(): Friends = jacksonFriendsReader.readValue(jsonString)
-
-  @Benchmark
-  fun helios(): Friends =
-    Json.parseFromString(jsonString)
-      .flatMap { heliosFriendsDecoder.decode(it) }
-      .fold({ throw RuntimeException(it.toString()) }, { it })
 
   @Benchmark
   fun kotlinx(): Friends = Jsonx.parse(kotlinxFriendsSerializer, jsonString)

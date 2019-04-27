@@ -53,6 +53,14 @@ task executeHeliosBenchmark {
     finalizedBy "jmh"
 }
 
+task executeLibrariesBenchmarks {
+    doLast {
+        jmh.resultsFile = file("$rootDir/build/reports/libraries_benchmarks.json")
+        jmh.include = ["helios.benchmarks.Decoding", "helios.benchmarks.DecodingFromRaw", "helios.benchmarks.Parsing"]
+    }
+    finalizedBy "jmh"
+}
+
 task executeBenchmarks {
     doLast {
         jmh.resultsFile = file("$rootDir/build/reports/benchmarks.json")
@@ -81,4 +89,12 @@ uploadBenchmark {
     benchmarkFile = file("$rootDir/build/reports/master_benchmark.json")
     benchmarkDestinationFromProjectRoot = "benchmarks/master_benchmark.json"
     token = System.getenv("GITHUB_ACCESS_TOKEN")
+}
+
+task uploadLibrariesBenchmark {
+    doLast {
+        uploadBenchmark.benchmarkFile = file("$rootDir/build/reports/libraries_benchmark.json")
+        uploadBenchmark.benchmarkDestinationFromProjectRoot = "benchmarks/libraries_benchmark.json"
+    }
+    finalizedBy "uploadBenchmark"
 }

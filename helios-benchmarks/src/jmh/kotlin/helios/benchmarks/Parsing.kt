@@ -15,6 +15,9 @@ import org.openjdk.jmh.annotations.*
 open class Parsing {
 
   @Benchmark
+  fun helios(): Json = Json.parseUnsafe(jsonString)
+
+  @Benchmark
   fun klaxon(): JsonObject = klaxonParser.parse(StringBuilder(jsonString)) as JsonObject
 
   @Benchmark
@@ -25,9 +28,6 @@ open class Parsing {
 
   @Benchmark
   fun jackson(): JsonNode = jackson.readTree(jsonString)
-
-  @Benchmark
-  fun helios(): Json = Json.parseUnsafe(jsonString)
 
   @Benchmark
   fun jsonIter(): Map<Any?, Any?> = JsonIterator.parse(jsonString).read() as Map<Any?, Any?>
