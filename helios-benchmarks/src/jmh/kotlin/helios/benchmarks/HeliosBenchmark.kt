@@ -1,5 +1,6 @@
 package helios.benchmarks
 
+import arrow.core.flatMap
 import helios.benchmarks.sample.Friends
 import helios.core.Json
 import org.openjdk.jmh.annotations.*
@@ -18,6 +19,12 @@ open class HeliosBenchmark {
   fun decoding(): Friends = heliosFriendsDecoder.decode(Parsed.heliosJson).fold({
     throw RuntimeException(it.toString())
   }, { it })
+
+  @Benchmark
+  fun decodingFromRaw(): Friends =
+    Json.parseFromString(jsonString)
+      .flatMap { heliosFriendsDecoder.decode(it) }
+      .fold({ throw RuntimeException(it.toString()) }, { it })
 
 }
 
