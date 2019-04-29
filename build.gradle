@@ -21,20 +21,24 @@ buildscript {
         gradleVersionsPluginVersion = '0.21.0'
         javaVersion = JavaVersion.VERSION_1_7
         kotlinTestVersion = '3.1.11'
-        kotlinVersion = '1.3.21'
+        kotlinVersion = '1.3.31'
         arrowVersion = '0.9.0'
-        kotlinMetadata = '1.4.0'
-        googleTesting = '0.15'
-        autoService = '1.0-rc5'
+        kotlinMetadataVersion = '1.4.0'
+        googleTestingVersion = '0.15'
+        autoServiceVersion = '1.0-rc5'
+        bintrayVersion = "1.8.4"
+        gitPublishVersion = "2.1.1"
+        jmhVersion = "0.4.8"
+        hoodVersion = "0.5.0"
 
         //Other json libraries
-        kotlinx = '0.10.0'
-        klaxon = '5.0.5'
-        jsonparser = '1.0.10'
-        moshi = '1.8.0'
-        kotson ='2.5.0'
-        jackson = '2.9.8'
-        jsoniter = '0.9.23'
+        kotlinxVersion = '0.10.0'
+        klaxonVersion = '5.0.5'
+        jsonparserVersion = '1.0.10'
+        moshiVersion = '1.8.0'
+        kotsonVersion ='2.5.0'
+        jacksonVersion = '2.9.8'
+        jsoniterVersion = '0.9.23'
     }
     repositories {
         mavenLocal()
@@ -52,17 +56,14 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
         classpath "io.arrow-kt:arrow-ank-gradle:$arrowVersion"
-        classpath 'com.47deg:hood:0.4.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
-        classpath 'org.ajoberstar:gradle-git-publish:2.1.1'
-        classpath "me.champeau.gradle:jmh-gradle-plugin:0.4.8"
+        classpath "com.47deg:hood:$hoodVersion"
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintrayVersion"
+        classpath "org.ajoberstar:gradle-git-publish:$gitPublishVersion"
+        classpath "me.champeau.gradle:jmh-gradle-plugin:$jmhVersion"
     }
 }
 
-plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.3.21"
-    id "org.jetbrains.kotlin.kapt" version "1.3.21"
-}
+apply plugin: "kotlin"
 
 apply from: 'detekt.gradle'
 
