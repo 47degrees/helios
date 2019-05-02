@@ -1,10 +1,10 @@
 content:
     - title: Navigation
-      description: Navigate through the json with the optics power.
+      description: Navigate through JSON with the power of optics.
       icon: img/feature-icon-primary.svg
 
     - title: Serialization
-      description: Json serialization with the advantages of Arrow Functional Programming.
+      description: JSON serialization with the advantage of Functional Programming with Arrow.
       icon: img/feature-icon-secondary.svg
 
     - title: Parsing
