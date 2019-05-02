@@ -67,6 +67,10 @@ apply plugin: "kotlin"
 
 apply from: 'detekt.gradle'
 
+def findPropertyOrEnv(String key) {
+    [project.properties[key], System.getenv(key)].find { it != null }
+}
+
 subprojects { project ->
 
     group = GROUP
@@ -109,15 +113,16 @@ subprojects { project ->
 
     bintray {
         publish = true
-        user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-        key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-        configurations = ['archives']
+        user = findPropertyOrEnv("BINTRAY_USER") ?: "no.bintray.user"
+        key = findPropertyOrEnv("BINTRAY_API_KEY") ?: "no.bintray.api.key"
+        publications = ["HeliosPublication"]
+        configurations = ["archives"]
         pkg {
-            repo = 'helios'
+            repo = "helios"
             name = project.name
             userOrg = POM_DEVELOPER_ID
-            licenses = ['Apache-2.0']
-            vcsUrl = 'https://github.com/47deg/helios.git'
+            licenses = ["Apache-2.0"]
+            vcsUrl = "https://github.com/47deg/helios.git"
         }
     }
 

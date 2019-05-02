@@ -25,5 +25,4 @@ dependencies {
     testCompileOnly project(':helios-meta-compiler')
 }
 
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
 apply from: rootProject.file('gradle/generated-kotlin-sources.gradle')
