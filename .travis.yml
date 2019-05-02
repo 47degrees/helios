@@ -1,4 +1,6 @@
-language: java
+language: kotlin
+sudo: required
+dist: trusty
 
 jdk:
 - oraclejdk8
@@ -9,6 +11,8 @@ stages:
     if: type == pull_request
   - name: upload
     if: branch = master AND type != pull_request AND sender != 47degdev
+  - name: deploy
+    if: branch = master AND type != pull_request
 
 jobs:
   include:
@@ -28,3 +32,6 @@ jobs:
         - ./gradlew :helios-benchmarks:uploadBenchmark
         - ./gradlew :helios-benchmarks:executeLibrariesBenchmark
         - ./gradlew :helios-benchmarks:uploadLibrariesBenchmark
+    - stage: deploy
+      script:
+        - ./deploy-scripts/deploy.sh
