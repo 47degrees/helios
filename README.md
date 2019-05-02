@@ -13,7 +13,7 @@ with the advantage of using the `Arrow` library for functional programming.
 
 ## Adding the dependency
 
-**Helios** uses Kotlin version `1.3.21` and `Arrow` version `0.9.0`.
+**Helios** uses Kotlin version `1.3.31` and `Arrow` version `0.9.0`.
 
 To import the library on `Gradle`, add the following repository and dependencies:
 

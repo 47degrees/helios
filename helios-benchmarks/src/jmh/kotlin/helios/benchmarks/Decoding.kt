@@ -15,6 +15,11 @@ import org.openjdk.jmh.annotations.*
 open class Decoding {
 
   @Benchmark
+  fun helios(): Friends = heliosFriendsDecoder.decode(Parsed.heliosJson).fold({
+    throw RuntimeException(it.toString())
+  }, { it })
+
+  @Benchmark
   fun klaxon(): Friends = klaxon.parseFromJsonObject<Friends>(Parsed.klaxonJson)!!
 
   @Benchmark
@@ -25,11 +30,6 @@ open class Decoding {
 
   @Benchmark
   fun jackson(): Friends = jacksonFriendsReader.readValue(Parsed.jacksonJson)
-
-  @Benchmark
-  fun helios(): Friends = heliosFriendsDecoder.decode(Parsed.heliosJson).fold({
-    throw RuntimeException(it.toString())
-  }, { it })
 
 }
 

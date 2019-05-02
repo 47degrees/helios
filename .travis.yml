@@ -26,3 +26,5 @@ jobs:
       script:
         - ./gradlew :helios-benchmarks:executeMasterBenchmark
         - ./gradlew :helios-benchmarks:uploadBenchmark
+        - ./gradlew :helios-benchmarks:executeLibrariesBenchmark
+        - ./gradlew :helios-benchmarks:uploadLibrariesBenchmark
