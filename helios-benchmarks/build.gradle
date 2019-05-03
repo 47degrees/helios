@@ -84,15 +84,6 @@ compareBenchmarkCI {
 }
 
 uploadBenchmark {
-    benchmarkFile = file("$rootDir/build/reports/master_benchmark.json")
-    benchmarkDestinationFromProjectRoot = "benchmarks/master_benchmark.json"
+    benchmarkFiles = [file("$rootDir/build/reports/master_benchmark.json"), file("$rootDir/build/reports/libraries_benchmark.json")]
     token = System.getenv("GITHUB_ACCESS_TOKEN")
-}
-
-task uploadLibrariesBenchmark {
-    doLast {
-        uploadBenchmark.benchmarkFile = file("$rootDir/build/reports/libraries_benchmark.json")
-        uploadBenchmark.benchmarkDestinationFromProjectRoot = "benchmarks/libraries_benchmark.json"
-    }
-    finalizedBy "uploadBenchmark"
 }
