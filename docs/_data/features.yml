@@ -1,0 +1,12 @@
+content:
+    - title: Navigation
+      description: Navigate through JSON with the power of optics.
+      icon: img/feature-icon-primary.svg
+
+    - title: Serialization
+      description: JSON serialization with the advantage of Functional Programming with Arrow.
+      icon: img/feature-icon-secondary.svg
+
+    - title: Parsing
+      description: Encoding and Decoding for all Kotlin and Arrow datatypes.
+      icon: img/feature-icon-tertiary.svg

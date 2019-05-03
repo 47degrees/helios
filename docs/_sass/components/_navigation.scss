@@ -2,7 +2,7 @@
 // -----------------------------------------------
 // -----------------------------------------------
 #navigation {
-    position: fixed;
+    position: absolute;
     @include flexbox;
     @include justify-content(space-between);
     @include align-items(center);
