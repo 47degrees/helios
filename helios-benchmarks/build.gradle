@@ -27,7 +27,7 @@ dependencies {
 
 jmh {
     resultFormat = "JSON"
-    resultsFile = file("$rootDir/build/reports/benchmarks.json")
+    resultsFile = file("$rootDir/build/reports/benchmark.json")
     timeOnIteration = "1s"
     if (project.hasProperty("jmhInclude"))
         include = [jmhInclude]
@@ -53,7 +53,7 @@ task executeHeliosBenchmark {
 
 task executeLibrariesBenchmarks {
     doLast {
-        jmh.resultsFile = file("$rootDir/build/reports/libraries_benchmarks.json")
+        jmh.resultsFile = file("$rootDir/build/reports/libraries_benchmark.json")
         jmh.include = ["helios.benchmarks.Decoding", "helios.benchmarks.DecodingFromRaw", "helios.benchmarks.Parsing"]
     }
     finalizedBy "jmh"
