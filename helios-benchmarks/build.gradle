@@ -84,7 +84,7 @@ compareBenchmarkCI {
     repositoryOwner = POM_DEVELOPER_ID
     repositoryName = POM_NAME
     pullRequestSha = System.getenv("TRAVIS_PULL_REQUEST_SHA")
-    pullRequestNumber = System.getenv("TRAVIS_PULL_REQUEST")
+    pullRequestNumber = System.getenv("TRAVIS_PULL_REQUEST").toInteger()
 }
 
 uploadBenchmark {
