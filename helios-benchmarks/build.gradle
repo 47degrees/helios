@@ -81,7 +81,8 @@ compareBenchmarkCI {
     outputFormat = "json"
     benchmarkThreshold = ["Parsing": 500.00, "Decodingfromraw": 250]
     token = System.getenv("GITHUB_ACCESS_TOKEN")
-    slug = System.getenv("TRAVIS_REPO_SLUG")
+    repositoryOwner = POM_DEVELOPER_ID
+    repositoryName = POM_NAME
     pullRequestSha = System.getenv("TRAVIS_PULL_REQUEST_SHA")
     pullRequestNumber = System.getenv("TRAVIS_PULL_REQUEST")
 }
@@ -89,5 +90,6 @@ compareBenchmarkCI {
 uploadBenchmark {
     benchmarkFiles = [file("$rootDir/build/reports/master_benchmark.json"), file("$rootDir/build/reports/libraries_benchmark.json")]
     token = System.getenv("GITHUB_ACCESS_TOKEN")
-    slug = System.getenv("TRAVIS_REPO_SLUG")
+    repositoryOwner = POM_DEVELOPER_ID
+    repositoryName = POM_NAME
 }
