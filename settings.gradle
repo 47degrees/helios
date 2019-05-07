@@ -10,3 +10,5 @@ include ':helios-sample'
 include ':helios-optics'
 include ':helios-dsl-syntax-compiler'
 include 'helios-test'
+
+startParameter.excludedTaskNames << ':docs:bintrayUpload'
