@@ -79,6 +79,7 @@ compareBenchmarkCI {
     currentBenchmarkPath = [file("$rootDir/build/reports/helios_benchmark.json")]
     outputToFile = true
     outputFormat = "json"
+    benchmarkThreshold = ["Parsing": 250.00, "Decodingfromraw": 250]
     token = System.getenv("GITHUB_ACCESS_TOKEN")
     repositoryOwner = POM_DEVELOPER_ID
     repositoryName = "helios"
