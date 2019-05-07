@@ -75,7 +75,7 @@ compareBenchmark {
 }
 
 compareBenchmarkCI {
-    previousBenchmarkPath = file("$rootDir/helios_master/benchmarks/master_benchmark.json")
+    previousBenchmarkPath = file("$rootDir/helios_master/build/reports/master_benchmark.json")
     currentBenchmarkPath = [file("$rootDir/build/reports/helios_benchmark.json")]
     outputToFile = true
     outputFormat = "json"
