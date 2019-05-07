@@ -29,7 +29,7 @@ buildscript {
         bintrayVersion = "1.8.4"
         gitPublishVersion = "2.1.1"
         jmhVersion = "0.4.8"
-        hoodVersion = "0.5.0"
+        hoodVersion = "0.6.0"
 
         //Other json libraries
         kotlinxVersion = '0.10.0'
@@ -87,6 +87,9 @@ subprojects { project ->
 
     apply plugin: 'kotlin'
     apply plugin: 'jacoco'
+    apply plugin: 'com.jfrog.bintray'
+    apply plugin: "maven-publish"
+    apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
 
     archivesBaseName = POM_ARTIFACT_ID
 
@@ -108,9 +111,7 @@ subprojects { project ->
 
         executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
     }
-
-    apply plugin: 'com.jfrog.bintray'
-
+    
     bintray {
         publish = true
         user = findPropertyOrEnv("BINTRAY_USER") ?: "no.bintray.user"
