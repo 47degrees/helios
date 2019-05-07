@@ -75,16 +75,16 @@ compareBenchmark {
 }
 
 compareBenchmarkCI {
-    previousBenchmarkPath = file("$rootDir/helios_master/benchmarks/master_benchmark.json")
+    previousBenchmarkPath = file("$rootDir/helios_master/build/reports/master_benchmark.json")
     currentBenchmarkPath = [file("$rootDir/build/reports/helios_benchmark.json")]
     outputToFile = true
     outputFormat = "json"
-    benchmarkThreshold = ["Parsing": 500.00, "Decodingfromraw": 250]
+    benchmarkThreshold = ["Parsing": 250.00, "Decodingfromraw": 250]
     token = System.getenv("GITHUB_ACCESS_TOKEN")
     repositoryOwner = POM_DEVELOPER_ID
     repositoryName = "helios"
     pullRequestSha = System.getenv("TRAVIS_PULL_REQUEST_SHA")
-    pullRequestNumber = (System.getenv("TRAVIS_PULL_REQUEST") != "false") ? System.getenv("TRAVIS_PULL_REQUEST").toInteger() : -1
+    pullRequestNumber = (System.getenv("TRAVIS_PULL_REQUEST") != "false") ? System.getenv("TRAVIS_PULL_REQUEST")?.toInteger() : -1
 }
 
 uploadBenchmark {
@@ -92,4 +92,5 @@ uploadBenchmark {
     token = System.getenv("GITHUB_ACCESS_TOKEN")
     repositoryOwner = POM_DEVELOPER_ID
     repositoryName = "helios"
+    commitMessage = "Upload benchmark [ci skip]"
 }
