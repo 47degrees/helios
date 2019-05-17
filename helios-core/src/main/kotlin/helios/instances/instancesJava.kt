@@ -1,12 +1,9 @@
 package helios.instances
 
-import arrow.core.Either
+import arrow.core.*
 import arrow.core.extensions.either.applicative.applicative
 import arrow.core.extensions.either.applicative.map2
 import arrow.core.extensions.either.monoid.monoid
-import arrow.core.fix
-import arrow.core.flatMap
-import arrow.core.left
 import arrow.data.extensions.list.foldable.fold
 import arrow.data.extensions.list.foldable.foldLeft
 import arrow.data.extensions.list.traverse.sequence
@@ -77,10 +74,11 @@ interface MapDecoderInstance<A, B> : Decoder<Map<A, B>> {
   override fun decode(value: Json): Either<DecodingError, Map<A, B>> =
     value.asJsObject().fold({ ObjectDecodingError(value).left() }, { obj ->
       obj.value.map { (key, value) ->
-        val maybeKey: Either<DecodingError, A> = Json.parseFromString(key).mapLeft { StringDecodingError(value) }.flatMap { decoderA().decode(it) }
+        val maybeKey: Either<DecodingError, A> =
+          Json.parseFromString(key).mapLeft { StringDecodingError(value) }.flatMap { decoderA().decode(it) }
         val maybeValue: Either<DecodingError, B> = decoderB().decode(value)
-        maybeKey.map2(maybeValue){ mapOf(it.a to it.b)}
-      }.reduce { acc, either -> acc.map2(either){ it.a + it.b} }
+        maybeKey.map2(maybeValue) { mapOf(it.toPair()) }
+      }.reduce { acc, either -> acc.map2(either) { it.a + it.b } }
     })
 
   companion object {
