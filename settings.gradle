@@ -1,7 +1,7 @@
 rootProject.name = 'helios'
 
 include 'docs'
-include ':helios-meta-compiler'
+include ':helios-annotations'
 include ':helios-meta'
 include ':helios-core'
 include ':helios-parser'

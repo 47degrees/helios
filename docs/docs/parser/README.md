@@ -11,7 +11,7 @@ We can decode from a `String`, a `File`, etc:
 ```kotlin:ank:silent
 import arrow.core.*
 import helios.core.*
-import helios.meta.*
+import helios.annotations.*
 import helios.typeclasses.*
 val jsonStr =
 """{

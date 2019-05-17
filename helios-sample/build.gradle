@@ -6,6 +6,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
     kapt "io.arrow-kt:arrow-meta:$arrowVersion"
-    kapt project(':helios-meta-compiler')
+    kapt project(':helios-meta')
     kapt project(':helios-dsl-syntax-compiler')
 }

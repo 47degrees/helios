@@ -11,7 +11,7 @@ Once Helios is added to your project, you can start adding the necessary imports
 ```kotlin:ank:silent
 import arrow.core.*
 import helios.core.*
-import helios.meta.*
+import helios.annotations.*
 import helios.typeclasses.*
 ```
 

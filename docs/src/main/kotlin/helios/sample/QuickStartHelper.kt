@@ -1,6 +1,6 @@
 package helios.core
 
-import helios.meta.json
+import helios.annotations.json
 
 @json
 data class Person(val name: String, val age: Int) {

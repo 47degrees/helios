@@ -1,6 +1,6 @@
 package helios.benchmarks.sample
 
-import helios.meta.json
+import helios.annotations.json
 import kotlinx.serialization.Serializable
 
 @Serializable

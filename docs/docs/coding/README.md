@@ -21,7 +21,7 @@ You will be able to encode and decode using the following:
 ```kotlin:ank
 import arrow.core.*
 import helios.core.*
-import helios.meta.*
+import helios.annotations.*
 import helios.typeclasses.*
 //sampleStart
 val personJson = with(Person.encoder()) { Person("Abc", 10).encode() }

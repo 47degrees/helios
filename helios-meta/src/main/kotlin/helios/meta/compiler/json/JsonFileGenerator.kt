@@ -73,7 +73,7 @@ class JsonFileGenerator(
   private fun jsonProperties(je: JsonElement): String =
     je.pairs.joinToString(",", "JsObject(mapOf(", "))") { (p, r) ->
       """|
-         |"$p" to ${r.encoder}.run { $p.toJson() }
+         |"$p" to ${r.encoder}.run { $p.encode() }
          |""".trimMargin()
     }
 

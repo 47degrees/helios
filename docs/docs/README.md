@@ -34,8 +34,8 @@ repositories {
 
 dependencies {
     compile "com.47deg:helios-core:0.0.1-SNAPSHOT"
-    compile "com.47deg:helios-meta:0.0.1-SNAPSHOT"
     compile "com.47deg:helios-parser:0.0.1-SNAPSHOT"
+    compile "com.47deg:helios-optics:0.0.1-SNAPSHOT"
 }
 ```
 

@@ -1,4 +1,4 @@
-package helios.meta
+package helios.annotations
 
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
