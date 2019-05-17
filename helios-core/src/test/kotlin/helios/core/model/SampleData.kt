@@ -1,7 +1,7 @@
 package helios.core.model
 
 import arrow.optics.optics
-import helios.annotations.json
+import helios.json
 import helios.test.generators.alphaStr
 import io.kotlintest.properties.Gen
 

@@ -1,6 +1,6 @@
 package helios.meta.compiler.json
 
-import helios.annotations.json
+import helios.json
 
 val jsonAnnotationKClass = json::class
 val jsonAnnotationClass = jsonAnnotationKClass.java

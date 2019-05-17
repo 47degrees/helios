@@ -1,7 +1,7 @@
 package helios.sample
 
 import arrow.optics.optics
-import helios.annotations.json
+import helios.json
 
 @json
 data class Company(val name: String, val address: Address, val employees: List<Employee>) {

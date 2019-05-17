@@ -10,8 +10,8 @@ We can decode from a `String`, a `File`, etc:
 
 ```kotlin:ank:silent
 import arrow.core.*
+import helios.*
 import helios.core.*
-import helios.annotations.*
 import helios.typeclasses.*
 val jsonStr =
 """{
