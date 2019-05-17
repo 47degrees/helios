@@ -44,6 +44,13 @@ interface OptionEncoderInstance<in A> : Encoder<Option<A>> {
   override fun Option<A>.encode(): Json =
     fold({ JsNull }, { encoderA().run { it.encode() } })
 
+  companion object {
+    operator fun <A, B> invoke(encoderA: Encoder<A>): Encoder<Option<A>> =
+      object : OptionEncoderInstance<A> {
+        override fun encoderA(): Encoder<A> = encoderA
+      }
+  }
+
 }
 
 @extension
@@ -54,6 +61,12 @@ interface OptionDecoderInstance<out A> : Decoder<Option<A>> {
   override fun decode(value: Json): Either<DecodingError, Option<A>> =
     if (value.isNull) None.right() else decoderA().decode(value).map { Some(it) }
 
+  companion object {
+    operator fun <A, B> invoke(decoderA: Decoder<A>): Decoder<Option<A>> =
+      object : OptionDecoderInstance<A> {
+        override fun decoderA(): Decoder<A> = decoderA
+      }
+  }
 }
 
 @extension
@@ -67,6 +80,13 @@ interface EitherEncoderInstance<in A, in B> : Encoder<Either<A, B>> {
     fold({ encoderA().run { it.encode() } },
       { encoderB().run { it.encode() } })
 
+  companion object {
+    operator fun <A, B> invoke(encoderA: Encoder<A>, encoderB: Encoder<B>): Encoder<Either<A, B>> =
+      object : EitherEncoderInstance<A, B> {
+        override fun encoderA(): Encoder<A> = encoderA
+        override fun encoderB(): Encoder<B> = encoderB
+      }
+  }
 }
 
 @extension
@@ -80,6 +100,13 @@ interface EitherDecoderInstance<out A, out B> : Decoder<Either<A, B>> {
     decoderB().decode(value).fold({ decoderA().decode(value).map { it.left() } },
       { v -> v.right().map { it.right() } })
 
+  companion object {
+    operator fun <A, B> invoke(decoderA: Decoder<A>, decoderB: Decoder<B>): Decoder<Either<A, B>> =
+      object : EitherDecoderInstance<A, B> {
+        override fun decoderA(): Decoder<A> = decoderA
+        override fun decoderB(): Decoder<B> = decoderB
+      }
+  }
 }
 
 @extension
@@ -96,6 +123,13 @@ interface Tuple2EncoderInstance<in A, in B> : Encoder<Tuple2<A, B>> {
     )
   )
 
+  companion object {
+    operator fun <A, B> invoke(encoderA: Encoder<A>, encoderB: Encoder<B>): Encoder<Tuple2<A, B>> =
+      object : Tuple2EncoderInstance<A, B> {
+        override fun encoderA(): Encoder<A> = encoderA
+        override fun encoderB(): Encoder<B> = encoderB
+      }
+  }
 }
 
 @extension
@@ -112,6 +146,13 @@ interface Tuple2DecoderInstance<out A, out B> : Decoder<Tuple2<A, B>> {
     else ArrayDecodingError(value).left()
   }
 
+  companion object {
+    operator fun <A, B> invoke(decoderA: Decoder<A>, decoderB: Decoder<B>): Decoder<Tuple2<A, B>> =
+      object : Tuple2DecoderInstance<A, B> {
+        override fun decoderA(): Decoder<A> = decoderA
+        override fun decoderB(): Decoder<B> = decoderB
+      }
+  }
 }
 
 @extension
@@ -131,6 +172,14 @@ interface Tuple3EncoderInstance<in A, in B, in C> : Encoder<Tuple3<A, B, C>> {
     )
   )
 
+  companion object {
+    operator fun <A, B, C> invoke(encoderA: Encoder<A>, encoderB: Encoder<B>, encoderC: Encoder<C>): Encoder<Tuple3<A, B, C>> =
+      object : Tuple3EncoderInstance<A, B, C> {
+        override fun encoderA(): Encoder<A> = encoderA
+        override fun encoderB(): Encoder<B> = encoderB
+        override fun encoderC(): Encoder<C> = encoderC
+      }
+  }
 }
 
 @extension
@@ -145,9 +194,21 @@ interface Tuple3DecoderInstance<out A, out B, out C> : Decoder<Tuple3<A, B, C>> 
   override fun decode(value: Json): Either<DecodingError, Tuple3<A, B, C>> {
     val arr = value.asJsArray().toList().flatMap { it.value }
     return if (arr.size >= 3)
-      Either.applicative<DecodingError>().map(decoderA().decode(arr[1]), decoderB().decode(arr[2]), decoderC().decode(arr[3])) { it }.fix()
+      Either.applicative<DecodingError>().map(
+        decoderA().decode(arr[1]),
+        decoderB().decode(arr[2]),
+        decoderC().decode(arr[3])
+      ) { it }.fix()
     else ArrayDecodingError(value).left()
   }
 
+  companion object {
+    operator fun <A, B, C> invoke(decoderA: Decoder<A>, decoderB: Decoder<B>, decoderC: Decoder<C>): Decoder<Tuple3<A, B, C>> =
+      object : Tuple3DecoderInstance<A, B, C> {
+        override fun decoderA(): Decoder<A> = decoderA
+        override fun decoderB(): Decoder<B> = decoderB
+        override fun decoderC(): Decoder<C> = decoderC
+      }
+  }
 }
 
