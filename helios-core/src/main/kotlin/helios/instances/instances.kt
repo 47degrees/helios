@@ -1,16 +1,10 @@
 package helios.instances
 
 import arrow.core.*
-import arrow.core.extensions.eq
-import arrow.data.extensions.list.foldable.forAll
+import arrow.core.extensions.either.applicative.applicative
+import arrow.core.extensions.either.applicative.map2
 import arrow.extension
-import arrow.higherkind
-import arrow.typeclasses.Eq
 import helios.core.*
-import helios.instances.jsarray.eq.eq
-import helios.instances.jsnumber.eq.eq
-import helios.instances.jsobject.eq.eq
-import helios.instances.json.eq.eq
 import helios.typeclasses.*
 
 fun Int.Companion.encoder() = object : Encoder<Int> {
@@ -53,7 +47,43 @@ interface OptionEncoderInstance<in A> : Encoder<Option<A>> {
 }
 
 @extension
-interface Tuple2EncoderInstance<A, B> : Encoder<Tuple2<A, B>> {
+interface OptionDecoderInstance<out A> : Decoder<Option<A>> {
+
+  fun decoderA(): Decoder<A>
+
+  override fun decode(value: Json): Either<DecodingError, Option<A>> =
+    if (value.isNull) None.right() else decoderA().decode(value).map { Some(it) }
+
+}
+
+@extension
+interface EitherEncoderInstance<in A, in B> : Encoder<Either<A, B>> {
+
+  fun encoderA(): Encoder<A>
+
+  fun encoderB(): Encoder<B>
+
+  override fun Either<A, B>.encode(): Json =
+    fold({ encoderA().run { it.encode() } },
+      { encoderB().run { it.encode() } })
+
+}
+
+@extension
+interface EitherDecoderInstance<out A, out B> : Decoder<Either<A, B>> {
+
+  fun decoderA(): Decoder<A>
+
+  fun decoderB(): Decoder<B>
+
+  override fun decode(value: Json): Either<DecodingError, Either<A, B>> =
+    decoderB().decode(value).fold({ decoderA().decode(value).map { it.left() } },
+      { v -> v.right().map { it.right() } })
+
+}
+
+@extension
+interface Tuple2EncoderInstance<in A, in B> : Encoder<Tuple2<A, B>> {
 
   fun encoderA(): Encoder<A>
 
@@ -69,7 +99,23 @@ interface Tuple2EncoderInstance<A, B> : Encoder<Tuple2<A, B>> {
 }
 
 @extension
-interface Tuple3EncoderInstance<A, B, C> : Encoder<Tuple3<A, B, C>> {
+interface Tuple2DecoderInstance<out A, out B> : Decoder<Tuple2<A, B>> {
+
+  fun decoderA(): Decoder<A>
+
+  fun decoderB(): Decoder<B>
+
+  override fun decode(value: Json): Either<DecodingError, Tuple2<A, B>> {
+    val arr = value.asJsArray().toList().flatMap { it.value }
+    return if (arr.size >= 2)
+      decoderA().decode(arr[1]).map2(decoderB().decode(arr[2])) { it }.fix()
+    else ArrayDecodingError(value).left()
+  }
+
+}
+
+@extension
+interface Tuple3EncoderInstance<in A, in B, in C> : Encoder<Tuple3<A, B, C>> {
 
   fun encoderA(): Encoder<A>
 
@@ -87,77 +133,21 @@ interface Tuple3EncoderInstance<A, B, C> : Encoder<Tuple3<A, B, C>> {
 
 }
 
-private inline val Json.isNull inline get() = this === JsNull
-
 @extension
-interface JsObjectEqInstance : Eq<JsObject> {
-  override fun JsObject.eqv(b: JsObject): Boolean = with(Json.eq()) {
-    this@eqv.value.entries.zip(b.value.entries) { aa, bb ->
-      aa.key == bb.key && aa.value.eqv(bb.value)
-    }.forAll { it }
-  }
-}
+interface Tuple3DecoderInstance<out A, out B, out C> : Decoder<Tuple3<A, B, C>> {
 
-@extension
-interface JsArrayEqInstance : Eq<JsArray> {
-  override fun JsArray.eqv(b: JsArray): Boolean = with(Json.eq()) {
-    this@eqv.value.zip(b.value) { a, b -> a.eqv(b) }
-      .forAll { it }
-  }
-}
+  fun decoderA(): Decoder<A>
 
-@extension
-interface JsonEqInstance : Eq<Json> {
-  override fun Json.eqv(b: Json): Boolean = when {
-    this is JsObject && b is JsObject -> JsObject.eq().run { this@eqv.eqv(b) }
-    this is JsString && b is JsString -> String.eq().run {
-      this@eqv.value.toString().eqv(b.value.toString())
-    }
-    this is JsNumber && b is JsNumber -> JsNumber.eq().run { this@eqv.eqv(b) }
-    this is JsBoolean && b is JsBoolean -> Boolean.eq().run { this@eqv.value.eqv(b.value) }
-    this is JsArray && b is JsArray -> JsArray.eq().run { this@eqv.eqv(b) }
-    else -> this.isNull && b.isNull
+  fun decoderB(): Decoder<B>
+
+  fun decoderC(): Decoder<C>
+
+  override fun decode(value: Json): Either<DecodingError, Tuple3<A, B, C>> {
+    val arr = value.asJsArray().toList().flatMap { it.value }
+    return if (arr.size >= 3)
+      Either.applicative<DecodingError>().map(decoderA().decode(arr[1]), decoderB().decode(arr[2]), decoderC().decode(arr[3])) { it }.fix()
+    else ArrayDecodingError(value).left()
   }
 
 }
 
-@extension
-interface JsNumberEqInstance : Eq<JsNumber> {
-  override fun JsNumber.eqv(b: JsNumber): Boolean = when (this) {
-    is JsDecimal -> when (b) {
-      is JsDecimal -> String.eq().run { this@eqv.value.eqv(b.value) }
-      is JsLong -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
-      is JsDouble -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
-      is JsFloat -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
-      is JsInt -> String.eq().run { this@eqv.value.eqv(b.value.toString()) }
-    }
-    is JsLong -> when (b) {
-      is JsDecimal -> String.eq().run { this@eqv.value.toString().eqv(b.value) }
-      is JsLong -> Long.eq().run { this@eqv.value.eqv(b.value) }
-      is JsDouble -> Double.eq().run { this@eqv.value.toDouble().eqv(b.value) }
-      is JsFloat -> Float.eq().run { this@eqv.value.toFloat().eqv(b.value) }
-      is JsInt -> Long.eq().run { this@eqv.value.eqv(b.value.toLong()) }
-    }
-    is JsDouble -> when (b) {
-      is JsDecimal -> String.eq().run { this@eqv.value.toString().eqv(b.value) }
-      is JsLong -> Double.eq().run { this@eqv.value.eqv(b.value.toDouble()) }
-      is JsDouble -> Double.eq().run { this@eqv.value.eqv(b.value) }
-      is JsFloat -> Double.eq().run { this@eqv.value.eqv(b.value.toDouble()) }
-      is JsInt -> Double.eq().run { this@eqv.value.eqv(b.value.toDouble()) }
-    }
-    is JsFloat -> when (b) {
-      is JsDecimal -> String.eq().run { this@eqv.value.toString().eqv(b.value) }
-      is JsLong -> Float.eq().run { this@eqv.value.eqv(b.value.toFloat()) }
-      is JsDouble -> Double.eq().run { this@eqv.value.toDouble().eqv(b.value) }
-      is JsFloat -> Float.eq().run { this@eqv.value.eqv(b.value) }
-      is JsInt -> Float.eq().run { this@eqv.value.eqv(b.value.toFloat()) }
-    }
-    is JsInt -> when (b) {
-      is JsDecimal -> String.eq().run { this@eqv.value.toString().eqv(b.value) }
-      is JsLong -> Long.eq().run { this@eqv.value.toLong().eqv(b.value) }
-      is JsDouble -> Double.eq().run { this@eqv.value.toDouble().eqv(b.value) }
-      is JsFloat -> Float.eq().run { this@eqv.value.toFloat().eqv(b.value) }
-      is JsInt -> Int.eq().run { this@eqv.value.eqv(b.value) }
-    }
-  }
-}

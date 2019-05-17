@@ -21,6 +21,8 @@ const val MinLongString = "-9223372036854775808"
 
 sealed class Json {
 
+  inline val isNull inline get() = this === JsNull
+
   companion object {
     fun fromValues(i: Iterable<Json>): JsArray = JsArray(i.toList())
 
@@ -132,8 +134,7 @@ sealed class JsNumber : Json() {
   abstract fun toLong(): Option<Long>
 
   fun toByte(): Option<Byte> {
-    val ml = toLong()
-    return when (ml) {
+    return when (val ml = toLong()) {
       is Some<Long> -> {
         val asByte: Byte = ml.t.toByte()
         if (asByte.compareTo(ml.t) == 0) Some(asByte) else None
@@ -143,8 +144,7 @@ sealed class JsNumber : Json() {
   }
 
   fun toShort(): Option<Short> {
-    val ml = toLong()
-    return when (ml) {
+    return when (val ml = toLong()) {
       is Some<Long> -> {
         val asShort: Short = ml.t.toShort()
         if (asShort.compareTo(ml.t) == 0) Some(asShort) else None
@@ -154,8 +154,7 @@ sealed class JsNumber : Json() {
   }
 
   fun toInt(): Option<Int> {
-    val ml = toLong()
-    return when (ml) {
+    return when (val ml = toLong()) {
       is Some<Long> -> {
         val asInt: Int = ml.t.toInt()
         if (asInt.compareTo(ml.t) == 0) Some(asInt) else None
