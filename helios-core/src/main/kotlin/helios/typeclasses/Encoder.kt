@@ -5,5 +5,5 @@ import helios.core.Json
 
 interface Encoder<in A> {
   fun A.encode(): Json
-  fun Collection<A>.toJson(): JsArray = JsArray(map { it.encode() })
+  fun Collection<A>.encode(): JsArray = JsArray(map { it.encode() })
 }

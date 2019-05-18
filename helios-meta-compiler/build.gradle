@@ -16,4 +16,5 @@ dependencies {
     testCompile "com.google.testing.compile:compile-testing:$googleTestingVersion"
     testCompile fileTree(dir: './src/test/libs', includes: ['*.jar'])
     testCompile files(Jvm.current().getToolsJar())
+    compile "org.jetbrains.kotlin:kotlin-script-runtime:1.3.31"
 }
