@@ -8,12 +8,14 @@ import arrow.data.extensions.list.foldable.fold
 import arrow.data.extensions.list.foldable.foldLeft
 import arrow.data.extensions.list.traverse.sequence
 import arrow.data.fix
+import arrow.extension
 import arrow.typeclasses.Monoid
 import helios.core.JsArray
 import helios.core.JsObject
 import helios.core.Json
 import helios.typeclasses.*
 
+@extension
 interface ListEncoderInstance<in A> : Encoder<List<A>> {
 
   fun encoderA(): Encoder<A>
@@ -30,7 +32,8 @@ interface ListEncoderInstance<in A> : Encoder<List<A>> {
 
 }
 
-interface ListDecoderInstance<A> : Decoder<List<A>> {
+@extension
+interface ListDecoderInstance<out A> : Decoder<List<A>> {
 
   fun decoderA(): Decoder<A>
 
@@ -49,6 +52,7 @@ interface ListDecoderInstance<A> : Decoder<List<A>> {
 
 }
 
+@extension
 interface MapEncoderInstance<A, B> : Encoder<Map<A, B>> {
 
   fun encoderB(): Encoder<B>
@@ -65,6 +69,7 @@ interface MapEncoderInstance<A, B> : Encoder<Map<A, B>> {
 
 }
 
+@extension
 interface MapDecoderInstance<A, B> : Decoder<Map<A, B>> {
 
   fun decoderA(): Decoder<A>
