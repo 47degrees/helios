@@ -82,7 +82,6 @@ class JsonFileGenerator(
 
   private fun String.encoder(): String =
     when {
-      this == "Boolean" -> "Boolean.Companion.encoder()"
       this.startsWith("kotlin.collections.List") -> complexEncoder("ListEncoderInstance")
       this.startsWith("kotlin.collections.Map") ->
         "MapEncoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.last().encoder()})"
@@ -100,7 +99,6 @@ class JsonFileGenerator(
 
   private fun String.decoder(): String =
     when {
-      this == "Boolean" -> "Boolean.Companion.decoder()"
       this.startsWith("kotlin.collections.List") ->
         "ListDecoderInstance(${getTypeParameters[0]}.decoder())"
       this.startsWith("kotlin.collections.Map") ->

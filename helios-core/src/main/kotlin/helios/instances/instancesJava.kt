@@ -10,10 +10,38 @@ import arrow.data.extensions.list.traverse.sequence
 import arrow.data.fix
 import arrow.extension
 import arrow.typeclasses.Monoid
-import helios.core.JsArray
-import helios.core.JsObject
-import helios.core.Json
+import helios.core.*
 import helios.typeclasses.*
+import java.math.BigDecimal
+import java.math.BigInteger
+import java.util.*
+
+fun UUID.encoder() = object : Encoder<UUID> {
+  override fun UUID.encode(): Json = JsString(this.toString())
+}
+
+fun UUID.decoder() = object : Decoder<UUID> {
+  override fun decode(value: Json): Either<DecodingError, UUID> =
+    value.asJsString().map { UUID.fromString(it.value.toString()) }.toEither { NumberDecodingError(value) }
+}
+
+fun BigDecimal.encoder() = object : Encoder<BigDecimal> {
+  override fun BigDecimal.encode(): Json = JsNumber(this)
+}
+
+fun BigDecimal.decoder() = object : Decoder<BigDecimal> {
+  override fun decode(value: Json): Either<DecodingError, BigDecimal> =
+    value.asJsNumber().map { it.toBigDecimal() }.toEither { NumberDecodingError(value) }
+}
+
+fun BigInteger.encoder() = object : Encoder<BigInteger> {
+  override fun BigInteger.encode(): Json = JsNumber(this)
+}
+
+fun BigInteger.decoder() = object : Decoder<BigInteger> {
+  override fun decode(value: Json): Either<DecodingError, BigInteger> =
+    value.asJsNumber().map { it.toBigInteger() }.toEither { NumberDecodingError(value) }
+}
 
 @extension
 interface ListEncoderInstance<in A> : Encoder<List<A>> {

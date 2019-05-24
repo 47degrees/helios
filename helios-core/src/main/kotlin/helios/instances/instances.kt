@@ -7,6 +7,33 @@ import arrow.extension
 import helios.core.*
 import helios.typeclasses.*
 
+fun Double.Companion.encoder() = object : Encoder<Double> {
+  override fun Double.encode(): Json = JsNumber(this)
+}
+
+fun Double.Companion.decoder() = object : Decoder<Double> {
+  override fun decode(value: Json): Either<DecodingError, Double> =
+    value.asJsNumber().map { it.toDouble() }.toEither { NumberDecodingError(value) }
+}
+
+fun Float.Companion.encoder() = object : Encoder<Float> {
+  override fun Float.encode(): Json = JsNumber(this)
+}
+
+fun Float.Companion.decoder() = object : Decoder<Float> {
+  override fun decode(value: Json): Either<DecodingError, Float> =
+    value.asJsNumber().map { it.toFloat() }.toEither { NumberDecodingError(value) }
+}
+
+fun Long.Companion.encoder() = object : Encoder<Long> {
+  override fun Long.encode(): Json = JsNumber(this)
+}
+
+fun Long.Companion.decoder() = object : Decoder<Long> {
+  override fun decode(value: Json): Either<DecodingError, Long> =
+    value.asJsNumber().map { it.toLong() }.toEither { NumberDecodingError(value) }
+}
+
 fun Int.Companion.encoder() = object : Encoder<Int> {
   override fun Int.encode(): Json = JsNumber(this)
 }
@@ -16,13 +43,31 @@ fun Int.Companion.decoder() = object : Decoder<Int> {
     value.asJsNumber().flatMap { it.toInt() }.toEither { NumberDecodingError(value) }
 }
 
+fun Short.Companion.encoder() = object : Encoder<Short> {
+  override fun Short.encode(): Json = JsNumber(this)
+}
+
+fun Short.Companion.decoder() = object : Decoder<Short> {
+  override fun decode(value: Json): Either<DecodingError, Short> =
+    value.asJsNumber().flatMap { it.toShort() }.toEither { NumberDecodingError(value) }
+}
+
+fun Byte.Companion.encoder() = object : Encoder<Byte> {
+  override fun Byte.encode(): Json = JsNumber(this)
+}
+
+fun Byte.Companion.decoder() = object : Decoder<Byte> {
+  override fun decode(value: Json): Either<DecodingError, Byte> =
+    value.asJsNumber().flatMap { it.toByte() }.toEither { NumberDecodingError(value) }
+}
+
 fun Boolean.Companion.encoder() = object : Encoder<Boolean> {
   override fun Boolean.encode(): Json = JsBoolean(this)
 }
 
 fun Boolean.Companion.decoder() = object : Decoder<Boolean> {
   override fun decode(value: Json): Either<DecodingError, Boolean> =
-    value.asJsBoolean().flatMap { it.value.some() }.toEither { BooleanDecodingError(value) }
+    value.asJsBoolean().map { it.value }.toEither { BooleanDecodingError(value) }
 }
 
 fun String.Companion.encoder() = object : Encoder<String> {
@@ -31,13 +76,11 @@ fun String.Companion.encoder() = object : Encoder<String> {
 
 fun String.Companion.decoder() = object : Decoder<String> {
   override fun decode(value: Json): Either<DecodingError, String> =
-    value.asJsString().flatMap {
-      it.value.toString().some()
-    }.toEither { StringDecodingError(value) }
+    value.asJsString().map { it.value.toString() }.toEither { StringDecodingError(value) }
 }
 
 @extension
-interface PairEncoderInstance <in A, in B> : Encoder<Pair<A, B>>{
+interface PairEncoderInstance<in A, in B> : Encoder<Pair<A, B>> {
 
   fun encoderA(): Encoder<A>
   fun encoderB(): Encoder<B>
@@ -60,7 +103,7 @@ interface PairEncoderInstance <in A, in B> : Encoder<Pair<A, B>>{
 }
 
 @extension
-interface PairDecoderInstance <out A, out B> : Decoder<Pair<A, B>>{
+interface PairDecoderInstance<out A, out B> : Decoder<Pair<A, B>> {
 
   fun decoderA(): Decoder<A>
   fun decoderB(): Decoder<B>
@@ -71,6 +114,7 @@ interface PairDecoderInstance <out A, out B> : Decoder<Pair<A, B>>{
       decoderA().decode(arr[1]).map2(decoderB().decode(arr[2])) { it.toPair() }.fix()
     else ArrayDecodingError(value).left()
   }
+
   companion object {
     operator fun <A, B> invoke(decoderA: Decoder<A>, decoderB: Decoder<B>): Decoder<Pair<A, B>> =
       object : PairDecoderInstance<A, B> {
@@ -82,7 +126,7 @@ interface PairDecoderInstance <out A, out B> : Decoder<Pair<A, B>>{
 }
 
 @extension
-interface TripleEncoderInstance <in A, in B, in C> : Encoder<Triple<A, B, C>>{
+interface TripleEncoderInstance<in A, in B, in C> : Encoder<Triple<A, B, C>> {
 
   fun encoderA(): Encoder<A>
   fun encoderB(): Encoder<B>
@@ -97,7 +141,11 @@ interface TripleEncoderInstance <in A, in B, in C> : Encoder<Triple<A, B, C>>{
   )
 
   companion object {
-    operator fun <A, B, C> invoke(encoderA: Encoder<A>, encoderB: Encoder<B>, encoderC: Encoder<C>): Encoder<Triple<A, B, C>> =
+    operator fun <A, B, C> invoke(
+      encoderA: Encoder<A>,
+      encoderB: Encoder<B>,
+      encoderC: Encoder<C>
+    ): Encoder<Triple<A, B, C>> =
       object : TripleEncoderInstance<A, B, C> {
         override fun encoderA(): Encoder<A> = encoderA
         override fun encoderB(): Encoder<B> = encoderB
@@ -108,7 +156,7 @@ interface TripleEncoderInstance <in A, in B, in C> : Encoder<Triple<A, B, C>>{
 }
 
 @extension
-interface TripleDecoderInstance <out A, out B, out C> : Decoder<Triple<A, B, C>>{
+interface TripleDecoderInstance<out A, out B, out C> : Decoder<Triple<A, B, C>> {
 
   fun decoderA(): Decoder<A>
   fun decoderB(): Decoder<B>
@@ -121,11 +169,16 @@ interface TripleDecoderInstance <out A, out B, out C> : Decoder<Triple<A, B, C>>
         decoderA().decode(arr[1]),
         decoderB().decode(arr[2]),
         decoderC().decode(arr[3])
-      ) { (a, b, c) -> Triple(a, b, c)}.fix()
+      ) { (a, b, c) -> Triple(a, b, c) }.fix()
     else ArrayDecodingError(value).left()
   }
+
   companion object {
-    operator fun <A, B, C> invoke(decoderA: Decoder<A>, decoderB: Decoder<B>, decoderC: Decoder<C>): Decoder<Triple<A, B, C>> =
+    operator fun <A, B, C> invoke(
+      decoderA: Decoder<A>,
+      decoderB: Decoder<B>,
+      decoderC: Decoder<C>
+    ): Decoder<Triple<A, B, C>> =
       object : TripleDecoderInstance<A, B, C> {
         override fun decoderA(): Decoder<A> = decoderA
         override fun decoderB(): Decoder<B> = decoderB

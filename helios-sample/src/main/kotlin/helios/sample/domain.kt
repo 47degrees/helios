@@ -6,7 +6,7 @@ import arrow.optics.optics
 import helios.meta.json
 
 @json
-data class Company(val name: String, val address: Address, val employees: List<Employee>) {
+data class Company(val name: String, val address: Address, val employees: List<Employee>, val private: Boolean) {
   companion object
 }
 
