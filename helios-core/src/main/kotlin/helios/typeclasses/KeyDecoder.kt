@@ -6,6 +6,6 @@ import helios.core.DecodingError
 import helios.core.Json
 
 @higherkind
-interface Decoder<out A> {
-  fun decode(value: Json): Either<DecodingError, A>
+interface KeyDecoder<out A> {
+  fun keyDecode(value: Json): Either<DecodingError, A>
 }

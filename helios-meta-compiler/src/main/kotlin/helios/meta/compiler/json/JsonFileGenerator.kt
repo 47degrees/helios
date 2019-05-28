@@ -76,15 +76,17 @@ class JsonFileGenerator(
     }()
 
   private fun String.complexEncoder(pre: String) = getTypeParameters.joinToString(
-      prefix = "$pre(",
-      postfix = ")"
-    ) { it.encoder() }
+    prefix = "$pre(",
+    postfix = ")"
+  ) { it.encoder() }
+
+  private fun String.keyEncoder(): String = "$this.keyEncoder()"
 
   private fun String.encoder(): String =
     when {
       this.startsWith("kotlin.collections.List") -> complexEncoder("ListEncoderInstance")
       this.startsWith("kotlin.collections.Map") ->
-        "MapEncoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.last().encoder()})"
+        "MapEncoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyEncoder()}, ${getTypeParameters.last().encoder()})"
       this.contains('<') -> complexEncoder("${substringBefore('<')}.Companion.encoder")
       this.contains('?') -> "arrow.core.Option<${substringBefore('?')}>".encoder()
       else -> "$this.encoder()"
@@ -97,20 +99,21 @@ class JsonFileGenerator(
          |""".trimMargin()
     }
 
+  private fun String.complexDecoder(pre: String) = getTypeParameters.joinToString(
+    prefix = "$pre(",
+    postfix = ")"
+  ) { it.decoder() }
+
+  private fun String.keyDecoder(): String = "$this.keyDecoder()"
+
   private fun String.decoder(): String =
     when {
       this.startsWith("kotlin.collections.List") ->
-        "ListDecoderInstance(${getTypeParameters[0]}.decoder())"
+        complexDecoder("ListDecoderInstance")
       this.startsWith("kotlin.collections.Map") ->
-        getTypeParameters.joinToString(
-          prefix = "MapDecoderInstance(",
-          postfix = ")"
-        ) { it.decoder() }
+        "MapDecoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyDecoder()}, ${getTypeParameters.last().decoder()})"
       this.contains('<') ->
-        getTypeParameters.joinToString(
-          prefix = "${substringBefore('<')}.Companion.decoder(",
-          postfix = ")"
-        ) { it.decoder() }
+        complexDecoder("${substringBefore('<')}.Companion.decoder")
       this.contains('?') -> "arrow.core.Option<${substringBefore('?')}>".decoder()
       else -> "$this.decoder()"
     }

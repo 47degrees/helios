@@ -9,7 +9,6 @@ import helios.instances.jsobject.eq.eq
 import helios.instances.json.eq.eq
 import helios.parser.Parser
 import helios.typeclasses.Decoder
-import helios.typeclasses.DecodingError
 import java.io.File
 import java.math.BigDecimal
 import java.math.BigInteger

@@ -22,7 +22,7 @@ fun UUID.encoder() = object : Encoder<UUID> {
 
 fun UUID.decoder() = object : Decoder<UUID> {
   override fun decode(value: Json): Either<DecodingError, UUID> =
-    value.asJsString().map { UUID.fromString(it.value.toString()) }.toEither { NumberDecodingError(value) }
+    value.asJsString().map { UUID.fromString(it.value.toString()) }.toEither { StringDecodingError(value) }
 }
 
 fun BigDecimal.encoder() = object : Encoder<BigDecimal> {
@@ -83,14 +83,16 @@ interface ListDecoderInstance<out A> : Decoder<List<A>> {
 @extension
 interface MapEncoderInstance<A, B> : Encoder<Map<A, B>> {
 
+  fun keyEncoderA(): KeyEncoder<A>
   fun encoderB(): Encoder<B>
 
   override fun Map<A, B>.encode(): Json =
-    JsObject(this.map { (key, value) -> (key.toString() to encoderB().run { value.encode() }) }.toMap())
+    JsObject(this.map { (key, value) -> (keyEncoderA().run { key.keyEncode() } to encoderB().run { value.encode() }) }.toMap())
 
   companion object {
-    operator fun <A, B> invoke(encoderB: Encoder<B>): Encoder<Map<A, B>> =
+    operator fun <A, B> invoke(keyEncoderA: KeyEncoder<A>, encoderB: Encoder<B>): Encoder<Map<A, B>> =
       object : MapEncoderInstance<A, B>, Encoder<Map<A, B>> {
+        override fun keyEncoderA(): KeyEncoder<A> = keyEncoderA
         override fun encoderB(): Encoder<B> = encoderB
       }
   }
@@ -100,24 +102,23 @@ interface MapEncoderInstance<A, B> : Encoder<Map<A, B>> {
 @extension
 interface MapDecoderInstance<A, B> : Decoder<Map<A, B>> {
 
-  fun decoderA(): Decoder<A>
-
+  fun keyDecoderA(): KeyDecoder<A>
   fun decoderB(): Decoder<B>
 
   override fun decode(value: Json): Either<DecodingError, Map<A, B>> =
     value.asJsObject().fold({ ObjectDecodingError(value).left() }, { obj ->
       obj.value.map { (key, value) ->
         val maybeKey: Either<DecodingError, A> =
-          Json.parseFromString(key).mapLeft { StringDecodingError(value) }.flatMap { decoderA().decode(it) }
+          Json.parseFromString(key).mapLeft { StringDecodingError(value) }.flatMap { keyDecoderA().keyDecode(it) }
         val maybeValue: Either<DecodingError, B> = decoderB().decode(value)
         maybeKey.map2(maybeValue) { mapOf(it.toPair()) }
       }.reduce { acc, either -> acc.map2(either) { it.a + it.b } }
     })
 
   companion object {
-    operator fun <A, B> invoke(decoderA: Decoder<A>, decoderB: Decoder<B>): Decoder<Map<A, B>> =
+    operator fun <A, B> invoke(keyDecoderA: KeyDecoder<A>, decoderB: Decoder<B>): Decoder<Map<A, B>> =
       object : MapDecoderInstance<A, B> {
-        override fun decoderA(): Decoder<A> = decoderA
+        override fun keyDecoderA(): KeyDecoder<A> = keyDecoderA
         override fun decoderB(): Decoder<B> = decoderB
       }
   }
