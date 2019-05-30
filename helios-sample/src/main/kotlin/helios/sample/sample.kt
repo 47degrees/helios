@@ -31,7 +31,7 @@ object Sample {
   @JvmStatic
   fun main(args: Array<String>) {
 
-    val companyJson =
+    val companyJson: Json =
       Json.parseFromString(companyJsonString).getOrHandle {
         println("Failed creating the Json ${it.localizedMessage}, creating an empty one")
         JsString("")

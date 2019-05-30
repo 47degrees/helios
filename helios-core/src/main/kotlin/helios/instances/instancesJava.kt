@@ -112,7 +112,10 @@ interface MapDecoderInstance<A, B> : Decoder<Map<A, B>> {
           Json.parseFromString(key).mapLeft { StringDecodingError(value) }.flatMap { keyDecoderA().keyDecode(it) }
         val maybeValue: Either<DecodingError, B> = decoderB().decode(value)
         maybeKey.map2(maybeValue) { mapOf(it.toPair()) }
-      }.reduce { acc, either -> acc.map2(either) { it.a + it.b } }
+      }
+        .foldLeft<Either<DecodingError, Map<A, B>>, Either<DecodingError, Map<A, B>>>(mapOf<A, B>().right()) { acc, either ->
+          acc.map2(either) { it.a + it.b }
+        }
     })
 
   companion object {
