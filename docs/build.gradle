@@ -9,7 +9,7 @@ dependencies {
 
     kapt "io.arrow-kt:arrow-meta:$arrowVersion"
     kapt project(':helios-meta')
-    kapt project(':helios-dsl-syntax-compiler')
+    kapt project(':helios-dsl-meta')
     implementation "io.arrow-kt:arrow-ank:$arrowVersion"
 }
 
