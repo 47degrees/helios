@@ -176,14 +176,14 @@ sealed class JsNumber : Json() {
     fun fromDecimalStringUnsafe(value: String): JsDecimal = JsDecimal(value)
 
     fun fromIntegralStringUnsafe(value: String): JsNumber {
-      val bound = if (value.first() == '-') MinLongString else MaxLongString
+      val bound = if (value[0] == '-') MinLongString else MaxLongString
       val isJsDecimal =
         !(value.length < bound.length
             || (value.length == bound.length && value <= bound))
       return if (isJsDecimal) JsDecimal(value) else {
         val longValue = java.lang.Long.parseLong(value)
 
-        if (value.first() == '-' && longValue == 0L) JsDecimal(value) else JsLong(longValue)
+        if (value[0] == '-' && longValue == 0L) JsDecimal(value) else JsLong(longValue)
       }
     }
   }
