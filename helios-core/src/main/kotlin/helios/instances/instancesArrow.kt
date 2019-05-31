@@ -41,8 +41,8 @@ fun <A, B> Tuple2.Companion.encoder(encoderA: Encoder<A>, encoderB: Encoder<B>) 
 fun <A, B> Tuple2.Companion.decoder(decoderA: Decoder<A>, decoderB: Decoder<B>) = object : Decoder<Tuple2<A, B>> {
   override fun decode(value: Json): Either<DecodingError, Tuple2<A, B>> {
     val arr = value.asJsArray().toList().flatMap { it.value }
-    return if (arr.size >= 2)
-      decoderA.decode(arr[1]).map2(decoderB.decode(arr[2])) { it }.fix()
+    return if (arr.size == 2)
+      decoderA.decode(arr.first()).map2(decoderB.decode(arr.last())) { it }.fix()
     else ArrayDecodingError(value).left()
   }
 }
@@ -68,11 +68,11 @@ fun <A, B, C> Tuple3.Companion.decoder(
 ) = object : Decoder<Tuple3<A, B, C>> {
   override fun decode(value: Json): Either<DecodingError, Tuple3<A, B, C>> {
     val arr = value.asJsArray().toList().flatMap { it.value }
-    return if (arr.size >= 3)
+    return if (arr.size == 3)
       Either.applicative<DecodingError>().map(
-        decoderA.decode(arr[1]),
-        decoderB.decode(arr[2]),
-        decoderC.decode(arr[3])
+        decoderA.decode(arr[0]),
+        decoderB.decode(arr[1]),
+        decoderC.decode(arr[2])
       ) { it }.fix()
     else ArrayDecodingError(value).left()
   }

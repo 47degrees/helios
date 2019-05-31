@@ -110,8 +110,8 @@ interface PairDecoderInstance<out A, out B> : Decoder<Pair<A, B>> {
 
   override fun decode(value: Json): Either<DecodingError, Pair<A, B>> {
     val arr = value.asJsArray().toList().flatMap { it.value }
-    return if (arr.size >= 2)
-      decoderA().decode(arr[1]).map2(decoderB().decode(arr[2])) { it.toPair() }.fix()
+    return if (arr.size == 2)
+      decoderA().decode(arr.first()).map2(decoderB().decode(arr.last())) { it.toPair() }.fix()
     else ArrayDecodingError(value).left()
   }
 
@@ -164,11 +164,11 @@ interface TripleDecoderInstance<out A, out B, out C> : Decoder<Triple<A, B, C>> 
 
   override fun decode(value: Json): Either<DecodingError, Triple<A, B, C>> {
     val arr = value.asJsArray().toList().flatMap { it.value }
-    return if (arr.size >= 3)
+    return if (arr.size == 3)
       Either.applicative<DecodingError>().map(
-        decoderA().decode(arr[1]),
-        decoderB().decode(arr[2]),
-        decoderC().decode(arr[3])
+        decoderA().decode(arr[0]),
+        decoderB().decode(arr[1]),
+        decoderC().decode(arr[2])
       ) { (a, b, c) -> Triple(a, b, c) }.fix()
     else ArrayDecodingError(value).left()
   }
