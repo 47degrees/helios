@@ -2,6 +2,7 @@ package helios.optics
 
 import arrow.core.None
 import arrow.core.Option
+import arrow.core.extensions.option.applicative.applicative
 import arrow.core.extensions.option.eq.eq
 import arrow.core.orElse
 import helios.test.generators.alphaStr
@@ -84,7 +85,7 @@ class InstancesTest : UnitSpec() {
       EQA = JsObject.eq(),
       EQB = Option.eq(Json.eq()),
       MB = object : Monoid<Option<Json>> {
-        override fun Option<Json>.combine(b: Option<Json>) = orElse { b }
+        override fun Option<Json>.combine(b: Option<Json>) = flatMap { a -> b.map { a.merge(it) } }
         override fun empty(): Option<Json> = None
       }
     ))

@@ -1,6 +1,7 @@
 package helios.syntax.json
 
 import helios.core.*
+import java.math.BigDecimal
 import java.math.BigInteger
 
 fun String.toJson(): JsString = JsString(this)
@@ -19,3 +20,6 @@ fun BigInteger.toJson(): JsDecimal = JsNumber.fromDecimalStringUnsafe(this.toStr
 
 fun BigInteger.toJson(radix: Int): JsDecimal =
   JsNumber.fromDecimalStringUnsafe(this.toString(radix))
+
+fun BigDecimal.toJson(): JsDecimal = JsNumber.fromDecimalStringUnsafe(this.toString())
+

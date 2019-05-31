@@ -4,7 +4,6 @@ import arrow.core.Either
 import arrow.core.getOrHandle
 import helios.core.*
 import helios.optics.*
-import helios.typeclasses.DecodingError
 
 object Sample {
   const val companyJsonString = """
@@ -32,7 +31,7 @@ object Sample {
   @JvmStatic
   fun main(args: Array<String>) {
 
-    val companyJson =
+    val companyJson: Json =
       Json.parseFromString(companyJsonString).getOrHandle {
         println("Failed creating the Json ${it.localizedMessage}, creating an empty one")
         JsString("")

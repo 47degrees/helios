@@ -9,7 +9,6 @@ import helios.instances.jsobject.eq.eq
 import helios.instances.json.eq.eq
 import helios.parser.Parser
 import helios.typeclasses.Decoder
-import helios.typeclasses.DecodingError
 import java.io.File
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -20,6 +19,8 @@ const val MaxLongString = "9223372036854775807"
 const val MinLongString = "-9223372036854775808"
 
 sealed class Json {
+
+  inline val isNull inline get() = this === JsNull
 
   companion object {
     fun fromValues(i: Iterable<Json>): JsArray = JsArray(i.toList())
@@ -123,45 +124,29 @@ data class JsString(val value: CharSequence) : Json() {
 
 sealed class JsNumber : Json() {
 
-  abstract fun toBigDecimal(): Option<BigDecimal>
+  abstract fun toBigDecimal(): BigDecimal
 
-  abstract fun toBigInteger(): Option<BigInteger>
+  abstract fun toBigInteger(): BigInteger
 
   abstract fun toDouble(): Double
 
-  abstract fun toLong(): Option<Long>
+  abstract fun toFloat(): Float
 
-  fun toByte(): Option<Byte> {
-    val ml = toLong()
-    return when (ml) {
-      is Some<Long> -> {
-        val asByte: Byte = ml.t.toByte()
-        if (asByte.compareTo(ml.t) == 0) Some(asByte) else None
-      }
-      is None -> None
-    }
+  abstract fun toLong(): Long
+
+  open fun toInt(): Option<Int> = toLong().let {
+    val asInt: Int = it.toInt()
+    if (asInt.compareTo(it) == 0) Some(asInt) else None
   }
 
-  fun toShort(): Option<Short> {
-    val ml = toLong()
-    return when (ml) {
-      is Some<Long> -> {
-        val asShort: Short = ml.t.toShort()
-        if (asShort.compareTo(ml.t) == 0) Some(asShort) else None
-      }
-      is None -> None
-    }
+  open fun toShort(): Option<Short> = toLong().let {
+        val asShort: Short = it.toShort()
+        if (asShort.compareTo(it) == 0) Some(asShort) else None
   }
 
-  fun toInt(): Option<Int> {
-    val ml = toLong()
-    return when (ml) {
-      is Some<Long> -> {
-        val asInt: Int = ml.t.toInt()
-        if (asInt.compareTo(ml.t) == 0) Some(asInt) else None
-      }
-      is None -> None
-    }
+  open fun toByte(): Option<Byte> = toLong().let {
+        val asByte: Byte = it.toByte()
+        if (asByte.compareTo(it) == 0) Some(asByte) else None
   }
 
   override fun equals(other: Any?): Boolean = JsNumber.eq().run {
@@ -172,13 +157,21 @@ sealed class JsNumber : Json() {
 
   companion object {
 
-    operator fun invoke(value: Long): JsLong = JsLong(value)
+    operator fun invoke(value: BigDecimal): JsDecimal = JsDecimal(value.toString())
+
+    operator fun invoke(value: BigInteger): JsDecimal = JsDecimal(value.toString())
 
     operator fun invoke(value: Double): JsDouble = JsDouble(value)
 
+    operator fun invoke(value: Float): JsFloat = JsFloat(value)
+
+    operator fun invoke(value: Long): JsLong = JsLong(value)
+
     operator fun invoke(value: Int): JsInt = JsInt(value)
 
-    operator fun invoke(value: Float): JsFloat = JsFloat(value)
+    operator fun invoke(value: Short): JsInt = JsInt(value.toInt())
+
+    operator fun invoke(value: Byte): JsInt = JsInt(value.toInt())
 
     fun fromDecimalStringUnsafe(value: String): JsDecimal = JsDecimal(value)
 
@@ -197,13 +190,16 @@ sealed class JsNumber : Json() {
 }
 
 data class JsDecimal(val value: String) : JsNumber() {
-  override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
-  override fun toBigInteger(): Option<BigInteger> = toBigDecimal().map { it.toBigInteger() }
+  override fun toBigDecimal(): BigDecimal = value.toBigDecimal()
+
+  override fun toBigInteger(): BigInteger = value.toBigInteger()
 
   override fun toDouble(): Double = value.toDouble()
 
-  override fun toLong(): Option<Long> = value.toLong().some()
+  override fun toFloat(): Float = value.toFloat()
+
+  override fun toLong(): Long = value.toLong()
 
   override fun toJsonString(): String = value
 
@@ -217,13 +213,15 @@ data class JsDecimal(val value: String) : JsNumber() {
 }
 
 data class JsLong(val value: Long) : JsNumber() {
-  override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
+  override fun toBigDecimal(): BigDecimal = value.toBigDecimal()
 
-  override fun toBigInteger(): Option<BigInteger> = toBigDecimal().map { it.toBigInteger() }
+  override fun toBigInteger(): BigInteger = value.toBigInteger()
 
   override fun toDouble(): Double = value.toDouble()
 
-  override fun toLong(): Option<Long> = value.some()
+  override fun toFloat(): Float = value.toFloat()
+
+  override fun toLong(): Long = value
 
   override fun toJsonString(): String = "$value"
 
@@ -237,13 +235,16 @@ data class JsLong(val value: Long) : JsNumber() {
 }
 
 data class JsDouble(val value: Double) : JsNumber() {
-  override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
 
-  override fun toBigInteger(): Option<BigInteger> = toBigDecimal().map { it.toBigInteger() }
+  override fun toBigDecimal(): BigDecimal = value.toBigDecimal()
+
+  override fun toBigInteger(): BigInteger = value.toBigDecimal().toBigInteger()
 
   override fun toDouble(): Double = value
 
-  override fun toLong(): Option<Long> = value.toLong().some()
+  override fun toFloat(): Float = value.toFloat()
+
+  override fun toLong(): Long = value.toLong()
 
   override fun toJsonString(): String = "$value"
 
@@ -258,13 +259,15 @@ data class JsDouble(val value: Double) : JsNumber() {
 
 data class JsFloat(val value: Float) : JsNumber() {
 
-  override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
+  override fun toBigDecimal(): BigDecimal = value.toBigDecimal()
 
-  override fun toBigInteger(): Option<BigInteger> = toBigDecimal().map { it.toBigInteger() }
+  override fun toBigInteger(): BigInteger = value.toBigDecimal().toBigInteger()
 
   override fun toDouble(): Double = value.toDouble()
 
-  override fun toLong(): Option<Long> = value.toLong().some()
+  override fun toFloat(): Float = value
+
+  override fun toLong(): Long = value.toLong()
 
   override fun toJsonString(): String = "$value"
 
@@ -278,13 +281,21 @@ data class JsFloat(val value: Float) : JsNumber() {
 }
 
 data class JsInt(val value: Int) : JsNumber() {
-  override fun toBigDecimal(): Option<BigDecimal> = value.toBigDecimal().some()
+  override fun toBigDecimal(): BigDecimal = value.toBigDecimal()
 
-  override fun toBigInteger(): Option<BigInteger> = value.toBigInteger().some()
+  override fun toBigInteger(): BigInteger = value.toBigInteger()
 
   override fun toDouble(): Double = value.toDouble()
 
-  override fun toLong(): Option<Long> = value.toLong().some()
+  override fun toFloat(): Float = value.toFloat()
+
+  override fun toLong(): Long = value.toLong()
+
+  override fun toInt(): Option<Int> = value.some()
+
+  override fun toShort(): Option<Short> = value.toShort().some()
+
+  override fun toByte(): Option<Byte> = value.toByte().some()
 
   override fun toJsonString(): String = "$value"
 
