@@ -61,28 +61,60 @@ class JsonFileGenerator(
     }
   }
 
-  //TODO FIXME
-  inline val String.encoder: String
-    get() = when {
-      this == "Boolean" -> "Boolean.Companion.encoder()"
-      this.startsWith("kotlin.collections.List") ->
-        "${Regex("kotlin.collections.List<(.*)>$").matchEntire(this)!!.groupValues[1]}.encoder()"
+  private inline val String.isComplex get() = this.contains('<')
+  private inline val String.notClosed get() = !(this.contains('<') && this.contains('>'))
+
+  private inline val String.getTypeParameters
+    get() = {
+      val inside = this.substringAfter('<').substringBeforeLast('>')
+      inside.split(',').map { it.trim() }.fold(emptyList()) { acc: List<String>, str: String ->
+        val maybeLast = acc.lastOrNull()
+        if (maybeLast != null && maybeLast.isComplex && maybeLast.notClosed)
+          acc.subList(0, acc.size - 1) + "$maybeLast, $str"
+        else acc + str
+      }
+    }()
+
+  private fun String.complexEncoder(pre: String) = getTypeParameters.joinToString(
+    prefix = "$pre(",
+    postfix = ")"
+  ) { it.encoder() }
+
+  private fun String.keyEncoder(): String = "$this.keyEncoder()"
+
+  private fun String.encoder(): String =
+    when {
+      this.startsWith("kotlin.collections.List") -> complexEncoder("ListEncoderInstance")
+      this.startsWith("kotlin.collections.Map") ->
+        "MapEncoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyEncoder()}, ${getTypeParameters.last().encoder()})"
+      this.contains('<') -> complexEncoder("${substringBefore('<')}.Companion.encoder")
+      this.contains('?') -> "arrow.core.Option<${substringBefore('?')}>".encoder()
       else -> "$this.encoder()"
     }
 
   private fun jsonProperties(je: JsonElement): String =
     je.pairs.joinToString(",", "JsObject(mapOf(", "))") { (p, r) ->
       """|
-         |"$p" to ${r.encoder}.run { $p.toJson() }
+         |"$p" to ${r.encoder()}.run { $p.encode() }
          |""".trimMargin()
     }
 
-  //TODO FIXME
-  inline val String.decoder: String
-    get() = when {
-      this == "Boolean" -> "Boolean.Companion.decoder()"
+  private fun String.complexDecoder(pre: String) = getTypeParameters.joinToString(
+    prefix = "$pre(",
+    postfix = ")"
+  ) { it.decoder() }
+
+  private fun String.keyDecoder(): String = "$this.keyDecoder()"
+
+  private fun String.decoder(): String =
+    when {
       this.startsWith("kotlin.collections.List") ->
-        "ListDecoderInstance(${Regex("kotlin.collections.List<(.*)>$").matchEntire(this)!!.groupValues[1]}.decoder())"
+        complexDecoder("ListDecoderInstance")
+      this.startsWith("kotlin.collections.Map") ->
+        "MapDecoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyDecoder()}, ${getTypeParameters.last().decoder()})"
+      this.contains('<') ->
+        complexDecoder("${substringBefore('<')}.Companion.decoder")
+      this.contains('?') -> "arrow.core.Option<${substringBefore('?')}>".decoder()
       else -> "$this.decoder()"
     }
 
@@ -90,7 +122,7 @@ class JsonFileGenerator(
     prefix = "\n\t",
     separator = ",\n\t",
     postfix = "\n"
-  ) { (p, t) -> "value[\"$p\"].fold({Either.Left(KeyNotFound(\"$p\"))}, { ${t.decoder}.run { decode(it) } })" }
+  ) { (p, t) -> "value[\"$p\"].fold({Either.Left(KeyNotFound(\"$p\"))}, { ${t.decoder()}.run { decode(it) } })" }
 
   private fun map(je: JsonElement): String = if (je.pairs.size == 1) "${parse(je)}.map("
   else "Either.applicative<DecodingError>().map(${parse(je)}, "
