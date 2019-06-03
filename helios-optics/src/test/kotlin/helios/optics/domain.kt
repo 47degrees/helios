@@ -1,6 +1,6 @@
 package helios.optics
 
-import helios.meta.json
+import helios.json
 import helios.test.generators.alphaStr
 import io.kotlintest.properties.Gen
 

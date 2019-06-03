@@ -4,7 +4,7 @@ apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 
 dependencies {
-    compile project(":helios-meta")
+    compile project(":helios-annotations")
     compile "io.arrow-kt:arrow-meta:$arrowVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     compile "me.eugeniomarletti.kotlin.metadata:kotlin-metadata:$kotlinMetadataVersion"

@@ -3,7 +3,7 @@ package helios.sample
 import arrow.core.Either
 import arrow.core.Option
 import arrow.optics.optics
-import helios.meta.json
+import helios.json
 
 @json
 data class Company(val name: String, val address: Address, val employees: List<Employee>, val private: Boolean) {

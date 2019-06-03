@@ -1,7 +1,7 @@
 apply plugin: 'kotlin-kapt'
 
 dependencies {
-    compile project(":helios-meta")
+    compile project(":helios-annotations")
     compile project(":helios-parser")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
@@ -12,18 +12,18 @@ dependencies {
     compile "io.arrow-kt:arrow-extras-extensions:$arrowVersion"
 
     kapt "io.arrow-kt:arrow-meta:$arrowVersion"
-    kapt project(':helios-meta-compiler')
+    kapt project(':helios-meta')
 
     testImplementation("io.arrow-kt:arrow-test:$arrowVersion")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
     testImplementation("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
     
-    kaptTest project(':helios-meta-compiler')
+    kaptTest project(':helios-meta')
     kaptTest "io.arrow-kt:arrow-meta:$arrowVersion"
 
     testCompile project(':helios-test')
     testCompileOnly "io.arrow-kt:arrow-meta:$arrowVersion"
-    testCompileOnly project(':helios-meta-compiler')  
+    testCompileOnly project(':helios-meta')  
     
 }
 

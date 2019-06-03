@@ -22,7 +22,7 @@ dependencies {
     compile "com.jsoniter:jsoniter:$jsoniterVersion"
 
     kapt "io.arrow-kt:arrow-meta:$arrowVersion"
-    kapt project(":helios-meta-compiler")
+    kapt project(":helios-meta")
 }
 
 jmh {
