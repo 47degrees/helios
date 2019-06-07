@@ -1,4 +1,8 @@
 options:
+
+  - title: Index
+    url: /docs/
+
   - title: Quickstart
     url: /docs/quickstart/
 

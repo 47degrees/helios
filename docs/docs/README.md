@@ -14,8 +14,6 @@ permalink: /docs/
 It's based on part of the [Jawn Parser](https://github.com/non/jawn) built on `Arrow`,
 a Functional companion to Kotlin's Standard Library.
 
-Learn more on [**47deg.github.io/helios**](https://47deg.github.io/helios)
-
 ## Why Helios
 
 **Helios** is one of the fastest `Json` parser libraries in `Kotlin`
@@ -39,30 +37,6 @@ dependencies {
 }
 ```
 
-## Running Benchmarks
+## Quickstart
 
-To run the benchmarks for comparing Helios with other Json libraries, execute the following command:
-
-```bash
-./gradlew :helios-benchmarks: executeBenchmarks
-```
-
-To run the benchmarks with Helios' performance, execute the following command:
-
-```bash
-./gradlew :helios-benchmarks: executeHeliosBenchmark
-```
-
-## Running Microsite
-
-To run the **Helios** microsite locally, you need to execute the following command:
-
-```bash
-bundle install --gemfile ./docs/Gemfile --path vendor/bundle
-```
-
-Next, you'll be able to run the following command:
-
-```bash
-BUNDLE_GEMFILE=docs/Gemfile bundle exec jekyll serve -s docs
-```
+To see how to start working with Helios, lets take a look to the [Quickstart](quickstart/)
