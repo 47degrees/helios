@@ -1,6 +1,7 @@
 package helios.retrofit
 
 import arrow.core.flatMap
+import arrow.core.getOrElse
 import helios.core.Json
 import helios.typeclasses.Decoder
 import okhttp3.ResponseBody
@@ -12,6 +13,6 @@ class HeliosResponseBodyConverter<T>(private val decoder: Decoder<T>) : Converte
   override fun convert(value: ResponseBody): T? = Json
     .parseFromByteBuffer(ByteBuffer.wrap(value.byteStream().readBytes()))
     .flatMap { it.decode(decoder) }
-    .fold({ null }, { it })
+    .getOrElse { null }
     .also { value.close() }
 }
