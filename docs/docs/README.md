@@ -27,8 +27,8 @@ To import the library on `Gradle`, add the following repository and dependencies
 
 ```groovy
 repositories {
-      maven { url "https://jitpack.io" }
- }
+    maven { url = uri("https://dl.bintray.com/helios/helios") }
+}
 
 dependencies {
     compile "com.47deg:helios-core:0.1.0"
