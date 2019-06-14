@@ -10,6 +10,6 @@ include ':helios-sample'
 include ':helios-optics'
 include ':helios-dsl-meta'
 include 'helios-test'
-include ':helios-retrofit-integration'
+include 'helios-integrations:helios-retrofit'
 
 startParameter.excludedTaskNames << ':docs:bintrayUpload'

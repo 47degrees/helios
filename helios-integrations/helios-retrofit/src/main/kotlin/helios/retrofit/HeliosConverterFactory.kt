@@ -1,7 +1,6 @@
 package helios.retrofit
 
 import arrow.core.Option
-import arrow.core.Tuple2
 import arrow.core.getOrElse
 import arrow.data.extensions.list.monad.map
 import helios.typeclasses.Decoder

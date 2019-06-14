@@ -7,7 +7,6 @@ import helios.typeclasses.Decoder
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import java.nio.ByteBuffer
-import java.nio.CharBuffer
 
 class HeliosResponseBodyConverter<T>(private val decoder: Decoder<T>) : Converter<ResponseBody, T> {
   override fun convert(value: ResponseBody): T? = Json
