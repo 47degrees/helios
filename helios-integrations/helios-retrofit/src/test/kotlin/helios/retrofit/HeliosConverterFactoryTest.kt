@@ -24,7 +24,7 @@ class HeliosConverterFactoryTest : StringSpec() {
 
   private lateinit var service: Service
 
-  private val jsonables: List<Triple<Class<*>, Encoder<*>, Decoder<*>>> = listOf(
+  private val jsonables: List<JsonableEvidence<*>> = listOf(
     Triple(Something::class.java, Something.encoder(), Something.decoder())
   )
 

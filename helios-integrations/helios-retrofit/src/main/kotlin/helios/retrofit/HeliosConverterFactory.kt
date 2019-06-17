@@ -17,7 +17,7 @@ class HeliosConverterFactory private constructor(
 ) : Converter.Factory() {
 
   companion object {
-    fun create(jsonables: List<Triple<Class<*>, Encoder<*>, Decoder<*>>>): HeliosConverterFactory {
+    fun create(jsonables: List<JsonableEvidence<*>>): HeliosConverterFactory {
       val encoderInstances = jsonables.map { (clazz, encoder, _) -> Pair(clazz.canonicalName, encoder) }.toMap()
       val decoderInstances = jsonables.map { (clazz, _, decoder) -> Pair(clazz.canonicalName, decoder) }.toMap()
 

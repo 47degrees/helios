@@ -9,9 +9,13 @@ import retrofit2.Converter
 import java.nio.ByteBuffer
 
 class HeliosResponseBodyConverter<T>(private val decoder: Decoder<T>) : Converter<ResponseBody, T> {
-  override fun convert(value: ResponseBody): T? = Json
-    .parseFromByteBuffer(ByteBuffer.wrap(value.byteStream().readBytes()))
-    .flatMap { it.decode(decoder) }
-    .getOrElse { null }
-    .also { value.close() }
+  override fun convert(value: ResponseBody): T? = try {
+    Json
+      .parseFromByteBuffer(ByteBuffer.wrap(value.byteStream().readBytes()))
+      .flatMap { it.decode(decoder) }
+      .getOrElse { null }
+      .also { value.close() }
+  } catch (ex: Exception) {
+    null
+  }
 }
