@@ -1,5 +1,6 @@
 package helios.retrofit
 
+import arrow.core.Tuple3
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
 import io.kotlintest.Description
@@ -25,7 +26,7 @@ class HeliosConverterFactoryTest : StringSpec() {
   private lateinit var service: Service
 
   private val jsonables: List<JsonableEvidence<*>> = listOf(
-    Triple(Something::class.java, Something.encoder(), Something.decoder())
+    Tuple3(Something::class.java, Something.encoder(), Something.decoder())
   )
 
   override fun beforeTest(description: Description) {
