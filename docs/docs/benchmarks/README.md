@@ -23,11 +23,11 @@ between Helios and some of the most common Kotlin Json libraries.
 To run the benchmarks for comparing Helios with other Json libraries, execute the following command:
 
 ```bash
-./gradlew :helios-benchmarks: executeBenchmarks
+./gradlew :helios-benchmarks:executeBenchmarks
 ```
 
 To run the benchmarks with Helios' performance, execute the following command:
 
 ```bash
-./gradlew :helios-benchmarks: executeHeliosBenchmark
+./gradlew :helios-benchmarks:executeHeliosBenchmark
 ```
