@@ -39,6 +39,10 @@ buildscript {
         kotsonVersion ='2.5.0'
         jacksonVersion = '2.9.8'
         jsoniterVersion = '0.9.23'
+        
+        // Retrofit integration libraries
+        retrofitVersion = "2.6.0"
+        mockwebserverVersion = "3.14.2"
     }
     repositories {
         mavenLocal()
