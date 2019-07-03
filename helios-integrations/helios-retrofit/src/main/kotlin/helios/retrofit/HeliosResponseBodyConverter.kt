@@ -1,5 +1,7 @@
 package helios.retrofit
 
+import arrow.core.Try
+import arrow.core.extensions.either.functor.`as`
 import arrow.core.flatMap
 import arrow.core.getOrElse
 import helios.core.Json
@@ -13,8 +15,7 @@ class HeliosResponseBodyConverter<T>(private val decoder: Decoder<T>) : Converte
     Json
       .parseFromByteBuffer(ByteBuffer.wrap(value.byteStream().readBytes()))
       .flatMap { it.decode(decoder) }
-      .getOrElse { null }
-      .also { value.close() }
+      .flatMap { Try { value.close() }.toEither().`as`(it) }.getOrElse { null }
   } catch (ex: Exception) {
     null
   }
