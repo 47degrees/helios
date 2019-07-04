@@ -16,8 +16,9 @@ class HeliosResponseBodyConverter<T>(private val decoder: Decoder<T>) : Converte
       .parseFromByteBuffer(ByteBuffer.wrap(value.byteStream().readBytes()))
       .flatMap { it.decode(decoder) }
       .getOrElse { null }
-      .also { value.close() }
   } catch (ex: Exception) {
     null
+  } finally {
+    value.close()
   }
 }
