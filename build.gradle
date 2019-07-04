@@ -29,7 +29,7 @@ buildscript {
         bintrayVersion = "1.8.4"
         gitPublishVersion = "2.1.1"
         jmhVersion = "0.4.8"
-        hoodVersion = "0.6.0"
+        hoodVersion = "0.6.1"
 
         //Other json libraries
         kotlinxVersion = '0.10.0'
