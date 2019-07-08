@@ -16,31 +16,55 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
 
-fun UUID.encoder() = object : Encoder<UUID> {
+interface UUIDEncoderInstance : Encoder<UUID> {
   override fun UUID.encode(): Json = JsString(this.toString())
+
+  companion object {
+    operator fun invoke() = object : UUIDEncoderInstance {}
+  }
 }
 
-fun UUID.decoder() = object : Decoder<UUID> {
+interface UUIDDecoderInstance : Decoder<UUID> {
   override fun decode(value: Json): Either<DecodingError, UUID> =
     value.asJsString().map { UUID.fromString(it.value.toString()) }.toEither { StringDecodingError(value) }
+
+  companion object {
+    operator fun invoke() = object : UUIDDecoderInstance {}
+  }
 }
 
-fun BigDecimal.encoder() = object : Encoder<BigDecimal> {
+interface BigDecimalEncoderInstance : Encoder<BigDecimal> {
   override fun BigDecimal.encode(): Json = JsNumber(this)
+
+  companion object {
+    operator fun invoke() = object : BigDecimalEncoderInstance {}
+  }
 }
 
-fun BigDecimal.decoder() = object : Decoder<BigDecimal> {
+interface BigDecimalDecoderInstance : Decoder<BigDecimal> {
   override fun decode(value: Json): Either<DecodingError, BigDecimal> =
     value.asJsNumber().map { it.toBigDecimal() }.toEither { NumberDecodingError(value) }
+
+  companion object {
+    operator fun invoke() = object : BigDecimalDecoderInstance {}
+  }
 }
 
-fun BigInteger.encoder() = object : Encoder<BigInteger> {
+interface BigIntegerEncoderInstance : Encoder<BigInteger> {
   override fun BigInteger.encode(): Json = JsNumber(this)
+
+  companion object {
+    operator fun invoke() = object : BigIntegerEncoderInstance {}
+  }
 }
 
-fun BigInteger.decoder() = object : Decoder<BigInteger> {
+interface BigIntegerDecoderInstance : Decoder<BigInteger> {
   override fun decode(value: Json): Either<DecodingError, BigInteger> =
     value.asJsNumber().map { it.toBigInteger() }.toEither { NumberDecodingError(value) }
+
+  companion object {
+    operator fun invoke() = object : BigIntegerDecoderInstance {}
+  }
 }
 
 @extension

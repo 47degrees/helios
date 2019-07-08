@@ -4,9 +4,10 @@ import arrow.core.Either
 import arrow.core.Option
 import arrow.optics.optics
 import helios.json
+import java.util.*
 
 @json
-data class Company(val name: String, val address: Address, val employees: List<Employee>, val private: Boolean) {
+data class Company(val id: UUID, val name: String, val address: Address, val employees: List<Employee>, val private: Boolean) {
   companion object
 }
 
