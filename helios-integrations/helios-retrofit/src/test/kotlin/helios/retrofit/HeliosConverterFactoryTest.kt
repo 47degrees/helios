@@ -18,10 +18,12 @@ import retrofit2.http.POST
 class HeliosConverterFactoryTest : StringSpec() {
 
   interface Service {
-    @POST("/") fun getSomething(@Body something: Something): Call<Something>
+    @POST("/")
+    fun getSomething(@Body something: Something): Call<Something>
   }
 
-  @Rule val server = MockWebServer()
+  @Rule
+  val server = MockWebServer()
 
   private lateinit var service: Service
 

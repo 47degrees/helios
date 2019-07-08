@@ -17,9 +17,10 @@ interface InstantEncoderInstance : Encoder<Instant> {
   override fun Instant.encode() = JsString(formatter().format(this))
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_INSTANT) = object : InstantEncoderInstance {
-      override fun formatter(): DateTimeFormatter = formatter
-    }
+    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_INSTANT) =
+      object : InstantEncoderInstance {
+        override fun formatter(): DateTimeFormatter = formatter
+      }
   }
 }
 
@@ -40,13 +41,14 @@ interface ZonedDateTimeEncoderInstance : Encoder<ZonedDateTime> {
   override fun ZonedDateTime.encode() = JsString(formatter().format(this))
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME) = object : ZonedDateTimeEncoderInstance {
-      override fun formatter(): DateTimeFormatter = formatter
-    }
+    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME) =
+      object : ZonedDateTimeEncoderInstance {
+        override fun formatter(): DateTimeFormatter = formatter
+      }
   }
 }
 
-interface ZonedDateTimeDecoderInstance :  Decoder<ZonedDateTime> {
+interface ZonedDateTimeDecoderInstance : Decoder<ZonedDateTime> {
 
   fun formatter(): DateTimeFormatter
 
@@ -54,26 +56,28 @@ interface ZonedDateTimeDecoderInstance :  Decoder<ZonedDateTime> {
     value.asJsString().map { ZonedDateTime.parse(it.value, formatter()) }.toEither { StringDecodingError(value) }
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME) = object : ZonedDateTimeDecoderInstance {
-      override fun formatter(): DateTimeFormatter = formatter
-    }
+    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME) =
+      object : ZonedDateTimeDecoderInstance {
+        override fun formatter(): DateTimeFormatter = formatter
+      }
   }
 }
 
-interface LocalDateTimeEncoderInstance :  Encoder<LocalDateTime> {
+interface LocalDateTimeEncoderInstance : Encoder<LocalDateTime> {
 
   fun formatter(): DateTimeFormatter
 
   override fun LocalDateTime.encode() = JsString(formatter().format(this))
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME) = object : LocalDateTimeEncoderInstance {
-      override fun formatter(): DateTimeFormatter = formatter
-    }
+    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME) =
+      object : LocalDateTimeEncoderInstance {
+        override fun formatter(): DateTimeFormatter = formatter
+      }
   }
 }
 
-interface LocalDateTimeDecoderInstance :  Decoder<LocalDateTime> {
+interface LocalDateTimeDecoderInstance : Decoder<LocalDateTime> {
 
   fun formatter(): DateTimeFormatter
 
@@ -81,26 +85,28 @@ interface LocalDateTimeDecoderInstance :  Decoder<LocalDateTime> {
     value.asJsString().map { LocalDateTime.parse(it.value, formatter()) }.toEither { StringDecodingError(value) }
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME) = object : LocalDateTimeDecoderInstance {
-      override fun formatter(): DateTimeFormatter = formatter
-    }
+    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME) =
+      object : LocalDateTimeDecoderInstance {
+        override fun formatter(): DateTimeFormatter = formatter
+      }
   }
 }
 
-interface LocalDateEncoderInstance :  Encoder<LocalDate> {
+interface LocalDateEncoderInstance : Encoder<LocalDate> {
 
   fun formatter(): DateTimeFormatter
 
   override fun LocalDate.encode() = JsString(formatter().format(this))
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE) = object : LocalDateEncoderInstance {
-      override fun formatter(): DateTimeFormatter = formatter
-    }
+    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE) =
+      object : LocalDateEncoderInstance {
+        override fun formatter(): DateTimeFormatter = formatter
+      }
   }
 }
 
-interface LocalDateDecoderInstance :  Decoder<LocalDate> {
+interface LocalDateDecoderInstance : Decoder<LocalDate> {
 
   fun formatter(): DateTimeFormatter
 
@@ -108,26 +114,28 @@ interface LocalDateDecoderInstance :  Decoder<LocalDate> {
     value.asJsString().map { LocalDate.parse(it.value, formatter()) }.toEither { StringDecodingError(value) }
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE) = object : LocalDateDecoderInstance {
-      override fun formatter(): DateTimeFormatter = formatter
-    }
+    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE) =
+      object : LocalDateDecoderInstance {
+        override fun formatter(): DateTimeFormatter = formatter
+      }
   }
 }
 
-interface LocalTimeEncoderInstance :  Encoder<LocalTime> {
+interface LocalTimeEncoderInstance : Encoder<LocalTime> {
 
   fun formatter(): DateTimeFormatter
 
   override fun LocalTime.encode() = JsString(formatter().format(this))
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME) = object : LocalTimeEncoderInstance {
-      override fun formatter(): DateTimeFormatter = formatter
-    }
+    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME) =
+      object : LocalTimeEncoderInstance {
+        override fun formatter(): DateTimeFormatter = formatter
+      }
   }
 }
 
-interface LocalTimeDecoderInstance :  Decoder<LocalTime> {
+interface LocalTimeDecoderInstance : Decoder<LocalTime> {
 
   fun formatter(): DateTimeFormatter
 
@@ -135,26 +143,28 @@ interface LocalTimeDecoderInstance :  Decoder<LocalTime> {
     value.asJsString().map { LocalTime.parse(it.value, formatter()) }.toEither { StringDecodingError(value) }
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME) = object : LocalTimeDecoderInstance {
-      override fun formatter(): DateTimeFormatter = formatter
-    }
+    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME) =
+      object : LocalTimeDecoderInstance {
+        override fun formatter(): DateTimeFormatter = formatter
+      }
   }
 }
 
-interface OffsetDateTimeEncoderInstance :  Encoder<OffsetDateTime> {
+interface OffsetDateTimeEncoderInstance : Encoder<OffsetDateTime> {
 
   fun formatter(): DateTimeFormatter
 
   override fun OffsetDateTime.encode() = JsString(formatter().format(this))
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME) = object : OffsetDateTimeEncoderInstance {
-      override fun formatter(): DateTimeFormatter = formatter
-    }
+    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME) =
+      object : OffsetDateTimeEncoderInstance {
+        override fun formatter(): DateTimeFormatter = formatter
+      }
   }
 }
 
-interface OffsetDateTimeDecoderInstance :  Decoder<OffsetDateTime> {
+interface OffsetDateTimeDecoderInstance : Decoder<OffsetDateTime> {
 
   fun formatter(): DateTimeFormatter
 
@@ -162,26 +172,28 @@ interface OffsetDateTimeDecoderInstance :  Decoder<OffsetDateTime> {
     value.asJsString().map { OffsetDateTime.parse(it.value, formatter()) }.toEither { StringDecodingError(value) }
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME) = object : OffsetDateTimeDecoderInstance {
-      override fun formatter(): DateTimeFormatter = formatter
-    }
+    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME) =
+      object : OffsetDateTimeDecoderInstance {
+        override fun formatter(): DateTimeFormatter = formatter
+      }
   }
 }
 
-interface OffsetTimeEncoderInstance :  Encoder<OffsetTime> {
+interface OffsetTimeEncoderInstance : Encoder<OffsetTime> {
 
   fun formatter(): DateTimeFormatter
 
   override fun OffsetTime.encode() = JsString(formatter().format(this))
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_TIME) = object : OffsetTimeEncoderInstance {
-      override fun formatter(): DateTimeFormatter = formatter
-    }
+    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_TIME) =
+      object : OffsetTimeEncoderInstance {
+        override fun formatter(): DateTimeFormatter = formatter
+      }
   }
 }
 
-interface OffsetTimeDecoderInstance :  Decoder<OffsetTime> {
+interface OffsetTimeDecoderInstance : Decoder<OffsetTime> {
 
   fun formatter(): DateTimeFormatter
 
@@ -189,9 +201,10 @@ interface OffsetTimeDecoderInstance :  Decoder<OffsetTime> {
     value.asJsString().map { OffsetTime.parse(it.value, formatter()) }.toEither { StringDecodingError(value) }
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_TIME) = object : OffsetTimeDecoderInstance {
-      override fun formatter(): DateTimeFormatter = formatter
-    }
+    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_TIME) =
+      object : OffsetTimeDecoderInstance {
+        override fun formatter(): DateTimeFormatter = formatter
+      }
   }
 }
 
