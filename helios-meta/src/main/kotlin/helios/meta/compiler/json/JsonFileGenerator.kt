@@ -84,6 +84,7 @@ class JsonFileGenerator(
 
   private fun String.encoder(): String =
     when {
+      //TODO add java cases
       this.startsWith("kotlin.collections.List") -> complexEncoder("ListEncoderInstance")
       this.startsWith("kotlin.collections.Map") ->
         "MapEncoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyEncoder()}, ${getTypeParameters.last().encoder()})"
@@ -108,6 +109,7 @@ class JsonFileGenerator(
 
   private fun String.decoder(): String =
     when {
+      //TODO add java cases
       this.startsWith("kotlin.collections.List") ->
         complexDecoder("ListDecoderInstance")
       this.startsWith("kotlin.collections.Map") ->
