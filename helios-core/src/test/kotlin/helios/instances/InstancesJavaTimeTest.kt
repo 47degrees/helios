@@ -1,4 +1,4 @@
-package helios.core.instances
+package helios.instances
 
 import arrow.test.UnitSpec
 import helios.instances.*
