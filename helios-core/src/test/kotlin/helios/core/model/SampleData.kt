@@ -1,6 +1,8 @@
 package helios.core.model
 
+import arrow.data.NonEmptyList
 import arrow.optics.optics
+import arrow.test.generators.nonEmptyList
 import helios.json
 import helios.test.generators.alphaStr
 import io.kotlintest.properties.Gen
@@ -12,7 +14,7 @@ data class Friend(
   val latitude: String,
   val longitude: String,
   val tags: List<String>,
-  val range: List<Int>,
+  val range: NonEmptyList<Int>,
   val greeting: String,
   val favoriteFruit: String
 ) {
@@ -25,7 +27,7 @@ val genFriend: Gen<Friend> =
     Gen.alphaStr(),
     Gen.alphaStr(),
     Gen.list(Gen.alphaStr()),
-    Gen.list(Gen.int()),
+    Gen.nonEmptyList(Gen.int()),
     Gen.alphaStr(),
     Gen.alphaStr()
   ) { id, latitude, longitude, tags, range, greeting, favoriteFruit ->
