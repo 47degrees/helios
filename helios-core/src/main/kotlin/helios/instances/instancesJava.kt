@@ -146,7 +146,13 @@ interface EnumDecoderInstance<E : Enum<E>> : Decoder<Enum<E>> {
   override fun decode(value: Json): Either<DecodingError, Enum<E>> =
     value.asJsString()
       .toEither { StringDecodingError(value) }
-      .map { java.lang.Enum.valueOf<E>(enumClass().java, it.value.toString()) }
+      .flatMap {
+          try {
+              Right(java.lang.Enum.valueOf<E>(enumClass().java, it.value.toString()))
+          } catch (e: IllegalArgumentException) {
+              Left(EnumValueNotFound(value))
+          }
+      }
 
   companion object {
     inline operator fun <reified E : Enum<E>> invoke(): Decoder<Enum<E>> =
