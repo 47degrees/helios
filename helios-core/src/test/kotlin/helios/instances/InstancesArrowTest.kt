@@ -1,16 +1,15 @@
 package helios.instances
 
-import arrow.core.Right
 import arrow.data.NonEmptyList
 import arrow.test.UnitSpec
 import arrow.test.generators.nonEmptyList
 import helios.core.JsArray
 import helios.test.generators.alphaStr
 import io.kotlintest.assertions.arrow.either.beLeft
+import io.kotlintest.assertions.arrow.either.beRight
 import io.kotlintest.properties.Gen
 import io.kotlintest.properties.assertAll
 import io.kotlintest.should
-import io.kotlintest.shouldBe
 
 class InstancesArrowTest : UnitSpec() {
 
