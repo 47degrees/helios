@@ -93,10 +93,10 @@ class JsonFileGenerator(
     }
 
   private fun jsonProperties(je: JsonElement): String =
-    je.pairs.joinToString(",", "JsObject(mapOf(", "))") { (p, r) ->
-      """|
-         |"$p" to ${r.encoder()}.run { $p.encode() }
-         |""".trimMargin()
+    je.pairs.joinToString(",\n", "JsObject(mapOf(\n", "\n))") { (p, r) ->
+      """
+         |  "$p" to ${r.encoder()}.run { $p.encode() }
+         """.trimMargin()
     }
 
   private fun String.complexDecoder(pre: String) = getTypeParameters.joinToString(
