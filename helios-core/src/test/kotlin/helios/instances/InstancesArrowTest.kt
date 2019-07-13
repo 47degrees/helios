@@ -18,7 +18,7 @@ class InstancesArrowTest : UnitSpec() {
 
         "NonEmptyList should be encode and decode successfully" {
             assertAll(Gen.nonEmptyList(Gen.alphaStr())) { list ->
-                NonEmptyList.decoder(String.decoder()).decode(NonEmptyList.encoder(String.encoder()).run { list.encode() }) shouldBe Right(list)
+                NonEmptyList.decoder(String.decoder()).decode(NonEmptyList.encoder(String.encoder()).run { list.encode() }) should beRight(list)
             }
         }
 
