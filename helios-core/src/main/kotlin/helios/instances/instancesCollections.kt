@@ -275,7 +275,9 @@ interface MapEncoderInstance<A, B> : Encoder<Map<A, B>> {
   fun encoderB(): Encoder<B>
 
   override fun Map<A, B>.encode(): Json =
-    JsObject(this.map { (key, value) -> (keyEncoderA().run { key.keyEncode() } to encoderB().run { value.encode() }) }.toMap())
+    JsObject(this.map { (key, value) ->
+      (keyEncoderA().run { key.keyEncode().value.toString() } to encoderB().run { value.encode() })
+    }.toMap())
 
   companion object {
     operator fun <A, B> invoke(keyEncoderA: KeyEncoder<A>, encoderB: Encoder<B>): Encoder<Map<A, B>> =
@@ -296,8 +298,7 @@ interface MapDecoderInstance<A, B> : Decoder<Map<A, B>> {
   override fun decode(value: Json): Either<DecodingError, Map<A, B>> =
     value.asJsObject().fold({ ObjectDecodingError(value).left() }, { obj ->
       obj.value.map { (key, value) ->
-        val maybeKey: Either<DecodingError, A> =
-          Json.parseFromString(key).mapLeft { StringDecodingError(value) }.flatMap { keyDecoderA().keyDecode(it) }
+        val maybeKey: Either<DecodingError, A> = keyDecoderA().keyDecode(JsString(key))
         val maybeValue: Either<DecodingError, B> = decoderB().decode(value)
         maybeKey.map2(maybeValue) { mapOf(it.toPair()) }
       }

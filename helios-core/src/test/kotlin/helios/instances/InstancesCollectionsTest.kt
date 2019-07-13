@@ -1,36 +1,32 @@
 package helios.instances
 
+import arrow.core.flatMap
 import arrow.test.UnitSpec
+import helios.core.Json
+import helios.test.generators.*
 import io.kotlintest.assertions.arrow.either.beRight
-import io.kotlintest.assertions.arrow.either.shouldBeRight
-import io.kotlintest.should
-
+import io.kotlintest.matchers.maps.shouldContainExactly
 import io.kotlintest.properties.Gen
 import io.kotlintest.properties.assertAll
+import io.kotlintest.should
 
 class InstancesCollectionsTest : UnitSpec() {
-
-  inline fun <reified A> Gen.Companion.array(genA: Gen<A>): Gen<Array<A>> = Gen.list(genA).map { it.toTypedArray() }
-
-  fun Gen.Companion.short(): Gen<Short> = choose(Short.MIN_VALUE.toInt(), Short.MAX_VALUE.toInt()).map { it.toShort() }
-
-  fun Gen.Companion.byte(): Gen<Byte> = choose(Byte.MIN_VALUE.toInt(), Byte.MAX_VALUE.toInt()).map { it.toByte() }
 
   init {
 
     "List should be encode and decode successfully"{
-      assertAll(Gen.list(Gen.string())) { sample ->
+      assertAll(Gen.list(Gen.alphaStr())) { sample ->
         ListDecoderInstance(String.decoder()).decode(ListEncoderInstance(String.encoder()).run {
           sample.encode()
-        }).shouldBeRight(sample)
+        }) should beRight(sample)
       }
     }
 
     "Array should be encode and decode successfully"{
-      assertAll(Gen.array(Gen.string())) { sample ->
+      assertAll(Gen.array(Gen.alphaStr())) { sample ->
         ArrayDecoderInstance(String.decoder()).decode(ArrayEncoderInstance(String.encoder()).run {
           sample.encode()
-        }).shouldBeRight(sample)
+        }).map { it.contentEquals(sample) } should beRight(true)
       }
     }
 
@@ -38,7 +34,7 @@ class InstancesCollectionsTest : UnitSpec() {
       assertAll(Gen.array(Gen.double())) { sample ->
         DoubleArrayDecoderInstance().decode(DoubleArrayEncoderInstance().run {
           sample.toDoubleArray().encode()
-        }).shouldBeRight(sample)
+        }).map { it.contentEquals(sample.toDoubleArray()) } should beRight(true)
       }
     }
 
@@ -46,7 +42,7 @@ class InstancesCollectionsTest : UnitSpec() {
       assertAll(Gen.array(Gen.float())) { sample ->
         FloatArrayDecoderInstance().decode(FloatArrayEncoderInstance().run {
           sample.toFloatArray().encode()
-        }).shouldBeRight(sample)
+        }).map { it.contentEquals(sample.toFloatArray()) } should beRight(true)
       }
     }
 
@@ -54,7 +50,7 @@ class InstancesCollectionsTest : UnitSpec() {
       assertAll(Gen.array(Gen.long())) { sample ->
         LongArrayDecoderInstance().decode(LongArrayEncoderInstance().run {
           sample.toLongArray().encode()
-        }).shouldBeRight(sample)
+        }).map { it.contentEquals(sample.toLongArray()) } should beRight(true)
       }
     }
 
@@ -62,7 +58,7 @@ class InstancesCollectionsTest : UnitSpec() {
       assertAll(Gen.array(Gen.int())) { sample ->
         IntArrayDecoderInstance().decode(IntArrayEncoderInstance().run {
           sample.toIntArray().encode()
-        }).shouldBeRight(sample)
+        }).map { it.contentEquals(sample.toIntArray()) } should beRight(true)
       }
     }
 
@@ -70,7 +66,7 @@ class InstancesCollectionsTest : UnitSpec() {
       assertAll(Gen.array(Gen.short())) { sample ->
         ShortArrayDecoderInstance().decode(ShortArrayEncoderInstance().run {
           sample.toShortArray().encode()
-        }).shouldBeRight(sample)
+        }).map { it.contentEquals(sample.toShortArray()) } should beRight(true)
       }
     }
 
@@ -78,7 +74,7 @@ class InstancesCollectionsTest : UnitSpec() {
       assertAll(Gen.array(Gen.byte())) { sample ->
         ByteArrayDecoderInstance().decode(ByteArrayEncoderInstance().run {
           sample.toByteArray().encode()
-        }).shouldBeRight(sample)
+        }).map { it.contentEquals(sample.toByteArray()) } should beRight(true)
       }
     }
 
@@ -86,17 +82,17 @@ class InstancesCollectionsTest : UnitSpec() {
       assertAll(Gen.array(Gen.bool())) { sample ->
         BooleanArrayDecoderInstance().decode(BooleanArrayEncoderInstance().run {
           sample.toBooleanArray().encode()
-        }).shouldBeRight(sample)
+        }).map { it.contentEquals(sample.toBooleanArray()) } should beRight(true)
       }
     }
 
     "Map should be encode and decode successfully"{
-      assertAll(Gen.map(Gen.string(), Gen.string())) { sample ->
+      assertAll(Gen.map(Gen.alphaStr(), Gen.alphaStr())) { sample ->
         MapDecoderInstance(String.keyDecoder(), String.decoder()).decode(
           MapEncoderInstance(
             String.keyEncoder(),
             String.encoder()
-          ).run { sample.encode() }).shouldBeRight(sample)
+          ).run { sample.encode() }).map { it shouldContainExactly (sample) } should beRight()
       }
     }
 
