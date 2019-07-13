@@ -140,13 +140,13 @@ sealed class JsNumber : Json() {
   }
 
   open fun toShort(): Option<Short> = toLong().let {
-        val asShort: Short = it.toShort()
-        if (asShort.compareTo(it) == 0) Some(asShort) else None
+    val asShort: Short = it.toShort()
+    if (asShort.compareTo(it) == 0) Some(asShort) else None
   }
 
   open fun toByte(): Option<Byte> = toLong().let {
-        val asByte: Byte = it.toByte()
-        if (asByte.compareTo(it) == 0) Some(asByte) else None
+    val asByte: Byte = it.toByte()
+    if (asByte.compareTo(it) == 0) Some(asByte) else None
   }
 
   override fun equals(other: Any?): Boolean = JsNumber.eq().run {

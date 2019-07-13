@@ -23,3 +23,4 @@ fun BigInteger.toJson(radix: Int): JsDecimal =
 
 fun BigDecimal.toJson(): JsDecimal = JsNumber.fromDecimalStringUnsafe(this.toString())
 
+//TODO add more syntax
