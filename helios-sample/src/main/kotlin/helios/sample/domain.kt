@@ -4,9 +4,16 @@ import arrow.core.Either
 import arrow.core.Option
 import arrow.optics.optics
 import helios.json
+import java.util.*
 
 @json
-data class Company(val name: String, val address: Address, val employees: List<Employee>, val private: Boolean) {
+data class Company(
+  val id: UUID,
+  val name: String,
+  val address: Address,
+  val employees: List<Employee>,
+  val private: Boolean
+) {
   companion object
 }
 
@@ -24,7 +31,7 @@ typealias MomSide = String
 typealias DadSide = String
 
 @json
-data class Child(val name: String, val age: Int, val family: Map<String, Either<MomSide, DadSide>>){
+data class Child(val name: String, val age: Int, val family: Map<String, Either<MomSide, DadSide>>) {
   companion object
 }
 
@@ -32,7 +39,12 @@ typealias Wife = String
 typealias Husband = String
 
 @json
-data class Employee(val name: String, val lastName: String, val married: Either<Wife, Husband>, val childs: Option<List<Child>>) {
+data class Employee(
+  val name: String,
+  val lastName: String,
+  val married: Either<Wife, Husband>,
+  val childs: Option<List<Child>>
+) {
   companion object
 }
 

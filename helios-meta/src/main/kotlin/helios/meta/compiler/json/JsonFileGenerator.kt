@@ -87,6 +87,7 @@ class JsonFileGenerator(
       this.startsWith("kotlin.collections.List") -> complexEncoder("ListEncoderInstance")
       this.startsWith("kotlin.collections.Map") ->
         "MapEncoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyEncoder()}, ${getTypeParameters.last().encoder()})"
+      this.startsWith("java") -> "${this.split('.').last()}EncoderInstance()"
       this.contains('<') -> complexEncoder("${substringBefore('<')}.Companion.encoder")
       this.contains('?') -> "arrow.core.Option<${substringBefore('?')}>".encoder()
       else -> "$this.encoder()"
@@ -112,6 +113,7 @@ class JsonFileGenerator(
         complexDecoder("ListDecoderInstance")
       this.startsWith("kotlin.collections.Map") ->
         "MapDecoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyDecoder()}, ${getTypeParameters.last().decoder()})"
+      this.startsWith("java") -> "${this.split('.').last()}DecoderInstance()"
       this.contains('<') ->
         complexDecoder("${substringBefore('<')}.Companion.decoder")
       this.contains('?') -> "arrow.core.Option<${substringBefore('?')}>".decoder()
