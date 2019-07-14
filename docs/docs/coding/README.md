@@ -34,7 +34,7 @@ Person.decoder().decode(personJson)
 The `@json` annotation does not support `Enum` types, so a custom `Encoder` and `Decoder` must be used.
 You will be able to encode and decode using the following:
 
-```kotlin:ank
+```kotlin:ank:silent
 import arrow.core.*
 import helios.*
 import helios.instances.*
