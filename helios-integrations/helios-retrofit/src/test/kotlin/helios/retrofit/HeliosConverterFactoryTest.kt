@@ -1,5 +1,6 @@
 package helios.retrofit
 
+import arrow.core.Try
 import arrow.core.Tuple3
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
@@ -27,7 +28,7 @@ class HeliosConverterFactoryTest : StringSpec() {
 
   private lateinit var service: Service
 
-  private val jsonables: List<JsonableEvidence<*>> = listOf(
+  private val jsonables: List<JsonableEvidence<*>> = listOf<JsonableEvidence<*>>(
     Tuple3(Something::class.java, Something.encoder(), Something.decoder())
   )
 
@@ -66,12 +67,11 @@ class HeliosConverterFactoryTest : StringSpec() {
       result.quantity shouldBe 1
     }
 
-    "Converter should return null if serialization fails" {
+    "Converter should throw an exception if serialization fails" {
       server.enqueue(MockResponse().setBody("{}"))
 
-      val call = service.getSomething(Something("value", 100))
-      val response = call.execute()
-      val result = response.body()
+      val call = Try{service.getSomething(Something("value", 100)).execute() }.toOption()
+      val result = call.map { it.body() }.orNull()
 
       result shouldBe null
     }

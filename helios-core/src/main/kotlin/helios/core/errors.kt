@@ -1,6 +1,6 @@
 package helios.core
 
-sealed class DecodingError: Exception()
+sealed class DecodingError : Exception()
 data class StringDecodingError(val value: Json) : DecodingError()
 data class BooleanDecodingError(val value: Json) : DecodingError()
 data class NumberDecodingError(val value: Json) : DecodingError()

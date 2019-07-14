@@ -22,8 +22,8 @@ class HeliosConverterFactory private constructor(
     fun create(vararg jsonables: JsonableEvidence<*>): HeliosConverterFactory = create(jsonables.toList())
 
     fun create(jsonables: List<JsonableEvidence<*>>): HeliosConverterFactory {
-      val encoderInstances = jsonables.map { (clazz, encoder, _) -> Pair(clazz.java, encoder) }.toMap()
-      val decoderInstances = jsonables.map { (clazz, _, decoder) -> Pair(clazz.java, decoder) }.toMap()
+      val encoderInstances = jsonables.map { (clazz, encoder, _) -> Pair(clazz, encoder) }.toMap()
+      val decoderInstances = jsonables.map { (clazz, _, decoder) -> Pair(clazz, decoder) }.toMap()
 
       return HeliosConverterFactory(decoderInstances, encoderInstances)
     }
