@@ -37,8 +37,7 @@ You will be able to encode and decode using the following:
 ```kotlin:ank
 import arrow.core.*
 import helios.*
-import helios.core.*
-import helios.typeclasses.*
+import helios.instances.*
 
 enum class Foo {
   A
