@@ -3,19 +3,15 @@ package helios.instances
 import arrow.core.*
 import arrow.core.extensions.either.applicative.applicative
 import arrow.core.extensions.either.applicative.map2
-import arrow.core.extensions.either.monoid.monoid
-import arrow.data.extensions.list.foldable.fold
 import arrow.data.extensions.list.foldable.foldLeft
 import arrow.data.extensions.list.traverse.sequence
 import arrow.data.fix
 import arrow.extension
-import arrow.typeclasses.Monoid
 import helios.core.*
 import helios.typeclasses.*
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
-import kotlin.reflect.KClass
 
 fun UUID.encoder() = object : Encoder<UUID> {
   override fun UUID.encode(): Json = JsString(this.toString())
@@ -127,37 +123,4 @@ interface MapDecoderInstance<A, B> : Decoder<Map<A, B>> {
       }
   }
 
-}
-
-interface EnumEncoderInstance<E : Enum<E>> : Encoder<Enum<E>> {
-
-  override fun Enum<E>.encode(): Json = JsString(name)
-
-  companion object {
-    operator fun <E : Enum<E>> invoke(): Encoder<Enum<E>> =
-      object : EnumEncoderInstance<E> {}
-  }
-}
-
-interface EnumDecoderInstance<E : Enum<E>> : Decoder<Enum<E>> {
-
-  fun enumClass(): KClass<E>
-
-  override fun decode(value: Json): Either<DecodingError, Enum<E>> =
-    value.asJsString()
-      .toEither { StringDecodingError(value) }
-      .flatMap {
-          try {
-              Right(java.lang.Enum.valueOf<E>(enumClass().java, it.value.toString()))
-          } catch (e: IllegalArgumentException) {
-              Left(EnumValueNotFound(value))
-          }
-      }
-
-  companion object {
-    inline operator fun <reified E : Enum<E>> invoke(): Decoder<Enum<E>> =
-      object : EnumDecoderInstance<E> {
-        override fun enumClass(): KClass<E> = E::class
-      }
-  }
 }

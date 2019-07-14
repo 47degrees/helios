@@ -1,11 +1,13 @@
-package helios.core
+package helios.instances
 
-import arrow.core.Left
-import arrow.core.Right
 import arrow.test.UnitSpec
-import helios.instances.EnumDecoderInstance
-import helios.instances.EnumEncoderInstance
-import io.kotlintest.shouldBe
+import helios.core.EnumValueNotFound
+import helios.core.JsInt
+import helios.core.JsString
+import helios.core.StringDecodingError
+import io.kotlintest.assertions.arrow.either.beLeft
+import io.kotlintest.assertions.arrow.either.beRight
+import io.kotlintest.should
 
 private enum class Foo {
     A
@@ -14,20 +16,20 @@ private enum class Foo {
 internal class EnumTest : UnitSpec() {
 
     init {
-        "helios serialization works both ways" {
+        "Enums should be encoded and decoded successfully" {
             val encoded = with(EnumEncoderInstance<Foo>()) { Foo.A.encode() }
             val decoded = encoded.decode(EnumDecoderInstance<Foo>())
-            decoded shouldBe Right(Foo.A)
+            decoded should beRight(Foo.A)
         }
 
         "invalid enum value produces the correct error" {
             val decoded = EnumDecoderInstance<Foo>().decode(JsString("B"))
-            decoded shouldBe Left(EnumValueNotFound(JsString("B")))
+            decoded should beLeft(EnumValueNotFound(JsString("B")))
         }
 
         "invalid json produces the correct error" {
             val decoded = EnumDecoderInstance<Foo>().decode(JsInt(1))
-            decoded shouldBe Left(StringDecodingError(JsInt(1)))
+            decoded should beLeft(StringDecodingError(JsInt(1)))
         }
     }
 }

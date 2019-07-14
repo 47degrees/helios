@@ -6,6 +6,7 @@ import arrow.core.extensions.either.applicative.map2
 import arrow.extension
 import helios.core.*
 import helios.typeclasses.*
+import kotlin.reflect.KClass
 
 fun Double.Companion.encoder() = object : Encoder<Double> {
   override fun Double.encode(): Json = JsNumber(this)
@@ -186,4 +187,37 @@ interface TripleDecoderInstance<out A, out B, out C> : Decoder<Triple<A, B, C>> 
       }
   }
 
+}
+
+interface EnumEncoderInstance<E : Enum<E>> : Encoder<Enum<E>> {
+
+  override fun Enum<E>.encode(): Json = JsString(name)
+
+  companion object {
+    operator fun <E : Enum<E>> invoke(): Encoder<Enum<E>> =
+      object : EnumEncoderInstance<E> {}
+  }
+}
+
+interface EnumDecoderInstance<E : Enum<E>> : Decoder<Enum<E>> {
+
+  fun enumClass(): KClass<E>
+
+  override fun decode(value: Json): Either<DecodingError, Enum<E>> =
+    value.asJsString()
+      .toEither { StringDecodingError(value) }
+      .flatMap {
+        try {
+          Right(java.lang.Enum.valueOf<E>(enumClass().java, it.value.toString()))
+        } catch (e: IllegalArgumentException) {
+          Left(EnumValueNotFound(value))
+        }
+      }
+
+  companion object {
+    inline operator fun <reified E : Enum<E>> invoke(): Decoder<Enum<E>> =
+      object : EnumDecoderInstance<E> {
+        override fun enumClass(): KClass<E> = E::class
+      }
+  }
 }
