@@ -29,7 +29,7 @@ class InstancesArrowTest : UnitSpec() {
         )
       }
     }
-    
+
     "Either should be encoded and decoded successfully"{
       assertAll(Gen.either(Gen.alphaStr(), Gen.double())) { sample ->
         Either.decoder(String.decoder(), Double.decoder()).decode(

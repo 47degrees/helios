@@ -97,6 +97,6 @@ class InstancesTest : UnitSpec() {
         ) should beRight(sample)
       }
     }
-    
+
   }
 }

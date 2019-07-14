@@ -37,7 +37,9 @@ fun <A> NonEmptyList.Companion.encoder(encoderA: Encoder<A>) = object : Encoder<
 
 fun <A> NonEmptyList.Companion.decoder(decoderA: Decoder<A>) = object : Decoder<NonEmptyList<A>> {
   override fun decode(value: Json): Either<DecodingError, NonEmptyList<A>> =
-    ListDecoderInstance(decoderA).decode(value).flatMap { NonEmptyList.fromList(it).toEither { ArrayDecodingError(value) } }
+    ListDecoderInstance(decoderA).decode(value).flatMap {
+      NonEmptyList.fromList(it).toEither { ArrayDecodingError(value) }
+    }
 }
 
 fun <A, B> Tuple2.Companion.encoder(encoderA: Encoder<A>, encoderB: Encoder<B>) = object : Encoder<Tuple2<A, B>> {
