@@ -1,0 +1,14 @@
+apply plugin: 'kotlin-kapt'
+
+def arrow_version = "0.9.0"
+
+dependencies {
+    compile project(":helios-core")
+    compile project(":helios-optics")
+    compile project(":helios-integrations:helios-retrofit")
+    compile "com.squareup.retrofit2:retrofit:2.6.0"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
+    kapt project(':helios-meta')
+    kapt project(':helios-dsl-meta')
+}

@@ -9,6 +9,9 @@ options:
   - title: Parser
     url: /docs/parser/
 
+  - title: Retrofit integration
+    url: /docs/retrofit/
+
   - title: Coding/Encoding
     url: /docs/coding/
 

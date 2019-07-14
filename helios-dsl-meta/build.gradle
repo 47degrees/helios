@@ -15,5 +15,5 @@ dependencies {
     testImplementation("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
     testCompile "com.google.testing.compile:compile-testing:$googleTestingVersion"
     testCompile fileTree(dir: './src/test/libs', includes: ['*.jar'])
-    testCompile files(Jvm.current().getToolsJar())
+//    testCompile files(Jvm.current().getToolsJar())
 }
