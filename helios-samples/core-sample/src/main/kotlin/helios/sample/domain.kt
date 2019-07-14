@@ -31,7 +31,11 @@ typealias MomSide = String
 typealias DadSide = String
 
 @json
-data class Child(val name: String, val age: Int, val family: Map<String, Either<MomSide, DadSide>>) {
+data class Child(
+  val name: String,
+  val age: Int,
+  val family: Map<String, Either<MomSide, DadSide>>
+) {
   companion object
 }
 

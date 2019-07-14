@@ -19,7 +19,6 @@ data class Slideshow(
   companion object
 }
 
-
 @json
 data class Slide(
   // https://github.com/47deg/helios/issues/93
