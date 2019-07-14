@@ -189,35 +189,18 @@ interface TripleDecoderInstance<out A, out B, out C> : Decoder<Triple<A, B, C>> 
 
 }
 
-interface EnumEncoderInstance<E : Enum<E>> : Encoder<Enum<E>> {
-
+fun <E : Enum<E>> Enum.Companion.encoder(): Encoder<Enum<E>> = object : Encoder<Enum<E>> {
   override fun Enum<E>.encode(): Json = JsString(name)
-
-  companion object {
-    operator fun <E : Enum<E>> invoke(): Encoder<Enum<E>> =
-      object : EnumEncoderInstance<E> {}
-  }
 }
 
-interface EnumDecoderInstance<E : Enum<E>> : Decoder<Enum<E>> {
+inline fun <reified E : Enum<E>> Enum.Companion.decoder(): Decoder<Enum<E>> =
+  object : Decoder<Enum<E>> {
 
-  fun enumClass(): KClass<E>
-
-  override fun decode(value: Json): Either<DecodingError, Enum<E>> =
-    value.asJsString()
-      .toEither { StringDecodingError(value) }
-      .flatMap {
-        try {
-          Right(java.lang.Enum.valueOf<E>(enumClass().java, it.value.toString()))
-        } catch (e: IllegalArgumentException) {
-          Left(EnumValueNotFound(value))
-        }
+    override fun decode(value: Json): Either<DecodingError, Enum<E>> =
+      value.asJsString().toEither { StringDecodingError(value) }.flatMap {
+        Try {
+          java.lang.Enum.valueOf(E::class.java, it.value.toString())
+        }.toEither { EnumValueNotFound(value) }
       }
 
-  companion object {
-    inline operator fun <reified E : Enum<E>> invoke(): Decoder<Enum<E>> =
-      object : EnumDecoderInstance<E> {
-        override fun enumClass(): KClass<E> = E::class
-      }
   }
-}
