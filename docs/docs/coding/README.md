@@ -32,13 +32,6 @@ Person.decoder().decode(personJson)
 ## Enum Encoding/Decoding
 
 The `@json` annotation does not support `Enum` types, so a custom `Encoder` and `Decoder` must be used.
-
-```kotlin
-enum class Foo {
-  A
-}
-```
-
 You will be able to encode and decode using the following:
 
 ```kotlin:ank
@@ -46,6 +39,10 @@ import arrow.core.*
 import helios.*
 import helios.core.*
 import helios.typeclasses.*
+
+enum class Foo {
+  A
+}
 
 val fooJson = Enum.Companion.encoder<Foo>().run {
   Foo.A.encode()
