@@ -14,63 +14,63 @@ import io.kotlintest.should
 class InstancesTest : UnitSpec() {
   init {
 
-    "Double should be encode and decode successfully"{
+    "Double should be encoded and decoded successfully"{
       assertAll(Gen.double()) { sample ->
         Double.decoder().decode(Double.encoder().run { sample.encode() }
         ) should beRight(sample)
       }
     }
 
-    "Float should be encode and decode successfully"{
+    "Float should be encoded and decoded successfully"{
       assertAll(Gen.float()) { sample ->
         Float.decoder().decode(Float.encoder().run { sample.encode() }
         ) should beRight(sample)
       }
     }
 
-    "Long should be encode and decode successfully"{
+    "Long should be encoded and decoded successfully"{
       assertAll(Gen.long()) { sample ->
         Long.decoder().decode(Long.encoder().run { sample.encode() }
         ) should beRight(sample)
       }
     }
 
-    "Int should be encode and decode successfully"{
+    "Int should be encoded and decoded successfully"{
       assertAll(Gen.int()) { sample ->
         Int.decoder().decode(Int.encoder().run { sample.encode() }
         ) should beRight(sample)
       }
     }
 
-    "Short should be encode and decode successfully"{
+    "Short should be encoded and decoded successfully"{
       assertAll(Gen.short()) { sample ->
         Short.decoder().decode(Short.encoder().run { sample.encode() }
         ) should beRight(sample)
       }
     }
 
-    "Byte should be encode and decode successfully"{
+    "Byte should be encoded and decoded successfully"{
       assertAll(Gen.byte()) { sample ->
         Byte.decoder().decode(Byte.encoder().run { sample.encode() }
         ) should beRight(sample)
       }
     }
 
-    "Boolean should be encode and decode successfully"{
+    "Boolean should be encoded and decoded successfully"{
       assertAll(Gen.bool()) { sample ->
         Boolean.decoder().decode(Boolean.encoder().run { sample.encode() }
         ) should beRight(sample)
       }
     }
 
-    "String should be encode and decode successfully"{
+    "String should be encoded and decoded successfully"{
       assertAll(Gen.alphaStr()) { sample ->
         String.decoder().decode(String.encoder().run { sample.encode() }
         ) should beRight(sample)
       }
     }
 
-    "Pair should be encode and decode successfully"{
+    "Pair should be encoded and decoded successfully"{
       assertAll(Gen.pair(Gen.double(), Gen.alphaStr())) { sample ->
         PairDecoderInstance(
           Double.decoder(),
@@ -83,7 +83,7 @@ class InstancesTest : UnitSpec() {
       }
     }
 
-    "Triple should be encode and decode successfully"{
+    "Triple should be encoded and decoded successfully"{
       assertAll(Gen.triple(Gen.bool(), Gen.intSmall(), Gen.alphaStr())) { sample ->
         TripleDecoderInstance(
           Boolean.decoder(),
