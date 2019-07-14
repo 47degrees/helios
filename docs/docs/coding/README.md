@@ -40,6 +40,7 @@ enum class Foo {
 ```
 
 You will be able to encode and decode using the following:
+
 ```kotlin:ank
 import arrow.core.*
 import helios.*
