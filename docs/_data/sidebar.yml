@@ -9,11 +9,11 @@ options:
   - title: Parser
     url: /docs/parser/
 
-  - title: Retrofit integration
-    url: /docs/retrofit/
-
   - title: Coding/Encoding
     url: /docs/coding/
+
+  - title: Retrofit Integration
+    url: /docs/integrations/retrofit/
 
   - title: Benchmarks
     url: /docs/benchmarks/
