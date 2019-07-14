@@ -124,7 +124,14 @@ class JsonFileGenerator(
     prefix = "\n\t",
     separator = ",\n\t",
     postfix = "\n"
-  ) { (p, t) -> "value[\"$p\"].fold({Either.Left(KeyNotFound(\"$p\"))}, { ${t.decoder()}.run { decode(it) } })" }
+  ) { (p, t) ->
+    if (t.startsWith("arrow.core.Option"))
+      "value[\"$p\"].fold({ None.right() }, { ${t.decoder()}.run { decode(it) } })"
+    else
+      "value[\"$p\"].fold(" +
+          "{ Either.Left(KeyNotFound(\"$p\")) }, " +
+          "{ ${t.decoder()}.run { decode(it) } })"
+  }
 
   private fun map(je: JsonElement): String = if (je.pairs.size == 1) "${parse(je)}.map("
   else "Either.applicative<DecodingError>().map(${parse(je)}, "
