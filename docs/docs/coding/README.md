@@ -42,7 +42,7 @@ enum class Foo {
 
 You will be able to encode and decode using the following:
 
-```kotlin:ank:silent
+```kotlin:ank
 import arrow.core.*
 import helios.*
 import helios.instances.*
