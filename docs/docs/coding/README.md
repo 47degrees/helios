@@ -32,16 +32,20 @@ Person.decoder().decode(personJson)
 ## Enum Encoding/Decoding
 
 The `@json` annotation does not support `Enum` types, so a custom `Encoder` and `Decoder` must be used.
+For example, given the following `Enum`:
+
+```kotlin:ank:silent
+enum class Foo {
+  A
+}
+```
+
 You will be able to encode and decode using the following:
 
 ```kotlin:ank:silent
 import arrow.core.*
 import helios.*
 import helios.instances.*
-
-enum class Foo {
-  A
-}
 
 val fooJson = Enum.Companion.encoder<Foo>().run {
   Foo.A.encode()
