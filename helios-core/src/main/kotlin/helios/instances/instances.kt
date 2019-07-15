@@ -5,7 +5,8 @@ import arrow.core.extensions.either.applicative.applicative
 import arrow.core.extensions.either.applicative.map2
 import arrow.extension
 import helios.core.*
-import helios.typeclasses.*
+import helios.typeclasses.Decoder
+import helios.typeclasses.Encoder
 
 fun Double.Companion.encoder() = object : Encoder<Double> {
   override fun Double.encode(): Json = JsNumber(this)

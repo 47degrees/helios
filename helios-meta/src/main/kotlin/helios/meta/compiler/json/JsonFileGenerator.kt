@@ -131,7 +131,7 @@ class JsonFileGenerator(
       postfix = if (je.pairs.size > 1) ")" else ""
     ) { (p, _) -> p }
 
-    fun parse(parsePrefix:String, parseSeparator:String, parsePostfix:String): String = je.pairs.joinToString(
+    fun parse(parsePrefix: String, parseSeparator: String, parsePostfix: String): String = je.pairs.joinToString(
       prefix = parsePrefix,
       separator = parseSeparator,
       postfix = parsePostfix
@@ -143,8 +143,13 @@ class JsonFileGenerator(
       }
     }
 
-    val map: String = if (je.pairs.size == 1) "${parse(parsePrefix = "", parseSeparator = ",\n", parsePostfix = "")}.map"
-    else "Either.applicative<DecodingError>().map(${parse(parsePrefix = "\t", parseSeparator = ",\n\t\t", parsePostfix = "\n\t")})"
+    val map: String =
+      if (je.pairs.size == 1) "${parse(parsePrefix = "", parseSeparator = ",\n", parsePostfix = "")}.map"
+      else "Either.applicative<DecodingError>().map(${parse(
+        parsePrefix = "\t",
+        parseSeparator = ",\n\t\t",
+        parsePostfix = "\n\t"
+      )})"
 
     val createInstance = """
       |$map { $params ->
