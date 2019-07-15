@@ -193,10 +193,10 @@ fun <E : Enum<E>> Enum.Companion.encoder(): Encoder<Enum<E>> = object : Encoder<
   override fun Enum<E>.encode(): Json = JsString(name)
 }
 
-inline fun <reified E : Enum<E>> Enum.Companion.decoder(): Decoder<Enum<E>> =
-  object : Decoder<Enum<E>> {
+inline fun <reified E : Enum<E>> Enum.Companion.decoder(): Decoder<E> =
+  object : Decoder<E> {
 
-    override fun decode(value: Json): Either<DecodingError, Enum<E>> =
+    override fun decode(value: Json): Either<DecodingError, E> =
       value.asJsString().toEither { StringDecodingError(value) }.flatMap {
         Try {
           java.lang.Enum.valueOf(E::class.java, it.value.toString())
