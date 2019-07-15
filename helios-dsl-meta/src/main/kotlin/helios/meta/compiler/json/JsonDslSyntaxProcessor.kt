@@ -34,7 +34,7 @@ class JsonDslSyntaxProcessor : AbstractProcessor() {
 
     if (roundEnv.processingOver()) {
       val generatedDir =
-        File(this.generatedDir!!, jsonAnnotationClass.simpleName).also { it.mkdirs() }
+        File(generatedDir ?: return, jsonAnnotationClass.simpleName).also { it.mkdirs() }
       JsonDslSyntaxFileGenerator(generatedDir, jsonAnnotatedList).generate()
     }
   }

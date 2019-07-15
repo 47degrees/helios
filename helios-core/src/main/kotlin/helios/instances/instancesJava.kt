@@ -1,17 +1,9 @@
 package helios.instances
 
-import arrow.core.*
-import arrow.core.extensions.either.applicative.applicative
-import arrow.core.extensions.either.applicative.map2
-import arrow.core.extensions.either.monoid.monoid
-import arrow.data.extensions.list.foldable.fold
-import arrow.data.extensions.list.foldable.foldLeft
-import arrow.data.extensions.list.traverse.sequence
-import arrow.data.fix
-import arrow.extension
-import arrow.typeclasses.Monoid
+import arrow.core.Either
 import helios.core.*
-import helios.typeclasses.*
+import helios.typeclasses.Decoder
+import helios.typeclasses.Encoder
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
@@ -43,7 +35,7 @@ interface BigDecimalEncoderInstance : Encoder<BigDecimal> {
 
 interface BigDecimalDecoderInstance : Decoder<BigDecimal> {
   override fun decode(value: Json): Either<DecodingError, BigDecimal> =
-    value.asJsNumber().map { it.toBigDecimal() }.toEither { NumberDecodingError(value) }
+    value.asJsNumber().map(JsNumber::toBigDecimal).toEither { NumberDecodingError(value) }
 
   companion object {
     operator fun invoke() = object : BigDecimalDecoderInstance {}
@@ -60,7 +52,7 @@ interface BigIntegerEncoderInstance : Encoder<BigInteger> {
 
 interface BigIntegerDecoderInstance : Decoder<BigInteger> {
   override fun decode(value: Json): Either<DecodingError, BigInteger> =
-    value.asJsNumber().map { it.toBigInteger() }.toEither { NumberDecodingError(value) }
+    value.asJsNumber().map(JsNumber::toBigInteger).toEither { NumberDecodingError(value) }
 
   companion object {
     operator fun invoke() = object : BigIntegerDecoderInstance {}

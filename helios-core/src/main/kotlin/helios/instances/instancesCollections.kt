@@ -39,8 +39,8 @@ interface ListDecoderInstance<out A> : Decoder<List<A>> {
 
   override fun decode(value: Json): Either<DecodingError, List<A>> =
     value.asJsArray().toList()
-      .flatMap { arr ->
-        arr.value.map { decoderA().decode(it) }
+      .flatMap { (arrValue) ->
+        arrValue.map(decoderA()::decode)
       }.sequence(Either.applicative()).fix().map { it.fix().toList() }
 
   companion object {
@@ -53,7 +53,7 @@ interface ListDecoderInstance<out A> : Decoder<List<A>> {
 }
 
 @extension
-interface MapEncoderInstance<A, B> : Encoder<Map<A, B>> {
+interface MapEncoderInstance<A, in B> : Encoder<Map<A, B>> {
 
   fun keyEncoderA(): KeyEncoder<A>
   fun encoderB(): Encoder<B>
@@ -72,16 +72,16 @@ interface MapEncoderInstance<A, B> : Encoder<Map<A, B>> {
 }
 
 @extension
-interface MapDecoderInstance<A, B> : Decoder<Map<A, B>> {
+interface MapDecoderInstance<A, out B> : Decoder<Map<A, B>> {
 
   fun keyDecoderA(): KeyDecoder<A>
   fun decoderB(): Decoder<B>
 
   override fun decode(value: Json): Either<DecodingError, Map<A, B>> =
-    value.asJsObject().fold({ ObjectDecodingError(value).left() }, { obj ->
-      obj.value.map { (key, value) ->
+    value.asJsObject().fold({ ObjectDecodingError(value).left() }, { (objValue) ->
+      objValue.map { (key, value) ->
         val maybeKey: Either<DecodingError, A> =
-          Json.parseFromString(key).mapLeft { StringDecodingError(value) }.flatMap { keyDecoderA().keyDecode(it) }
+          Json.parseFromString(key).mapLeft { StringDecodingError(value) }.flatMap(keyDecoderA()::keyDecode)
         val maybeValue: Either<DecodingError, B> = decoderB().decode(value)
         maybeKey.map2(maybeValue) { mapOf(it.toPair()) }
       }

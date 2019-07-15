@@ -17,7 +17,7 @@ fun <S, A : S> PPrism.Companion.fromOption(getOption: (S) -> Option<A>, reverseG
   Prism({ s: S -> getOption(s).toEither { s } }, { a: A -> reverseGet(a) })
 
 @PublishedApi
-internal val boolean = Prism.fromOption<Json, JsBoolean>({ it.asJsBoolean() }, { identity(it) })
+internal val boolean = Prism.fromOption<Json, JsBoolean>(Json::asJsBoolean) { identity(it) }
 inline val Json.Companion.jsBoolean: Prism<Json, JsBoolean>
   inline get() = boolean
 
@@ -27,7 +27,7 @@ inline val JsBoolean.Companion.value: Iso<JsBoolean, Boolean>
   inline get() = booleanValue
 
 @PublishedApi
-internal val string = Prism.fromOption<Json, JsString>({ it.asJsString() }, { identity(it) })
+internal val string = Prism.fromOption<Json, JsString>(Json::asJsString) { identity(it) }
 inline val Json.Companion.jsString: Prism<Json, JsString>
   inline get() = string
 
@@ -37,7 +37,7 @@ inline val JsString.Companion.value: Iso<JsString, CharSequence>
   inline get() = stringValue
 
 @PublishedApi
-internal val array = Prism.fromOption<Json, JsArray>({ it.asJsArray() }, { identity(it) })
+internal val array = Prism.fromOption<Json, JsArray>(Json::asJsArray) { identity(it) }
 inline val Json.Companion.jsArray: Prism<Json, JsArray>
   inline get() = array
 
@@ -47,7 +47,7 @@ inline val JsArray.Companion.value: Iso<JsArray, List<Json>>
   inline get() = arrayValue
 
 @PublishedApi
-internal val `object` = Prism.fromOption<Json, JsObject>({ it.asJsObject() }, { identity(it) })
+internal val `object` = Prism.fromOption<Json, JsObject>(Json::asJsObject) { identity(it) }
 inline val Json.Companion.jsObject: Prism<Json, JsObject>
   inline get() = `object`
 
@@ -57,7 +57,7 @@ inline val JsObject.Companion.value: Iso<JsObject, Map<String, Json>>
   inline get() = objectValue
 
 @PublishedApi
-internal val `null` = Prism.fromOption<Json, JsNull>({ it.asJsNull() }, { identity(it) })
+internal val `null` = Prism.fromOption<Json, JsNull>(Json::asJsNull) { identity(it) }
 inline val Json.Companion.jsNull: Prism<Json, JsNull>
   inline get() = `null`
 

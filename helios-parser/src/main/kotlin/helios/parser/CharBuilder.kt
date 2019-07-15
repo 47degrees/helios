@@ -23,7 +23,7 @@ class CharBuilder {
   fun resizeIfNecessary(goal: Int): Unit {
     if (goal <= capacity) return
     var cap = capacity
-    while (cap in 1..(goal - 1)) cap *= 2
+    while (cap in 1 until goal) cap *= 2
     if (cap > capacity) {
       val ncs = CharArray(cap)
       System.arraycopy(cs, 0, ncs, 0, capacity)

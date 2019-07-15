@@ -1,4 +1,4 @@
-package helios.sample
+package helios.core
 
 import arrow.core.Either
 import arrow.core.Option

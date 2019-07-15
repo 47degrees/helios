@@ -1,7 +1,6 @@
 package helios.instances
 
 import arrow.test.UnitSpec
-import helios.instances.*
 import io.kotlintest.assertions.arrow.either.shouldBeRight
 import java.time.*
 

@@ -53,7 +53,8 @@ class JsonDslSyntaxFileGenerator(
           )
         }
       }.distinct(),
-        v.mapNotNull { it.typeName })
+        v.mapNotNull(JsonElement::typeName)
+      )
     }.toList()
 
   /**

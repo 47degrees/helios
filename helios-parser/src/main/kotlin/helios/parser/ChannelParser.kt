@@ -56,7 +56,7 @@ class ChannelParser<J>(val ch: ReadableByteChannel, bufferSize: Int) : SyncParse
       }
   }
 
-  var bufSize: Int = ChannelParser.computeBufferSize(bufferSize)
+  var bufSize: Int = computeBufferSize(bufferSize)
   var mask: Int = bufSize - 1
   var allSize: Int = bufSize * 2
 

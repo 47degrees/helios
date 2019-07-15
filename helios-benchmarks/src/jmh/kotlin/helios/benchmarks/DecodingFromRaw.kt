@@ -15,7 +15,7 @@ open class DecodingFromRaw {
   @Benchmark
   fun helios(): Friends =
     Json.parseFromString(jsonString)
-      .flatMap { heliosFriendsDecoder.decode(it) }
+      .flatMap(heliosFriendsDecoder::decode)
       .fold({ throw RuntimeException(it.toString()) }, { it })
 
   @Benchmark

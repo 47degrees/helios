@@ -67,7 +67,7 @@ class JsonFileGenerator(
   private inline val String.getTypeParameters
     get() = {
       val inside = this.substringAfter('<').substringBeforeLast('>')
-      inside.split(',').map { it.trim() }.fold(emptyList()) { acc: List<String>, str: String ->
+      inside.split(',').map(String::trim).fold(emptyList()) { acc: List<String>, str: String ->
         val maybeLast = acc.lastOrNull()
         if (maybeLast != null && maybeLast.isComplex && maybeLast.notClosed)
           acc.subList(0, acc.size - 1) + "$maybeLast, $str"

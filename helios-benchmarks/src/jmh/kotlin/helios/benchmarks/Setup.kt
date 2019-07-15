@@ -17,7 +17,7 @@ val jsonString: String = sampleJson
 
 val klaxonParser: Parser = Parser.default()
 
-val klaxon: Klaxon = com.beust.klaxon.Klaxon()
+val klaxon: Klaxon = Klaxon()
 
 val gson = Gson()
 

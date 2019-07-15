@@ -13,7 +13,7 @@ fun Double.Companion.encoder() = object : Encoder<Double> {
 
 fun Double.Companion.decoder() = object : Decoder<Double> {
   override fun decode(value: Json): Either<DecodingError, Double> =
-    value.asJsNumber().map { it.toDouble() }.toEither { NumberDecodingError(value) }
+    value.asJsNumber().map(JsNumber::toDouble).toEither { NumberDecodingError(value) }
 }
 
 fun Float.Companion.encoder() = object : Encoder<Float> {
@@ -22,7 +22,7 @@ fun Float.Companion.encoder() = object : Encoder<Float> {
 
 fun Float.Companion.decoder() = object : Decoder<Float> {
   override fun decode(value: Json): Either<DecodingError, Float> =
-    value.asJsNumber().map { it.toFloat() }.toEither { NumberDecodingError(value) }
+    value.asJsNumber().map(JsNumber::toFloat).toEither { NumberDecodingError(value) }
 }
 
 fun Long.Companion.encoder() = object : Encoder<Long> {
@@ -31,7 +31,7 @@ fun Long.Companion.encoder() = object : Encoder<Long> {
 
 fun Long.Companion.decoder() = object : Decoder<Long> {
   override fun decode(value: Json): Either<DecodingError, Long> =
-    value.asJsNumber().map { it.toLong() }.toEither { NumberDecodingError(value) }
+    value.asJsNumber().map(JsNumber::toLong).toEither { NumberDecodingError(value) }
 }
 
 fun Int.Companion.encoder() = object : Encoder<Int> {
@@ -40,7 +40,7 @@ fun Int.Companion.encoder() = object : Encoder<Int> {
 
 fun Int.Companion.decoder() = object : Decoder<Int> {
   override fun decode(value: Json): Either<DecodingError, Int> =
-    value.asJsNumber().flatMap { it.toInt() }.toEither { NumberDecodingError(value) }
+    value.asJsNumber().flatMap(JsNumber::toInt).toEither { NumberDecodingError(value) }
 }
 
 fun Short.Companion.encoder() = object : Encoder<Short> {
@@ -49,7 +49,7 @@ fun Short.Companion.encoder() = object : Encoder<Short> {
 
 fun Short.Companion.decoder() = object : Decoder<Short> {
   override fun decode(value: Json): Either<DecodingError, Short> =
-    value.asJsNumber().flatMap { it.toShort() }.toEither { NumberDecodingError(value) }
+    value.asJsNumber().flatMap(JsNumber::toShort).toEither { NumberDecodingError(value) }
 }
 
 fun Byte.Companion.encoder() = object : Encoder<Byte> {
@@ -58,7 +58,7 @@ fun Byte.Companion.encoder() = object : Encoder<Byte> {
 
 fun Byte.Companion.decoder() = object : Decoder<Byte> {
   override fun decode(value: Json): Either<DecodingError, Byte> =
-    value.asJsNumber().flatMap { it.toByte() }.toEither { NumberDecodingError(value) }
+    value.asJsNumber().flatMap(JsNumber::toByte).toEither { NumberDecodingError(value) }
 }
 
 fun Boolean.Companion.encoder() = object : Encoder<Boolean> {
@@ -67,7 +67,7 @@ fun Boolean.Companion.encoder() = object : Encoder<Boolean> {
 
 fun Boolean.Companion.decoder() = object : Decoder<Boolean> {
   override fun decode(value: Json): Either<DecodingError, Boolean> =
-    value.asJsBoolean().map { it.value }.toEither { BooleanDecodingError(value) }
+    value.asJsBoolean().map(JsBoolean::value).toEither { BooleanDecodingError(value) }
 }
 
 fun String.Companion.encoder() = object : Encoder<String> {
@@ -109,7 +109,7 @@ interface PairDecoderInstance<out A, out B> : Decoder<Pair<A, B>> {
   fun decoderB(): Decoder<B>
 
   override fun decode(value: Json): Either<DecodingError, Pair<A, B>> {
-    val arr = value.asJsArray().toList().flatMap { it.value }
+    val arr = value.asJsArray().toList().flatMap(JsArray::value)
     return if (arr.size == 2)
       decoderA().decode(arr.first()).map2(decoderB().decode(arr.last())) { it.toPair() }.fix()
     else ArrayDecodingError(value).left()
@@ -163,7 +163,7 @@ interface TripleDecoderInstance<out A, out B, out C> : Decoder<Triple<A, B, C>> 
   fun decoderC(): Decoder<C>
 
   override fun decode(value: Json): Either<DecodingError, Triple<A, B, C>> {
-    val arr = value.asJsArray().toList().flatMap { it.value }
+    val arr = value.asJsArray().toList().flatMap(JsArray::value)
     return if (arr.size == 3)
       Either.applicative<DecodingError>().map(
         decoderA().decode(arr[0]),

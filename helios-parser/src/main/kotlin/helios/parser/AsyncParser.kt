@@ -4,11 +4,40 @@ import arrow.core.Either
 import arrow.core.Left
 import arrow.core.Right
 import java.nio.ByteBuffer
+import kotlin.math.max
 
 sealed class Mode(val start: Int, val value: Int)
 object UnwrapArray : Mode(-5, 1)
 object ValueStream : Mode(-1, 0)
 object SingleValue : Mode(-1, -1)
+
+/**
+ * Explanation of the new synthetic states. The parser machinery
+ * uses positive integers for states while parsing json values. We
+ * use these negative states to keep track of the async parser's
+ * status between json values.
+ *
+ * ASYNC_PRESTART: We haven't seen any non-whitespace yet. We
+ * could be parsing an array, or not. We are waiting for valid
+ * JSON.
+ *
+ * ASYNC_START: We've seen an array and have begun unwrapping
+ * it. We could see a ] if the array is empty, or valid JSON.
+ *
+ * ASYNC_END: We've parsed an array and seen the final ]. At this
+ * point we should only see whitespace or an EOF.
+ *
+ * ASYNC_POSTVAL: We just parsed a value from inside the array. We
+ * expect to see whitespace, a comma, or a ].
+ *
+ * ASYNC_PREVAL: We are in an array and we just saw a comma. We
+ * expect to see whitespace or a JSON value.
+ */
+const val ASYNC_PRESTART = -5
+const val ASYNC_START = -4
+const val ASYNC_END = -3
+const val ASYNC_POSTVAL = -2
+const val ASYNC_PREVAL = -1
 
 /**
  * AsyncParser is able to parse chunks of data (encoded as
@@ -110,41 +139,13 @@ class AsyncParser<J>(
     // feed with similarly-sized buffers.
     if (need > allocated) {
       val doubled = if (allocated < 0x40000000) allocated * 2 else Int.MAX_VALUE
-      val newsize = Math.max(need, doubled)
+      val newsize = max(need, doubled)
       val newdata = ByteArray(newsize)
       System.arraycopy(data, 0, newdata, 0, len)
       data = newdata
       allocated = newsize
     }
   }
-
-  /**
-   * Explanation of the new synthetic states. The parser machinery
-   * uses positive integers for states while parsing json values. We
-   * use these negative states to keep track of the async parser's
-   * status between json values.
-   *
-   * ASYNC_PRESTART: We haven't seen any non-whitespace yet. We
-   * could be parsing an array, or not. We are waiting for valid
-   * JSON.
-   *
-   * ASYNC_START: We've seen an array and have begun unwrapping
-   * it. We could see a ] if the array is empty, or valid JSON.
-   *
-   * ASYNC_END: We've parsed an array and seen the final ]. At this
-   * point we should only see whitespace or an EOF.
-   *
-   * ASYNC_POSTVAL: We just parsed a value from inside the array. We
-   * expect to see whitespace, a comma, or a ].
-   *
-   * ASYNC_PREVAL: We are in an array and we just saw a comma. We
-   * expect to see whitespace or a JSON value.
-   */
-  val ASYNC_PRESTART = -5
-  val ASYNC_START = -4
-  val ASYNC_END = -3
-  val ASYNC_POSTVAL = -2
-  val ASYNC_PREVAL = -1
 
   //TODO Either from Try
   fun churn(facade: Facade<J>): Either<ParseException, List<J>> {
@@ -160,32 +161,28 @@ class AsyncParser<J>(
               newline(offset)
               offset += 1
             }
-
             ' ', '\t', '\r' -> offset += 1
             '[' -> {
-              if (state == ASYNC_PRESTART) {
-                offset += 1
-                state = ASYNC_START
-              } else if (state == ASYNC_END) {
-                die(offset, "expected eof")
-              } else if (state == ASYNC_POSTVAL) {
-                die(offset, "expected , or ]")
-              } else {
-                state = 0
+              when (state) {
+                ASYNC_PRESTART -> {
+                  offset += 1
+                  state = ASYNC_START
+                }
+                ASYNC_END -> die(offset, "expected eof")
+                ASYNC_POSTVAL -> die(offset, "expected , or ]")
+                else -> state = 0
               }
             }
-
             ',' -> {
-              if (state == ASYNC_POSTVAL) {
-                offset += 1
-                state = ASYNC_PREVAL
-              } else if (state == ASYNC_END) {
-                die(offset, "expected eof")
-              } else {
-                die(offset, "expected json value")
+              when (state) {
+                ASYNC_POSTVAL -> {
+                  offset += 1
+                  state = ASYNC_PREVAL
+                }
+                ASYNC_END -> die(offset, "expected eof")
+                else -> die(offset, "expected json value")
               }
             }
-
             ']' -> {
               if (state == ASYNC_POSTVAL || state == ASYNC_START) {
                 if (streamMode > 0) {
@@ -200,15 +197,14 @@ class AsyncParser<J>(
                 die(offset, "expected json value")
               }
             }
-
             else -> {
-              if (state == ASYNC_END) {
-                die(offset, "expected eof")
-              } else if (state == ASYNC_POSTVAL) {
-                die(offset, "expected ] or ,")
-              } else {
-                if (state == ASYNC_PRESTART && streamMode > 0) streamMode = -1
-                state = 0
+              when (state) {
+                ASYNC_END -> die(offset, "expected eof")
+                ASYNC_POSTVAL -> die(offset, "expected ] or ,")
+                else -> {
+                  if (state == ASYNC_PRESTART && streamMode > 0) streamMode = -1
+                  state = 0
+                }
               }
             }
           }
@@ -221,12 +217,10 @@ class AsyncParser<J>(
           } else {
             rparse(state, curr, stack, facade)
           }
-          state = if (streamMode > 0) {
-            ASYNC_POSTVAL
-          } else if (streamMode == 0) {
-            ASYNC_PREVAL
-          } else {
-            ASYNC_END
+          state = when {
+            streamMode > 0 -> ASYNC_POSTVAL
+            streamMode == 0 -> ASYNC_PREVAL
+            else -> ASYNC_END
           }
           curr = j
           offset = j

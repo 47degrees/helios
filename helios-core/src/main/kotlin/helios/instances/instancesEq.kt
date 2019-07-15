@@ -14,7 +14,7 @@ import helios.instances.json.eq.eq
 @extension
 interface JsObjectEqInstance : Eq<JsObject> {
   override fun JsObject.eqv(b: JsObject): Boolean = with(Json.eq()) {
-    this@eqv.value.entries.zip(b.value.entries) { aa, bb ->
+    value.entries.zip(b.value.entries) { aa, bb ->
       aa.key == bb.key && aa.value.eqv(bb.value)
     }.forAll { it }
   }
@@ -23,7 +23,7 @@ interface JsObjectEqInstance : Eq<JsObject> {
 @extension
 interface JsArrayEqInstance : Eq<JsArray> {
   override fun JsArray.eqv(b: JsArray): Boolean = with(Json.eq()) {
-    this@eqv.value.zip(b.value) { a, b -> a.eqv(b) }
+    value.zip(b.value) { a, b -> a.eqv(b) }
       .forAll { it }
   }
 }
@@ -38,7 +38,7 @@ interface JsonEqInstance : Eq<Json> {
     this is JsNumber && b is JsNumber -> JsNumber.eq().run { this@eqv.eqv(b) }
     this is JsBoolean && b is JsBoolean -> Boolean.eq().run { this@eqv.value.eqv(b.value) }
     this is JsArray && b is JsArray -> JsArray.eq().run { this@eqv.eqv(b) }
-    else -> this.isNull && b.isNull
+    else -> isNull && b.isNull
   }
 
 }

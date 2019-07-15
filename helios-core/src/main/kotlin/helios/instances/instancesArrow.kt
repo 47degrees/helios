@@ -4,9 +4,9 @@ import arrow.core.*
 import arrow.core.extensions.either.applicative.applicative
 import arrow.core.extensions.either.applicative.map2
 import arrow.data.NonEmptyList
-import arrow.extension
 import helios.core.*
-import helios.typeclasses.*
+import helios.typeclasses.Decoder
+import helios.typeclasses.Encoder
 
 fun <A> Option.Companion.encoder(encoderA: Encoder<A>) = object : Encoder<Option<A>> {
   override fun Option<A>.encode(): Json =
@@ -51,7 +51,7 @@ fun <A, B> Tuple2.Companion.encoder(encoderA: Encoder<A>, encoderB: Encoder<B>) 
 
 fun <A, B> Tuple2.Companion.decoder(decoderA: Decoder<A>, decoderB: Decoder<B>) = object : Decoder<Tuple2<A, B>> {
   override fun decode(value: Json): Either<DecodingError, Tuple2<A, B>> {
-    val arr = value.asJsArray().toList().flatMap { it.value }
+    val arr = value.asJsArray().toList().flatMap(JsArray::value)
     return if (arr.size == 2)
       decoderA.decode(arr.first()).map2(decoderB.decode(arr.last())) { it }.fix()
     else ArrayDecodingError(value).left()
@@ -78,7 +78,7 @@ fun <A, B, C> Tuple3.Companion.decoder(
   decoderC: Decoder<C>
 ) = object : Decoder<Tuple3<A, B, C>> {
   override fun decode(value: Json): Either<DecodingError, Tuple3<A, B, C>> {
-    val arr = value.asJsArray().toList().flatMap { it.value }
+    val arr = value.asJsArray().toList().flatMap(JsArray::value)
     return if (arr.size == 3)
       Either.applicative<DecodingError>().map(
         decoderA.decode(arr[0]),
