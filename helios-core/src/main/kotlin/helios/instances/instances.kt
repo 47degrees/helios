@@ -187,3 +187,43 @@ interface TripleDecoderInstance<out A, out B, out C> : Decoder<Triple<A, B, C>> 
   }
 
 }
+
+@extension
+interface NullableEncoderInstance<in A> : Encoder<A?> {
+
+  fun encoderA(): Encoder<A>
+
+  override fun A?.encode(): Json {
+    val maybeThis = toOption()
+    return Option.encoder(encoderA()).run { maybeThis.encode() }
+  }
+
+  companion object {
+    operator fun <A> invoke(
+      encoderA: Encoder<A>
+    ): Encoder<A?> =
+      object : NullableEncoderInstance<A> {
+        override fun encoderA(): Encoder<A> = encoderA
+      }
+  }
+
+}
+
+@extension
+interface NullableDecoderInstance<out A> : Decoder<A?> {
+
+  fun decoderA(): Decoder<A>
+
+  override fun decode(value: Json): Either<DecodingError, A?> =
+    Option.decoder(decoderA()).decode(value).map(Option<A>::orNull)
+
+  companion object {
+    operator fun <A> invoke(
+      decoderA: Decoder<A>
+    ): Decoder<A?> =
+      object : NullableDecoderInstance<A> {
+        override fun decoderA(): Decoder<A> = decoderA
+      }
+  }
+
+}
