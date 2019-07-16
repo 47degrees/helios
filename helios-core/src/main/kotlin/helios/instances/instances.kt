@@ -196,7 +196,7 @@ interface NullableEncoderInstance<in A> : Encoder<A?> {
 
   override fun A?.encode(): Json {
     val maybeThis = toOption()
-    return Option.encoder(encoderA()).run { maybeThis.encode() }
+    return this?.let { a ->encoderA().let { a.encode() } } ?: JsNull
   }
 
   companion object {
