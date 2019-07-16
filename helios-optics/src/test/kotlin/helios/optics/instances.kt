@@ -2,11 +2,7 @@ package helios.optics
 
 import arrow.core.None
 import arrow.core.Option
-import arrow.core.extensions.option.applicative.applicative
 import arrow.core.extensions.option.eq.eq
-import arrow.core.orElse
-import helios.test.generators.alphaStr
-import helios.test.generators.*
 import arrow.test.UnitSpec
 import arrow.test.generators.functionAToB
 import arrow.test.generators.option
@@ -25,6 +21,10 @@ import helios.optics.jsarray.index.index
 import helios.optics.jsobject.at.at
 import helios.optics.jsobject.each.each
 import helios.optics.jsobject.index.index
+import helios.test.generators.alphaStr
+import helios.test.generators.jsArray
+import helios.test.generators.jsObject
+import helios.test.generators.json
 import io.kotlintest.properties.Gen
 
 class InstancesTest : UnitSpec() {

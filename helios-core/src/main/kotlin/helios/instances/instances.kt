@@ -5,7 +5,8 @@ import arrow.core.extensions.either.applicative.applicative
 import arrow.core.extensions.either.applicative.map2
 import arrow.extension
 import helios.core.*
-import helios.typeclasses.*
+import helios.typeclasses.Decoder
+import helios.typeclasses.Encoder
 
 fun Double.Companion.encoder() = object : Encoder<Double> {
   override fun Double.encode(): Json = JsNumber(this)
@@ -187,3 +188,53 @@ interface TripleDecoderInstance<out A, out B, out C> : Decoder<Triple<A, B, C>> 
   }
 
 }
+
+@extension
+interface NullableEncoderInstance<in A> : Encoder<A?> {
+
+  fun encoderA(): Encoder<A>
+
+  override fun A?.encode(): Json =
+    this?.let { a -> encoderA().let { a.encode() } } ?: JsNull
+
+  companion object {
+    operator fun <A> invoke(encoderA: Encoder<A>): Encoder<A?> =
+      object : NullableEncoderInstance<A> {
+        override fun encoderA(): Encoder<A> = encoderA
+      }
+  }
+
+}
+
+@extension
+interface NullableDecoderInstance<out A> : Decoder<A?> {
+
+  fun decoderA(): Decoder<A>
+
+  override fun decode(value: Json): Either<DecodingError, A?> =
+    if (value.isNull) null.right() else decoderA().decode(value)
+
+  companion object {
+    operator fun <A> invoke(decoderA: Decoder<A>): Decoder<A?> =
+      object : NullableDecoderInstance<A> {
+        override fun decoderA(): Decoder<A> = decoderA
+      }
+  }
+
+}
+
+fun <E : Enum<E>> Enum.Companion.encoder(): Encoder<Enum<E>> = object : Encoder<Enum<E>> {
+  override fun Enum<E>.encode(): Json = JsString(name)
+}
+
+inline fun <reified E : Enum<E>> Enum.Companion.decoder(): Decoder<E> = object : Decoder<E> {
+
+  override fun decode(value: Json): Either<DecodingError, E> =
+    value.asJsString().toEither { StringDecodingError(value) }.flatMap {
+      Try {
+        java.lang.Enum.valueOf(E::class.java, it.value.toString())
+      }.toEither { EnumValueNotFound(value) }
+    }
+
+}
+

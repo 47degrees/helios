@@ -3,9 +3,10 @@ package helios.instances
 import arrow.core.*
 import arrow.core.extensions.either.applicative.applicative
 import arrow.core.extensions.either.applicative.map2
-import arrow.extension
+import arrow.data.NonEmptyList
 import helios.core.*
-import helios.typeclasses.*
+import helios.typeclasses.Decoder
+import helios.typeclasses.Encoder
 
 fun <A> Option.Companion.encoder(encoderA: Encoder<A>) = object : Encoder<Option<A>> {
   override fun Option<A>.encode(): Json =
@@ -27,6 +28,18 @@ fun <A, B> Either.Companion.decoder(decoderA: Decoder<A>, decoderB: Decoder<B>) 
   override fun decode(value: Json): Either<DecodingError, Either<A, B>> =
     decoderB.decode(value).fold({ decoderA.decode(value).map { it.left() } },
       { v -> v.right().map { it.right() } })
+}
+
+fun <A> NonEmptyList.Companion.encoder(encoderA: Encoder<A>) = object : Encoder<NonEmptyList<A>> {
+  override fun NonEmptyList<A>.encode(): Json =
+    ListEncoderInstance(encoderA).run { all.encode() }
+}
+
+fun <A> NonEmptyList.Companion.decoder(decoderA: Decoder<A>) = object : Decoder<NonEmptyList<A>> {
+  override fun decode(value: Json): Either<DecodingError, NonEmptyList<A>> =
+    ListDecoderInstance(decoderA).decode(value).flatMap {
+      NonEmptyList.fromList(it).toEither { ArrayDecodingError(value) }
+    }
 }
 
 fun <A, B> Tuple2.Companion.encoder(encoderA: Encoder<A>, encoderB: Encoder<B>) = object : Encoder<Tuple2<A, B>> {

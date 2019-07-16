@@ -307,7 +307,7 @@ interface MapDecoderInstance<A, B> : Decoder<Map<A, B>> {
             val maybeValue: Either<DecodingError, B> = decode(value)
             maybeKey.map2(maybeValue) { mapOf(it.toPair()) }
           }
-            .foldLeft<Either<DecodingError, Map<A, B>>, Either<DecodingError, Map<A, B>>>(mapOf<A, B>().right()) { acc, either ->
+            .foldLeft(mapOf<A, B>().right()) { acc, either ->
               acc.map2(either) { it.a + it.b }
             }
         })
