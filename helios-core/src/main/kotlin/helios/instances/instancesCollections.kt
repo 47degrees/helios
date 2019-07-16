@@ -70,7 +70,7 @@ interface ArrayEncoderInstance<A> : Encoder<Array<A>> {
 
 }
 
-inline fun <reified A> ArrayDecoderInstance(decoderA: Decoder<A>) = object : Decoder<Array<A>> {
+inline fun <reified A> ArrayDecoderInstance(decoderA: Decoder<A>): Decoder<Array<A>> = object : Decoder<Array<A>> {
 
   override fun decode(value: Json): Either<DecodingError, Array<A>> =
     with(decoderA) {
@@ -295,7 +295,7 @@ interface BooleanArrayDecoderInstance : Decoder<BooleanArray> {
 }
 
 @extension
-interface MapEncoderInstance<A, B> : Encoder<Map<A, B>> {
+interface MapEncoderInstance<A, in B> : Encoder<Map<A, B>> {
 
   fun keyEncoderA(): KeyEncoder<A>
   fun encoderB(): Encoder<B>
@@ -320,7 +320,7 @@ interface MapEncoderInstance<A, B> : Encoder<Map<A, B>> {
 }
 
 @extension
-interface MapDecoderInstance<A, B> : Decoder<Map<A, B>> {
+interface MapDecoderInstance<A, out B> : Decoder<Map<A, B>> {
 
   fun keyDecoderA(): KeyDecoder<A>
   fun decoderB(): Decoder<B>
