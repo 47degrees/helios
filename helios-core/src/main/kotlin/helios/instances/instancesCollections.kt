@@ -57,7 +57,7 @@ interface ArrayEncoderInstance<A> : Encoder<Array<A>> {
   fun encoderA(): Encoder<A>
 
   override fun Array<A>.encode(): Json =
-    JsArray(map { encoderA().run { it.encode() } })
+    with(encoderA()) { JsArray(map { it.encode() }) }
 
   companion object {
     operator fun <A> invoke(encoderA: Encoder<A>): Encoder<Array<A>> =
