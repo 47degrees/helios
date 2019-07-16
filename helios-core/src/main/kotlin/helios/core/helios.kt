@@ -358,7 +358,7 @@ data class JsObject(val value: Map<String, Json>) : Json() {
   fun toList(): List<Tuple2<String, Json>> = value.toList().map { it.first toT it.second }
 
   override fun noSpaces(): String =
-    value.map { (k, v) -> """"$k": ${v.noSpaces()}""" }.joinToString(
+    value.map { (k, v) -> """"$k":${v.noSpaces()}""" }.joinToString(
       prefix = "{",
       separator = ",",
       postfix = "}"
