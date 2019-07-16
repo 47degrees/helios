@@ -12,7 +12,6 @@ import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
 import helios.typeclasses.KeyDecoder
 import helios.typeclasses.KeyEncoder
-import kotlin.collections.mapOf
 
 @extension
 interface ListEncoderInstance<in A> : Encoder<List<A>> {
@@ -275,9 +274,13 @@ interface MapEncoderInstance<A, B> : Encoder<Map<A, B>> {
   fun encoderB(): Encoder<B>
 
   override fun Map<A, B>.encode(): Json =
-    JsObject(this.map { (key, value) ->
-      (keyEncoderA().run { key.keyEncode().value.toString() } to encoderB().run { value.encode() })
-    }.toMap())
+    with(keyEncoderA()) {
+      with(encoderB()) {
+        JsObject(map { (key, value) ->
+          (key.keyEncode().value.toString() to value.encode())
+        }.toMap())
+      }
+    }
 
   companion object {
     operator fun <A, B> invoke(keyEncoderA: KeyEncoder<A>, encoderB: Encoder<B>): Encoder<Map<A, B>> =
@@ -296,16 +299,20 @@ interface MapDecoderInstance<A, B> : Decoder<Map<A, B>> {
   fun decoderB(): Decoder<B>
 
   override fun decode(value: Json): Either<DecodingError, Map<A, B>> =
-    value.asJsObject().fold({ ObjectDecodingError(value).left() }, { obj ->
-      obj.value.map { (key, value) ->
-        val maybeKey: Either<DecodingError, A> = keyDecoderA().keyDecode(JsString(key))
-        val maybeValue: Either<DecodingError, B> = decoderB().decode(value)
-        maybeKey.map2(maybeValue) { mapOf(it.toPair()) }
+    with(keyDecoderA()) {
+      with(decoderB()) {
+        value.asJsObject().fold({ ObjectDecodingError(value).left() }, { obj ->
+          obj.value.map { (key, value) ->
+            val maybeKey: Either<DecodingError, A> = keyDecode(JsString(key))
+            val maybeValue: Either<DecodingError, B> = decode(value)
+            maybeKey.map2(maybeValue) { mapOf(it.toPair()) }
+          }
+            .foldLeft<Either<DecodingError, Map<A, B>>, Either<DecodingError, Map<A, B>>>(mapOf<A, B>().right()) { acc, either ->
+              acc.map2(either) { it.a + it.b }
+            }
+        })
       }
-        .foldLeft<Either<DecodingError, Map<A, B>>, Either<DecodingError, Map<A, B>>>(arrow.core.mapOf<A, B>().right()) { acc, either ->
-          acc.map2(either) { it.a + it.b }
-        }
-    })
+    }
 
   companion object {
     operator fun <A, B> invoke(keyDecoderA: KeyDecoder<A>, decoderB: Decoder<B>): Decoder<Map<A, B>> =
