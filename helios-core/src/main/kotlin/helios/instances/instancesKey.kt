@@ -86,7 +86,7 @@ val UUIDKeyEncoder = object : KeyEncoder<UUID> {
 }
 
 val UUIDKeyDecoder = object : KeyDecoder<UUID> {
-  override fun keyDecode(value: Json): Either<DecodingError, UUID> =
+  override fun keyDecode(value: JsString): Either<DecodingError, UUID> =
     value.asJsString().map { UUID.fromString(it.value.toString()) }.toEither { StringDecodingError(value) }
 }
 

@@ -36,10 +36,13 @@ interface ListDecoderInstance<out A> : Decoder<List<A>> {
   fun decoderA(): Decoder<A>
 
   override fun decode(value: Json): Either<DecodingError, List<A>> =
-    value.asJsArray().toList()
-      .flatMap { arr ->
-        arr.value.map { decoderA().decode(it) }
-      }.sequence(Either.applicative()).fix().map { it.fix().toList() }
+    with(decoderA()) {
+      value.asJsArray().toList()
+        .flatMap { (arrValue) ->
+          arrValue.map(this::decode)
+        }.sequence(Either.applicative()).fix()
+        .map { it.fix().toList() }
+    }
 
   companion object {
     operator fun <A> invoke(decoderA: Decoder<A>): Decoder<List<A>> =
@@ -70,10 +73,13 @@ interface ArrayEncoderInstance<A> : Encoder<Array<A>> {
 inline fun <reified A> ArrayDecoderInstance(decoderA: Decoder<A>) = object : Decoder<Array<A>> {
 
   override fun decode(value: Json): Either<DecodingError, Array<A>> =
-    value.asJsArray().toList()
-      .flatMap { arr ->
-        arr.value.map { decoderA.decode(it) }
-      }.sequence(Either.applicative()).fix().map { it.fix().toTypedArray() }
+    with(decoderA) {
+      value.asJsArray().toList()
+        .flatMap { (arrValue) ->
+          arrValue.map(this::decode)
+        }.sequence(Either.applicative()).fix()
+        .map { it.fix().toTypedArray() }
+    }
 
 }
 
@@ -94,10 +100,13 @@ interface DoubleArrayEncoderInstance : Encoder<DoubleArray> {
 interface DoubleArrayDecoderInstance : Decoder<DoubleArray> {
 
   override fun decode(value: Json): Either<DecodingError, DoubleArray> =
-    value.asJsArray().toList()
-      .flatMap { arr ->
-        arr.value.map { Double.decoder().decode(it) }
-      }.sequence(Either.applicative()).fix().map { it.fix().toTypedArray().toDoubleArray() }
+    with(Double.decoder()) {
+      value.asJsArray().toList()
+        .flatMap { (arrValue) ->
+          arrValue.map(this::decode)
+        }.sequence(Either.applicative()).fix()
+        .map { it.fix().toTypedArray().toDoubleArray() }
+    }
 
   companion object {
     operator fun invoke(): Decoder<DoubleArray> = object : DoubleArrayDecoderInstance {}
@@ -121,10 +130,13 @@ interface FloatArrayEncoderInstance : Encoder<FloatArray> {
 interface FloatArrayDecoderInstance : Decoder<FloatArray> {
 
   override fun decode(value: Json): Either<DecodingError, FloatArray> =
-    value.asJsArray().toList()
-      .flatMap { arr ->
-        arr.value.map { Float.decoder().decode(it) }
-      }.sequence(Either.applicative()).fix().map { it.fix().toTypedArray().toFloatArray() }
+    with(Float.decoder()) {
+      value.asJsArray().toList()
+        .flatMap { (arrValue) ->
+          arrValue.map(this::decode)
+        }.sequence(Either.applicative()).fix()
+        .map { it.fix().toTypedArray().toFloatArray() }
+    }
 
   companion object {
     operator fun invoke(): Decoder<FloatArray> = object : FloatArrayDecoderInstance {}
@@ -148,10 +160,13 @@ interface LongArrayEncoderInstance : Encoder<LongArray> {
 interface LongArrayDecoderInstance : Decoder<LongArray> {
 
   override fun decode(value: Json): Either<DecodingError, LongArray> =
-    value.asJsArray().toList()
-      .flatMap { arr ->
-        arr.value.map { Long.decoder().decode(it) }
-      }.sequence(Either.applicative()).fix().map { it.fix().toTypedArray().toLongArray() }
+    with(Long.decoder()) {
+      value.asJsArray().toList()
+        .flatMap { (arrValue) ->
+          arrValue.map(this::decode)
+        }.sequence(Either.applicative()).fix()
+        .map { it.fix().toTypedArray().toLongArray() }
+    }
 
   companion object {
     operator fun invoke(): Decoder<LongArray> = object : LongArrayDecoderInstance {}
@@ -175,10 +190,13 @@ interface IntArrayEncoderInstance : Encoder<IntArray> {
 interface IntArrayDecoderInstance : Decoder<IntArray> {
 
   override fun decode(value: Json): Either<DecodingError, IntArray> =
-    value.asJsArray().toList()
-      .flatMap { arr ->
-        arr.value.map { Int.decoder().decode(it) }
-      }.sequence(Either.applicative()).fix().map { it.fix().toTypedArray().toIntArray() }
+    with(Int.decoder()) {
+      value.asJsArray().toList()
+        .flatMap { (arrValue) ->
+          arrValue.map(this::decode)
+        }.sequence(Either.applicative()).fix()
+        .map { it.fix().toTypedArray().toIntArray() }
+    }
 
   companion object {
     operator fun invoke(): Decoder<IntArray> = object : IntArrayDecoderInstance {}
@@ -202,10 +220,13 @@ interface ShortArrayEncoderInstance : Encoder<ShortArray> {
 interface ShortArrayDecoderInstance : Decoder<ShortArray> {
 
   override fun decode(value: Json): Either<DecodingError, ShortArray> =
-    value.asJsArray().toList()
-      .flatMap { arr ->
-        arr.value.map { Short.decoder().decode(it) }
-      }.sequence(Either.applicative()).fix().map { it.fix().toTypedArray().toShortArray() }
+    with(Short.decoder()) {
+      value.asJsArray().toList()
+        .flatMap { (arrValue) ->
+          arrValue.map(this::decode)
+        }.sequence(Either.applicative()).fix()
+        .map { it.fix().toTypedArray().toShortArray() }
+    }
 
   companion object {
     operator fun invoke(): Decoder<ShortArray> = object : ShortArrayDecoderInstance {}
@@ -229,10 +250,13 @@ interface ByteArrayEncoderInstance : Encoder<ByteArray> {
 interface ByteArrayDecoderInstance : Decoder<ByteArray> {
 
   override fun decode(value: Json): Either<DecodingError, ByteArray> =
-    value.asJsArray().toList()
-      .flatMap { arr ->
-        arr.value.map { Byte.decoder().decode(it) }
-      }.sequence(Either.applicative()).fix().map { it.fix().toTypedArray().toByteArray() }
+    with(Byte.decoder()) {
+      value.asJsArray().toList()
+        .flatMap { (arrValue) ->
+          arrValue.map(this::decode)
+        }.sequence(Either.applicative()).fix()
+        .map { it.fix().toTypedArray().toByteArray() }
+    }
 
   companion object {
     operator fun invoke(): Decoder<ByteArray> = object : ByteArrayDecoderInstance {}
@@ -256,10 +280,13 @@ interface BooleanArrayEncoderInstance : Encoder<BooleanArray> {
 interface BooleanArrayDecoderInstance : Decoder<BooleanArray> {
 
   override fun decode(value: Json): Either<DecodingError, BooleanArray> =
-    value.asJsArray().toList()
-      .flatMap { arr ->
-        arr.value.map { Boolean.decoder().decode(it) }
-      }.sequence(Either.applicative()).fix().map { it.fix().toTypedArray().toBooleanArray() }
+    with(Boolean.decoder()) {
+      value.asJsArray().toList()
+        .flatMap { (arrValue) ->
+          arrValue.map(this::decode)
+        }.sequence(Either.applicative()).fix()
+        .map { it.fix().toTypedArray().toBooleanArray() }
+    }
 
   companion object {
     operator fun invoke(): Decoder<BooleanArray> = object : BooleanArrayDecoderInstance {}
@@ -301,13 +328,13 @@ interface MapDecoderInstance<A, B> : Decoder<Map<A, B>> {
   override fun decode(value: Json): Either<DecodingError, Map<A, B>> =
     with(keyDecoderA()) {
       with(decoderB()) {
-        value.asJsObject().fold({ ObjectDecodingError(value).left() }, { obj ->
-          obj.value.map { (key, value) ->
+        value.asJsObject().fold({ ObjectDecodingError(value).left() }, { (arrValue) ->
+          arrValue.map { (key, value) ->
             val maybeKey: Either<DecodingError, A> = keyDecode(JsString(key))
             val maybeValue: Either<DecodingError, B> = decode(value)
             maybeKey.map2(maybeValue) { mapOf(it.toPair()) }
           }
-            .foldLeft(mapOf<A, B>().right()) { acc, either ->
+            .foldLeft<Either<DecodingError, Map<A, B>>, Either<DecodingError, Map<A, B>>>(mapOf<A, B>().right()) { acc, either ->
               acc.map2(either) { it.a + it.b }
             }
         })
