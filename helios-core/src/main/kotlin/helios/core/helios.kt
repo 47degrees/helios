@@ -2,7 +2,6 @@ package helios.core
 
 import arrow.core.*
 import arrow.core.extensions.option.applicative.applicative
-import arrow.syntax.collections.prependTo
 import helios.instances.HeliosFacade
 import helios.instances.jsarray.eq.eq
 import helios.instances.jsnumber.eq.eq
@@ -19,7 +18,7 @@ import java.nio.channels.ReadableByteChannel
 const val MaxLongString = "9223372036854775807"
 const val MinLongString = "-9223372036854775808"
 
-fun String.withPrefixPerLine(prefix : String) = this.lines().joinToString(separator = "\n") { "$prefix$it" }
+fun String.withPrefixPerLine(prefix: String) = this.lines().joinToString(separator = "\n") { "$prefix$it" }
 
 sealed class Json {
 
@@ -324,10 +323,18 @@ data class JsArray(val value: List<Json>) : Json() {
     value.joinToString(prefix = "[", separator = ",", postfix = "]", transform = Json::noSpaces)
 
   override fun spaces2(): String =
-    value.joinToString(prefix = "[\n", separator = ",\n", postfix = "\n]", transform = { it.spaces2().withPrefixPerLine("  ") })
+    value.joinToString(
+      prefix = "[\n",
+      separator = ",\n",
+      postfix = "\n]",
+      transform = { it.spaces2().withPrefixPerLine("  ") })
 
   override fun spaces4(): String =
-    value.joinToString(prefix = "[\n", separator = ",\n", postfix = "\n]", transform = { it.spaces4().withPrefixPerLine("    ") })
+    value.joinToString(
+      prefix = "[\n",
+      separator = ",\n",
+      postfix = "\n]",
+      transform = { it.spaces4().withPrefixPerLine("    ") })
 
   override fun equals(other: Any?): Boolean = JsArray.eq().run {
     (other as? JsArray)?.let { this@JsArray.eqv(it) } ?: false
@@ -362,14 +369,14 @@ data class JsObject(val value: Map<String, Json>) : Json() {
       prefix = "{\n",
       separator = ",\n",
       postfix = "\n}"
-    ){ it.withPrefixPerLine("  ") }
+    ) { it.withPrefixPerLine("  ") }
 
   override fun spaces4(): String =
     value.map { (k, v) -> """"$k": ${v.spaces4()}""" }.joinToString(
       prefix = "{\n",
       separator = ",\n",
       postfix = "\n}"
-    ){ it.withPrefixPerLine("    ") }
+    ) { it.withPrefixPerLine("    ") }
 
   override fun equals(other: Any?): Boolean = JsObject.eq().run {
     (other as? JsObject)?.let { this@JsObject.eqv(it) } ?: false
