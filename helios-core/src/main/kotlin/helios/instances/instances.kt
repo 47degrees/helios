@@ -216,7 +216,7 @@ interface NullableDecoderInstance<out A> : Decoder<A?> {
   fun decoderA(): Decoder<A>
 
   override fun decode(value: Json): Either<DecodingError, A?> =
-    Option.decoder(decoderA()).decode(value).map(Option<A>::orNull)
+   if (value.isNull) null.right() else decoderA.decode(value)
 
   companion object {
     operator fun <A> invoke(
