@@ -2,6 +2,7 @@ package helios.core
 
 import arrow.core.*
 import arrow.core.extensions.option.applicative.applicative
+import arrow.syntax.collections.prependTo
 import helios.instances.HeliosFacade
 import helios.instances.jsarray.eq.eq
 import helios.instances.jsnumber.eq.eq
@@ -17,6 +18,8 @@ import java.nio.channels.ReadableByteChannel
 
 const val MaxLongString = "9223372036854775807"
 const val MinLongString = "-9223372036854775808"
+
+fun String.withPrefixPerLine(prefix : String) = this.lines().joinToString(separator = "\n") { "$prefix$it" }
 
 sealed class Json {
 
@@ -100,7 +103,11 @@ sealed class Json {
       }
     }.fix().getOrElse { that }
 
-  abstract fun toJsonString(): String
+  abstract fun noSpaces(): String
+
+  open fun spaces2(): String = noSpaces()
+
+  open fun spaces4(): String = noSpaces()
 
   override fun equals(other: Any?): Boolean = Json.eq().run {
     (other as? Json)?.let { this@Json.eqv(it) } ?: false
@@ -111,13 +118,14 @@ sealed class Json {
 }
 
 data class JsBoolean(val value: Boolean) : Json() {
-  override fun toJsonString(): String = "$value"
+
+  override fun noSpaces(): String = "$value"
 
   companion object
 }
 
 data class JsString(val value: CharSequence) : Json() {
-  override fun toJsonString(): String = """"$value""""
+  override fun noSpaces(): String = """"$value""""
 
   companion object
 }
@@ -201,7 +209,7 @@ data class JsDecimal(val value: String) : JsNumber() {
 
   override fun toLong(): Long = value.toLong()
 
-  override fun toJsonString(): String = value
+  override fun noSpaces(): String = value
 
   override fun equals(other: Any?): Boolean = JsNumber.eq().run {
     (other as? JsNumber)?.let { this@JsDecimal.eqv(it) } ?: false
@@ -223,7 +231,7 @@ data class JsLong(val value: Long) : JsNumber() {
 
   override fun toLong(): Long = value
 
-  override fun toJsonString(): String = "$value"
+  override fun noSpaces(): String = "$value"
 
   override fun equals(other: Any?): Boolean = JsNumber.eq().run {
     (other as? JsNumber)?.let { this@JsLong.eqv(it) } ?: false
@@ -246,7 +254,7 @@ data class JsDouble(val value: Double) : JsNumber() {
 
   override fun toLong(): Long = value.toLong()
 
-  override fun toJsonString(): String = "$value"
+  override fun noSpaces(): String = "$value"
 
   override fun equals(other: Any?): Boolean = JsNumber.eq().run {
     (other as? JsNumber)?.let { this@JsDouble.eqv(it) } ?: false
@@ -269,7 +277,7 @@ data class JsFloat(val value: Float) : JsNumber() {
 
   override fun toLong(): Long = value.toLong()
 
-  override fun toJsonString(): String = "$value"
+  override fun noSpaces(): String = "$value"
 
   override fun equals(other: Any?): Boolean = JsNumber.eq().run {
     (other as? JsNumber)?.let { this@JsFloat.eqv(it) } ?: false
@@ -297,7 +305,7 @@ data class JsInt(val value: Int) : JsNumber() {
 
   override fun toByte(): Option<Byte> = value.toByte().some()
 
-  override fun toJsonString(): String = "$value"
+  override fun noSpaces(): String = "$value"
 
   override fun equals(other: Any?): Boolean = JsNumber.eq().run {
     (other as? JsNumber)?.let { this@JsInt.eqv(it) } ?: false
@@ -312,8 +320,14 @@ data class JsArray(val value: List<Json>) : Json() {
 
   operator fun get(index: Int): Option<Json> = Option.fromNullable(value.getOrNull(index))
 
-  override fun toJsonString(): String =
-    value.joinToString(prefix = "[", separator = ",", postfix = "]", transform = Json::toJsonString)
+  override fun noSpaces(): String =
+    value.joinToString(prefix = "[", separator = ",", postfix = "]", transform = Json::noSpaces)
+
+  override fun spaces2(): String =
+    value.joinToString(prefix = "[\n", separator = ",\n", postfix = "\n]", transform = { it.spaces2().withPrefixPerLine("  ") })
+
+  override fun spaces4(): String =
+    value.joinToString(prefix = "[\n", separator = ",\n", postfix = "\n]", transform = { it.spaces4().withPrefixPerLine("    ") })
 
   override fun equals(other: Any?): Boolean = JsArray.eq().run {
     (other as? JsArray)?.let { this@JsArray.eqv(it) } ?: false
@@ -336,12 +350,26 @@ data class JsObject(val value: Map<String, Json>) : Json() {
 
   fun toList(): List<Tuple2<String, Json>> = value.toList().map { it.first toT it.second }
 
-  override fun toJsonString(): String =
-    value.map { (k, v) -> """"$k":${v.toJsonString()}""" }.joinToString(
+  override fun noSpaces(): String =
+    value.map { (k, v) -> """"$k": ${v.noSpaces()}""" }.joinToString(
       prefix = "{",
       separator = ",",
       postfix = "}"
     )
+
+  override fun spaces2(): String =
+    value.map { (k, v) -> """"$k": ${v.spaces2()}""" }.joinToString(
+      prefix = "{\n",
+      separator = ",\n",
+      postfix = "\n}"
+    ){ it.withPrefixPerLine("  ") }
+
+  override fun spaces4(): String =
+    value.map { (k, v) -> """"$k": ${v.spaces4()}""" }.joinToString(
+      prefix = "{\n",
+      separator = ",\n",
+      postfix = "\n}"
+    ){ it.withPrefixPerLine("    ") }
 
   override fun equals(other: Any?): Boolean = JsObject.eq().run {
     (other as? JsObject)?.let { this@JsObject.eqv(it) } ?: false
@@ -352,7 +380,7 @@ data class JsObject(val value: Map<String, Json>) : Json() {
 }
 
 object JsNull : Json() {
-  override fun toJsonString(): String = "null"
+  override fun noSpaces(): String = "null"
 }
 
 val JsTrue = JsBoolean(true)
