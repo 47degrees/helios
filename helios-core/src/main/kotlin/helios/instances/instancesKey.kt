@@ -82,29 +82,29 @@ fun String.Companion.keyDecoder() = object : KeyDecoder<String> {
     value.asJsString().map { it.value.toString() }.toEither { StringDecodingError(value) }
 }
 
-fun UUID.keyEncoder() = object : KeyEncoder<UUID> {
+val UUIDKeyEncoder = object : KeyEncoder<UUID> {
   override fun UUID.keyEncode(): String = this.toString()
 }
 
-fun UUID.keyDecoder() = object : KeyDecoder<UUID> {
+val UUIDKeyDecoder = object : KeyDecoder<UUID> {
   override fun keyDecode(value: Json): Either<DecodingError, UUID> =
     value.asJsString().map { UUID.fromString(it.value.toString()) }.toEither { StringDecodingError(value) }
 }
 
-fun BigDecimal.keyEncoder() = object : KeyEncoder<BigDecimal> {
+val BigDecimalKeyEncoder = object : KeyEncoder<BigDecimal> {
   override fun BigDecimal.keyEncode(): String = this.toString()
 }
 
-fun BigDecimal.keyDecoder() = object : KeyDecoder<BigDecimal> {
+val BigDecimalKeyDecoder = object : KeyDecoder<BigDecimal> {
   override fun keyDecode(value: Json): Either<DecodingError, BigDecimal> =
     value.asJsString().map { it.value.toString().toBigDecimal() }.toEither { StringDecodingError(value) }
 }
 
-fun BigInteger.keyEncoder() = object : KeyEncoder<BigInteger> {
+val BigIntegerKeyEncoder = object : KeyEncoder<BigInteger> {
   override fun BigInteger.keyEncode(): String = this.toString()
 }
 
-fun BigInteger.keyDecoder() = object : KeyDecoder<BigInteger> {
+val BigIntegerKeyDecoder = object : KeyDecoder<BigInteger> {
   override fun keyDecode(value: Json): Either<DecodingError, BigInteger> =
     value.asJsString().map { it.value.toString().toBigInteger() }.toEither { StringDecodingError(value) }
 }

@@ -4,9 +4,9 @@ import arrow.core.*
 import arrow.core.extensions.either.applicative.applicative
 import arrow.core.extensions.either.applicative.map2
 import arrow.data.NonEmptyList
-import arrow.extension
 import helios.core.*
-import helios.typeclasses.*
+import helios.typeclasses.Decoder
+import helios.typeclasses.Encoder
 
 fun <A> Option.Companion.encoder(encoderA: Encoder<A>) = object : Encoder<Option<A>> {
   override fun Option<A>.encode(): Json =
