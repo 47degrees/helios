@@ -4,7 +4,7 @@ import arrow.test.UnitSpec
 import helios.core.EnumValueNotFound
 import helios.core.JsInt
 import helios.core.JsString
-import helios.core.StringDecodingError
+import helios.core.JsStringDecodingError
 import io.kotlintest.assertions.arrow.either.shouldBeLeft
 import io.kotlintest.assertions.arrow.either.shouldBeRight
 
@@ -28,7 +28,7 @@ internal class EnumTest : UnitSpec() {
 
     "invalid json produces the correct error" {
       val decoded = Enum.decoder<Foo>().decode(JsInt(1))
-      decoded.shouldBeLeft(StringDecodingError(JsInt(1)))
+      decoded.shouldBeLeft(JsStringDecodingError(JsInt(1)))
     }
 
   }

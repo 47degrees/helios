@@ -38,7 +38,7 @@ fun <A> NonEmptyList.Companion.encoder(encoderA: Encoder<A>) = object : Encoder<
 fun <A> NonEmptyList.Companion.decoder(decoderA: Decoder<A>) = object : Decoder<NonEmptyList<A>> {
   override fun decode(value: Json): Either<DecodingError, NonEmptyList<A>> =
     ListDecoderInstance(decoderA).decode(value).flatMap {
-      NonEmptyList.fromList(it).toEither { ArrayDecodingError(value) }
+      NonEmptyList.fromList(it).toEither { ExceptionOnDecoding(value, "Empty JsonArray cannot be decoded to NonEmptyList") }
     }
 }
 
@@ -56,7 +56,7 @@ fun <A, B> Tuple2.Companion.decoder(decoderA: Decoder<A>, decoderB: Decoder<B>) 
     val arr = value.asJsArray().toList().flatMap { it.value }
     return if (arr.size == 2)
       decoderA.decode(arr.first()).map2(decoderB.decode(arr.last())) { it }.fix()
-    else ArrayDecodingError(value).left()
+    else JsArrayDecodingError(value).left()
   }
 }
 
@@ -79,6 +79,7 @@ fun <A, B, C> Tuple3.Companion.decoder(
   decoderB: Decoder<B>,
   decoderC: Decoder<C>
 ) = object : Decoder<Tuple3<A, B, C>> {
+
   override fun decode(value: Json): Either<DecodingError, Tuple3<A, B, C>> {
     val arr = value.asJsArray().toList().flatMap { it.value }
     return if (arr.size == 3)
@@ -87,7 +88,8 @@ fun <A, B, C> Tuple3.Companion.decoder(
         decoderB.decode(arr[1]),
         decoderC.decode(arr[2])
       ) { it }.fix()
-    else ArrayDecodingError(value).left()
+    else JsArrayDecodingError(value).left()
   }
+
 }
 

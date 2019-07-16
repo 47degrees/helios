@@ -1,10 +1,7 @@
 package helios.instances
 
-import arrow.core.Either
-import helios.core.DecodingError
-import helios.core.JsString
-import helios.core.Json
-import helios.core.StringDecodingError
+import arrow.core.*
+import helios.core.*
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
 import java.time.*
@@ -26,7 +23,11 @@ interface InstantEncoderInstance : Encoder<Instant> {
 
 interface InstantDecoderInstance : Decoder<Instant> {
   override fun decode(value: Json): Either<DecodingError, Instant> =
-    value.asJsString().map { Instant.parse(it.value) }.toEither { StringDecodingError(value) }
+    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+      Try { Instant.parse(it.value) }.toEither {
+        DateDecodingError(value, None)
+      }
+    }
 
   companion object {
     operator fun invoke() = object : InstantDecoderInstance {
@@ -53,7 +54,11 @@ interface ZonedDateTimeDecoderInstance : Decoder<ZonedDateTime> {
   fun formatter(): DateTimeFormatter
 
   override fun decode(value: Json): Either<DecodingError, ZonedDateTime> =
-    value.asJsString().map { ZonedDateTime.parse(it.value, formatter()) }.toEither { StringDecodingError(value) }
+    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+      Try { ZonedDateTime.parse(it.value, formatter()) }.toEither {
+        DateDecodingError(value, formatter().some())
+      }
+    }
 
   companion object {
     operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME) =
@@ -82,7 +87,11 @@ interface LocalDateTimeDecoderInstance : Decoder<LocalDateTime> {
   fun formatter(): DateTimeFormatter
 
   override fun decode(value: Json): Either<DecodingError, LocalDateTime> =
-    value.asJsString().map { LocalDateTime.parse(it.value, formatter()) }.toEither { StringDecodingError(value) }
+    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+      Try { LocalDateTime.parse(it.value, formatter()) }.toEither {
+        DateDecodingError(value, formatter().some())
+      }
+    }
 
   companion object {
     operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME) =
@@ -111,7 +120,11 @@ interface LocalDateDecoderInstance : Decoder<LocalDate> {
   fun formatter(): DateTimeFormatter
 
   override fun decode(value: Json): Either<DecodingError, LocalDate> =
-    value.asJsString().map { LocalDate.parse(it.value, formatter()) }.toEither { StringDecodingError(value) }
+    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+      Try { LocalDate.parse(it.value, formatter()) }.toEither {
+        DateDecodingError(value, formatter().some())
+      }
+    }
 
   companion object {
     operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE) =
@@ -140,7 +153,11 @@ interface LocalTimeDecoderInstance : Decoder<LocalTime> {
   fun formatter(): DateTimeFormatter
 
   override fun decode(value: Json): Either<DecodingError, LocalTime> =
-    value.asJsString().map { LocalTime.parse(it.value, formatter()) }.toEither { StringDecodingError(value) }
+    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+      Try { LocalTime.parse(it.value, formatter()) }.toEither {
+        DateDecodingError(value, formatter().some())
+      }
+    }
 
   companion object {
     operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME) =
@@ -169,7 +186,11 @@ interface OffsetDateTimeDecoderInstance : Decoder<OffsetDateTime> {
   fun formatter(): DateTimeFormatter
 
   override fun decode(value: Json): Either<DecodingError, OffsetDateTime> =
-    value.asJsString().map { OffsetDateTime.parse(it.value, formatter()) }.toEither { StringDecodingError(value) }
+    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+      Try { OffsetDateTime.parse(it.value, formatter()) }.toEither {
+        DateDecodingError(value, formatter().some())
+      }
+    }
 
   companion object {
     operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME) =
@@ -198,7 +219,11 @@ interface OffsetTimeDecoderInstance : Decoder<OffsetTime> {
   fun formatter(): DateTimeFormatter
 
   override fun decode(value: Json): Either<DecodingError, OffsetTime> =
-    value.asJsString().map { OffsetTime.parse(it.value, formatter()) }.toEither { StringDecodingError(value) }
+    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+      Try { OffsetTime.parse(it.value, formatter()) }.toEither {
+        DateDecodingError(value, formatter().some())
+      }
+    }
 
   companion object {
     operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_TIME) =
@@ -219,7 +244,11 @@ interface MonthDayEncoderInstance : Encoder<MonthDay> {
 
 interface MonthDayDecoderInstance : Decoder<MonthDay> {
   override fun decode(value: Json): Either<DecodingError, MonthDay> =
-    value.asJsString().map { MonthDay.parse(it.value) }.toEither { StringDecodingError(value) }
+    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+      Try { MonthDay.parse(it.value) }.toEither {
+        DateDecodingError(value, None)
+      }
+    }
 
   companion object {
     operator fun invoke() = object : MonthDayDecoderInstance {}
@@ -236,7 +265,11 @@ interface YearEncoderInstance : Encoder<Year> {
 
 interface YearDecoderInstance : Decoder<Year> {
   override fun decode(value: Json): Either<DecodingError, Year> =
-    value.asJsString().map { Year.parse(it.value) }.toEither { StringDecodingError(value) }
+    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+      Try { Year.parse(it.value) }.toEither {
+        DateDecodingError(value, None)
+      }
+    }
 
   companion object {
     operator fun invoke() = object : YearDecoderInstance {}
@@ -253,7 +286,11 @@ interface YearMonthEncoderInstance : Encoder<YearMonth> {
 
 interface YearMonthDecoderInstance : Decoder<YearMonth> {
   override fun decode(value: Json): Either<DecodingError, YearMonth> =
-    value.asJsString().map { YearMonth.parse(it.value) }.toEither { StringDecodingError(value) }
+    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+      Try { YearMonth.parse(it.value) }.toEither {
+        DateDecodingError(value, None)
+      }
+    }
 
   companion object {
     operator fun invoke() = object : YearMonthDecoderInstance {}
@@ -270,7 +307,11 @@ interface PeriodEncoderInstance : Encoder<Period> {
 
 interface PeriodDecoderInstance : Decoder<Period> {
   override fun decode(value: Json): Either<DecodingError, Period> =
-    value.asJsString().map { Period.parse(it.value) }.toEither { StringDecodingError(value) }
+    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+      Try { Period.parse(it.value) }.toEither {
+        DateDecodingError(value, None)
+      }
+    }
 
   companion object {
     operator fun invoke() = object : PeriodDecoderInstance {}
@@ -287,7 +328,11 @@ interface DurationEncoderInstance : Encoder<Duration> {
 
 interface DurationDecoderInstance : Decoder<Duration> {
   override fun decode(value: Json): Either<DecodingError, Duration> =
-    value.asJsString().map { Duration.parse(it.value) }.toEither { StringDecodingError(value) }
+    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+      Try { Duration.parse(it.value) }.toEither {
+        DateDecodingError(value, None)
+      }
+    }
 
   companion object {
     operator fun invoke() = object : DurationDecoderInstance {}
@@ -304,7 +349,11 @@ interface ZoneIdEncoderInstance : Encoder<ZoneId> {
 
 interface ZoneIdDecoderInstance : Decoder<ZoneId> {
   override fun decode(value: Json): Either<DecodingError, ZoneId> =
-    value.asJsString().map { ZoneId.of(it.value.toString()) }.toEither { StringDecodingError(value) }
+    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+      Try { ZoneId.of(it.value.toString()) }.toEither {
+        DateDecodingError(value, None)
+      }
+    }
 
   companion object {
     operator fun invoke() = object : ZoneIdDecoderInstance {}
@@ -321,7 +370,11 @@ interface ZoneOffsetEncoderInstance : Encoder<ZoneOffset> {
 
 interface ZoneOffsetDecoderInstance : Decoder<ZoneOffset> {
   override fun decode(value: Json): Either<DecodingError, ZoneOffset> =
-    value.asJsString().map { ZoneOffset.of(it.value.toString()) }.toEither { StringDecodingError(value) }
+    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+      Try { ZoneOffset.of(it.value.toString()) }.toEither {
+        DateDecodingError(value, None)
+      }
+    }
 
   companion object {
     operator fun invoke() = object : ZoneOffsetDecoderInstance {}
