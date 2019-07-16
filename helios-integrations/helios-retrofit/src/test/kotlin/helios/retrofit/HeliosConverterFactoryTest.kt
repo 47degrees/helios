@@ -1,8 +1,6 @@
 package helios.retrofit
 
 import arrow.core.Tuple3
-import helios.typeclasses.Decoder
-import helios.typeclasses.Encoder
 import io.kotlintest.Description
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe

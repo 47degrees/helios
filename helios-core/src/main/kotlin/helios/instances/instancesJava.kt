@@ -1,14 +1,9 @@
 package helios.instances
 
-import arrow.core.*
-import arrow.core.extensions.either.applicative.applicative
-import arrow.core.extensions.either.applicative.map2
-import arrow.data.extensions.list.foldable.foldLeft
-import arrow.data.extensions.list.traverse.sequence
-import arrow.data.fix
-import arrow.extension
+import arrow.core.Either
 import helios.core.*
-import helios.typeclasses.*
+import helios.typeclasses.Decoder
+import helios.typeclasses.Encoder
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
