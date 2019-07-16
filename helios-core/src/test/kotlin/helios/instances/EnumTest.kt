@@ -16,18 +16,18 @@ internal class EnumTest : UnitSpec() {
   init {
 
     "Enums should be encoded and decoded successfully" {
-      Enum.Companion.decoder<Foo>().decode(Enum.Companion.encoder<Foo>().run {
+      Enum.decoder<Foo>().decode(Enum.encoder<Foo>().run {
         Foo.A.encode()
       }).shouldBeRight(Foo.A)
     }
 
     "invalid enum value produces the correct error" {
-      val decoded = Enum.Companion.decoder<Foo>().decode(JsString("B"))
+      val decoded = Enum.decoder<Foo>().decode(JsString("B"))
       decoded.shouldBeLeft(EnumValueNotFound(JsString("B")))
     }
 
     "invalid json produces the correct error" {
-      val decoded = Enum.Companion.decoder<Foo>().decode(JsInt(1))
+      val decoded = Enum.decoder<Foo>().decode(JsInt(1))
       decoded.shouldBeLeft(StringDecodingError(JsInt(1)))
     }
 

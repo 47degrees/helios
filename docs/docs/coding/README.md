@@ -47,11 +47,11 @@ import arrow.core.*
 import helios.*
 import helios.instances.*
 
-val fooJson = Enum.Companion.encoder<Foo>().run {
+val fooJson = Enum.encoder<Foo>().run {
   Foo.A.encode()
 }
 
-Enum.Companion.decoder<Foo>().decode(fooJson)
+Enum.decoder<Foo>().decode(fooJson)
 ```
 
 ## Building a Json
