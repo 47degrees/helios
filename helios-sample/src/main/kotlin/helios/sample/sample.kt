@@ -51,7 +51,9 @@ object Sample {
       street.encode()
     }
 
-    println(streetJson.toJsonString())
+    println(streetJson.noSpaces())
+    println(streetJson.spaces2())
+    println(streetJson.spaces4())
 
     Json.path.select("name").string.modify(companyJson, String::toUpperCase).let(::println)
     Json.path.name.string.modify(companyJson, String::toUpperCase).let(::println)
@@ -88,6 +90,10 @@ object Sample {
         )
       )
     )
+
+    println(json.noSpaces())
+    println(json.spaces2())
+    println(json.spaces4())
 
     Json.path.select("siblings")[1]
       .toSibling()
