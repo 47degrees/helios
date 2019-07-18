@@ -53,5 +53,5 @@ val jsonFromPerson = with(Person.encoder()) {
   person.encode()
 }
 
-jsonFromPerson.toJsonString()
+jsonFromPerson.noSpaces()
 ```
