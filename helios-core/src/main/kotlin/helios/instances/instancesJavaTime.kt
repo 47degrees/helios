@@ -30,8 +30,7 @@ interface InstantDecoderInstance : Decoder<Instant> {
     }
 
   companion object {
-    operator fun invoke() = object : InstantDecoderInstance {
-    }
+    operator fun invoke() = object : InstantDecoderInstance {}
   }
 }
 
@@ -237,8 +236,7 @@ interface MonthDayEncoderInstance : Encoder<MonthDay> {
   override fun MonthDay.encode() = JsString(this.toString())
 
   companion object {
-    operator fun invoke() = object : MonthDayEncoderInstance {
-    }
+    operator fun invoke() = object : MonthDayEncoderInstance {}
   }
 }
 
