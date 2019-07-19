@@ -328,7 +328,7 @@ interface MapDecoderInstance<A, out B> : Decoder<Map<A, B>> {
   override fun decode(value: Json): Either<DecodingError, Map<A, B>> =
     with(keyDecoderA()) {
       with(decoderB()) {
-        value.asJsObject().fold({ ObjectDecodingError(value).left() }, { (arrValue) ->
+        value.asJsObject().fold({ JsObjectDecodingError(value).left() }, { (arrValue) ->
           arrValue.map { (key, value) ->
             val maybeKey: Either<DecodingError, A> = keyDecode(JsString(key))
             val maybeValue: Either<DecodingError, B> = decode(value)
