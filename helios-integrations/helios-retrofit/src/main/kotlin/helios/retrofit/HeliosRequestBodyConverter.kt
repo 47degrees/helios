@@ -12,6 +12,6 @@ class HeliosRequestBodyConverter<T>(private val encoder: Encoder<T>) : Converter
 
   override fun convert(value: T): RequestBody? {
     val json = encoder.run { value.encode() }
-    return RequestBody.create(MEDIA_TYPE, json.toJsonString())
+    return RequestBody.create(MEDIA_TYPE, json.noSpaces())
   }
 }

@@ -29,8 +29,7 @@ interface InstantDecoderInstance : Decoder<Instant> {
     value.asJsString().map { Instant.parse(it.value) }.toEither { StringDecodingError(value) }
 
   companion object {
-    operator fun invoke() = object : InstantDecoderInstance {
-    }
+    operator fun invoke() = object : InstantDecoderInstance {}
   }
 }
 
@@ -212,8 +211,7 @@ interface MonthDayEncoderInstance : Encoder<MonthDay> {
   override fun MonthDay.encode() = JsString(this.toString())
 
   companion object {
-    operator fun invoke() = object : MonthDayEncoderInstance {
-    }
+    operator fun invoke() = object : MonthDayEncoderInstance {}
   }
 }
 
