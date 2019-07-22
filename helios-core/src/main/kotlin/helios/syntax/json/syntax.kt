@@ -3,6 +3,7 @@ package helios.syntax.json
 import arrow.core.Either
 import arrow.core.left
 import helios.core.*
+import helios.core.DecodingError.*
 import java.math.BigDecimal
 import java.math.BigInteger
 

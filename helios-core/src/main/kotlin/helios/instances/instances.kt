@@ -5,6 +5,7 @@ import arrow.core.extensions.either.applicative.applicative
 import arrow.core.extensions.either.applicative.map2
 import arrow.extension
 import helios.core.*
+import helios.core.DecodingError.*
 import helios.syntax.json.asJsArrayOrError
 import helios.syntax.json.asJsNumberOrError
 import helios.syntax.json.asJsStringOrError
@@ -125,7 +126,7 @@ interface PairDecoderInstance<out A, out B> : Decoder<Pair<A, B>> {
   fun decoderB(): Decoder<B>
 
   override fun decode(value: Json): Either<DecodingError, Pair<A, B>> =
-    value.asJsArrayOrError {(arr) ->
+    value.asJsArrayOrError { (arr) ->
       if (arr.size == 2)
         decoderA().decode(arr.first()).map2(decoderB().decode(arr.last())) { it.toPair() }.fix()
       else JsArrayDecodingError(value).left()
@@ -179,15 +180,15 @@ interface TripleDecoderInstance<out A, out B, out C> : Decoder<Triple<A, B, C>> 
   fun decoderC(): Decoder<C>
 
   override fun decode(value: Json): Either<DecodingError, Triple<A, B, C>> =
-    value.asJsArrayOrError {(arr) ->
-    if (arr.size == 3)
-      Either.applicative<DecodingError>().map(
-        decoderA().decode(arr[0]),
-        decoderB().decode(arr[1]),
-        decoderC().decode(arr[2])
-      ) { (a, b, c) -> Triple(a, b, c) }.fix()
-    else JsArrayDecodingError(value).left()
-  }
+    value.asJsArrayOrError { (arr) ->
+      if (arr.size == 3)
+        Either.applicative<DecodingError>().map(
+          decoderA().decode(arr[0]),
+          decoderB().decode(arr[1]),
+          decoderC().decode(arr[2])
+        ) { (a, b, c) -> Triple(a, b, c) }.fix()
+      else JsArrayDecodingError(value).left()
+    }
 
   companion object {
     operator fun <A, B, C> invoke(

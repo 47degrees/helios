@@ -4,7 +4,12 @@ import arrow.core.*
 import arrow.core.extensions.either.applicative.applicative
 import arrow.core.extensions.either.applicative.map2
 import arrow.data.NonEmptyList
-import helios.core.*
+import helios.core.DecodingError
+import helios.core.DecodingError.ExceptionOnDecoding
+import helios.core.DecodingError.JsArrayDecodingError
+import helios.core.JsArray
+import helios.core.JsNull
+import helios.core.Json
 import helios.syntax.json.asJsArrayOrError
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
@@ -55,7 +60,7 @@ fun <A, B> Tuple2.Companion.encoder(encoderA: Encoder<A>, encoderB: Encoder<B>) 
 
 fun <A, B> Tuple2.Companion.decoder(decoderA: Decoder<A>, decoderB: Decoder<B>) = object : Decoder<Tuple2<A, B>> {
   override fun decode(value: Json): Either<DecodingError, Tuple2<A, B>> =
-    value.asJsArrayOrError {(arr) ->
+    value.asJsArrayOrError { (arr) ->
       if (arr.size == 2)
         decoderA.decode(arr.first()).map2(decoderB.decode(arr.last())) { it }.fix()
       else JsArrayDecodingError(value).left()
@@ -83,7 +88,7 @@ fun <A, B, C> Tuple3.Companion.decoder(
 ) = object : Decoder<Tuple3<A, B, C>> {
 
   override fun decode(value: Json): Either<DecodingError, Tuple3<A, B, C>> =
-    value.asJsArrayOrError {(arr) ->
+    value.asJsArrayOrError { (arr) ->
       if (arr.size == 3)
         Either.applicative<DecodingError>().map(
           decoderA.decode(arr[0]),

@@ -2,7 +2,9 @@ package helios.instances
 
 import arrow.core.Either
 import arrow.core.Try
-import helios.core.*
+import helios.core.DecodingError
+import helios.core.DecodingError.*
+import helios.core.JsString
 import helios.typeclasses.KeyDecoder
 import helios.typeclasses.KeyEncoder
 import java.math.BigDecimal

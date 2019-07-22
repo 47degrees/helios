@@ -1,10 +1,10 @@
 package helios.instances
 
 import arrow.test.UnitSpec
-import helios.core.EnumValueNotFound
+import helios.core.DecodingError.EnumValueNotFound
+import helios.core.DecodingError.JsStringDecodingError
 import helios.core.JsInt
 import helios.core.JsString
-import helios.core.JsStringDecodingError
 import io.kotlintest.assertions.arrow.either.shouldBeLeft
 import io.kotlintest.assertions.arrow.either.shouldBeRight
 

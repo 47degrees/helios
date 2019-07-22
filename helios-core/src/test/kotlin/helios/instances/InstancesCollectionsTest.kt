@@ -1,9 +1,10 @@
 package helios.instances
 
-import arrow.core.flatMap
 import arrow.test.UnitSpec
-import helios.core.Json
-import helios.test.generators.*
+import helios.test.generators.alphaStr
+import helios.test.generators.array
+import helios.test.generators.byte
+import helios.test.generators.short
 import io.kotlintest.assertions.arrow.either.beRight
 import io.kotlintest.matchers.maps.shouldContainExactly
 import io.kotlintest.properties.Gen
