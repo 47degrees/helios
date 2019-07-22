@@ -15,7 +15,7 @@ fun Double.Companion.keyEncoder() = object : KeyEncoder<Double> {
 
 fun Double.Companion.keyDecoder() = object : KeyDecoder<Double> {
   override fun keyDecode(value: JsString): Either<DecodingError, Double> =
-    Try { value.value.toString().toDouble() }.toEither { JsNumberDecodingError(value) }
+    Try(value.value.toString()::toDouble).toEither { JsNumberDecodingError(value) }
 }
 
 fun Float.Companion.keyEncoder() = object : KeyEncoder<Float> {
@@ -24,7 +24,7 @@ fun Float.Companion.keyEncoder() = object : KeyEncoder<Float> {
 
 fun Float.Companion.keyDecoder() = object : KeyDecoder<Float> {
   override fun keyDecode(value: JsString): Either<DecodingError, Float> =
-    Try { value.value.toString().toFloat() }.toEither { JsNumberDecodingError(value) }
+    Try(value.value.toString()::toFloat).toEither { JsNumberDecodingError(value) }
 }
 
 fun Long.Companion.keyEncoder() = object : KeyEncoder<Long> {
@@ -33,7 +33,7 @@ fun Long.Companion.keyEncoder() = object : KeyEncoder<Long> {
 
 fun Long.Companion.keyDecoder() = object : KeyDecoder<Long> {
   override fun keyDecode(value: JsString): Either<DecodingError, Long> =
-    Try { value.value.toString().toLong() }.toEither { JsNumberDecodingError(value) }
+    Try(value.value.toString()::toLong).toEither { JsNumberDecodingError(value) }
 }
 
 fun Int.Companion.keyEncoder() = object : KeyEncoder<Int> {
@@ -42,7 +42,7 @@ fun Int.Companion.keyEncoder() = object : KeyEncoder<Int> {
 
 fun Int.Companion.keyDecoder() = object : KeyDecoder<Int> {
   override fun keyDecode(value: JsString): Either<DecodingError, Int> =
-    Try { value.value.toString().toInt() }.toEither { JsNumberDecodingError(value) }
+    Try(value.value.toString()::toInt).toEither { JsNumberDecodingError(value) }
 }
 
 fun Short.Companion.keyEncoder() = object : KeyEncoder<Short> {
@@ -51,7 +51,7 @@ fun Short.Companion.keyEncoder() = object : KeyEncoder<Short> {
 
 fun Short.Companion.keyDecoder() = object : KeyDecoder<Short> {
   override fun keyDecode(value: JsString): Either<DecodingError, Short> =
-    Try { value.value.toString().toShort() }.toEither { JsNumberDecodingError(value) }
+    Try(value.value.toString()::toShort).toEither { JsNumberDecodingError(value) }
 }
 
 fun Byte.Companion.keyEncoder() = object : KeyEncoder<Byte> {
@@ -60,7 +60,7 @@ fun Byte.Companion.keyEncoder() = object : KeyEncoder<Byte> {
 
 fun Byte.Companion.keyDecoder() = object : KeyDecoder<Byte> {
   override fun keyDecode(value: JsString): Either<DecodingError, Byte> =
-    Try { value.value.toString().toByte() }.toEither { JsNumberDecodingError(value) }
+    Try(value.value.toString()::toByte).toEither { JsNumberDecodingError(value) }
 }
 
 fun Boolean.Companion.keyEncoder() = object : KeyEncoder<Boolean> {
@@ -69,7 +69,7 @@ fun Boolean.Companion.keyEncoder() = object : KeyEncoder<Boolean> {
 
 fun Boolean.Companion.keyDecoder() = object : KeyDecoder<Boolean> {
   override fun keyDecode(value: JsString): Either<DecodingError, Boolean> =
-    Try { value.value.toString().toBoolean() }.toEither { JsBooleanDecodingError(value) }
+    Try(value.value.toString()::toBoolean).toEither { JsBooleanDecodingError(value) }
 }
 
 fun String.Companion.keyEncoder() = object : KeyEncoder<String> {
@@ -78,7 +78,7 @@ fun String.Companion.keyEncoder() = object : KeyEncoder<String> {
 
 fun String.Companion.keyDecoder() = object : KeyDecoder<String> {
   override fun keyDecode(value: JsString): Either<DecodingError, String> =
-    Try { value.value.toString() }.toEither { JsStringDecodingError(value) }
+    Try(value.value::toString).toEither { JsStringDecodingError(value) }
 }
 
 val UUIDKeyEncoder = object : KeyEncoder<UUID> {
@@ -87,7 +87,7 @@ val UUIDKeyEncoder = object : KeyEncoder<UUID> {
 
 val UUIDKeyDecoder = object : KeyDecoder<UUID> {
   override fun keyDecode(value: JsString): Either<DecodingError, UUID> =
-    value.asJsString().map { UUID.fromString(it.value.toString()) }.toEither { JsStringDecodingError(value) }
+    Try { UUID.fromString(value.value.toString()) }.toEither { JsStringDecodingError(value) }
 }
 
 val BigDecimalKeyEncoder = object : KeyEncoder<BigDecimal> {
@@ -96,7 +96,7 @@ val BigDecimalKeyEncoder = object : KeyEncoder<BigDecimal> {
 
 val BigDecimalKeyDecoder = object : KeyDecoder<BigDecimal> {
   override fun keyDecode(value: JsString): Either<DecodingError, BigDecimal> =
-    Try { value.value.toString().toBigDecimal() }.toEither { JsNumberDecodingError(value) }
+    Try(value.value.toString()::toBigDecimal).toEither { JsNumberDecodingError(value) }
 }
 
 val BigIntegerKeyEncoder = object : KeyEncoder<BigInteger> {
@@ -105,5 +105,5 @@ val BigIntegerKeyEncoder = object : KeyEncoder<BigInteger> {
 
 val BigIntegerKeyDecoder = object : KeyDecoder<BigInteger> {
   override fun keyDecode(value: JsString): Either<DecodingError, BigInteger> =
-    Try { value.value.toString().toBigInteger() }.toEither { JsNumberDecodingError(value) }
+    Try(value.value.toString()::toBigInteger).toEither { JsNumberDecodingError(value) }
 }

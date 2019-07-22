@@ -4,6 +4,8 @@ import arrow.core.Either
 import arrow.core.Try
 import arrow.core.flatMap
 import helios.core.*
+import helios.syntax.json.asJsNumberOrError
+import helios.syntax.json.asJsStringOrError
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
 import java.math.BigDecimal
@@ -20,9 +22,9 @@ interface UUIDEncoderInstance : Encoder<UUID> {
 
 interface UUIDDecoderInstance : Decoder<UUID> {
   override fun decode(value: Json): Either<DecodingError, UUID> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
-      Try { UUID.fromString(it.value.toString()) }.toEither {
-        ExceptionOnDecoding(value, "Invalid String cannot be decoded to UUID", it)
+    value.asJsStringOrError {
+      Try { UUID.fromString(it.value.toString()) }.toEither { ex ->
+        ExceptionOnDecoding(value, "Invalid String cannot be decoded to UUID", ex)
       }
     }
 
@@ -41,9 +43,11 @@ interface BigDecimalEncoderInstance : Encoder<BigDecimal> {
 
 interface BigDecimalDecoderInstance : Decoder<BigDecimal> {
   override fun decode(value: Json): Either<DecodingError, BigDecimal> =
-    value.asJsNumber().toEither { JsNumberDecodingError(value) }.flatMap { Try{ it.toBigDecimal() }.toEither {
-      ExceptionOnDecoding(value, "Cannot convert content to BigDecimal", it)
-    } }
+    value.asJsNumberOrError {
+      Try(it::toBigDecimal).toEither { ex ->
+        ExceptionOnDecoding(value, "Cannot convert content to BigDecimal", ex)
+      }
+    }
 
   companion object {
     operator fun invoke() = object : BigDecimalDecoderInstance {}
@@ -60,9 +64,11 @@ interface BigIntegerEncoderInstance : Encoder<BigInteger> {
 
 interface BigIntegerDecoderInstance : Decoder<BigInteger> {
   override fun decode(value: Json): Either<DecodingError, BigInteger> =
-    value.asJsNumber().toEither { JsNumberDecodingError(value) }.flatMap { Try{ it.toBigInteger() }.toEither {
-      ExceptionOnDecoding(value, "Cannot convert content to BigInteger", it)
-    } }
+    value.asJsNumberOrError {
+      Try(it::toBigInteger).toEither { ex ->
+        ExceptionOnDecoding(value, "Cannot convert content to BigInteger", ex)
+      }
+    }
 
   companion object {
     operator fun invoke() = object : BigIntegerDecoderInstance {}

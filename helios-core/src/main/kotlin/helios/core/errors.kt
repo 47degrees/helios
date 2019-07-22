@@ -4,6 +4,7 @@ import arrow.core.Option
 import java.time.format.DateTimeFormatter
 
 sealed class DecodingError
+data class JsNullDecodingError(val value: Json) : DecodingError()
 data class JsStringDecodingError(val value: Json) : DecodingError()
 data class JsBooleanDecodingError(val value: Json) : DecodingError()
 data class JsNumberDecodingError(val value: Json) : DecodingError()

@@ -5,6 +5,9 @@ import arrow.core.extensions.either.applicative.applicative
 import arrow.core.extensions.either.applicative.map2
 import arrow.extension
 import helios.core.*
+import helios.syntax.json.asJsArrayOrError
+import helios.syntax.json.asJsNumberOrError
+import helios.syntax.json.asJsStringOrError
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
 
@@ -14,8 +17,8 @@ fun Double.Companion.encoder() = object : Encoder<Double> {
 
 fun Double.Companion.decoder() = object : Decoder<Double> {
   override fun decode(value: Json): Either<DecodingError, Double> =
-    value.asJsNumber().toEither { JsNumberDecodingError(value) }.flatMap {
-      Try { it.toDouble() }.toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Double", it) }
+    value.asJsNumberOrError {
+      Try(it::toDouble).toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Double", it) }
     }
 }
 
@@ -25,8 +28,8 @@ fun Float.Companion.encoder() = object : Encoder<Float> {
 
 fun Float.Companion.decoder() = object : Decoder<Float> {
   override fun decode(value: Json): Either<DecodingError, Float> =
-    value.asJsNumber().toEither { JsNumberDecodingError(value) }.flatMap {
-      Try { it.toFloat() }.toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Float", it) }
+    value.asJsNumberOrError {
+      Try(it::toFloat).toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Float", it) }
     }
 }
 
@@ -36,8 +39,8 @@ fun Long.Companion.encoder() = object : Encoder<Long> {
 
 fun Long.Companion.decoder() = object : Decoder<Long> {
   override fun decode(value: Json): Either<DecodingError, Long> =
-    value.asJsNumber().toEither { JsNumberDecodingError(value) }.flatMap {
-      Try { it.toLong() }.toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Long", it) }
+    value.asJsNumberOrError {
+      Try(it::toLong).toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Long", it) }
     }
 }
 
@@ -47,7 +50,7 @@ fun Int.Companion.encoder() = object : Encoder<Int> {
 
 fun Int.Companion.decoder() = object : Decoder<Int> {
   override fun decode(value: Json): Either<DecodingError, Int> =
-    value.asJsNumber().toEither { JsNumberDecodingError(value) }.flatMap {
+    value.asJsNumberOrError {
       it.toInt().toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Int") }
     }
 }
@@ -58,7 +61,7 @@ fun Short.Companion.encoder() = object : Encoder<Short> {
 
 fun Short.Companion.decoder() = object : Decoder<Short> {
   override fun decode(value: Json): Either<DecodingError, Short> =
-    value.asJsNumber().toEither { JsNumberDecodingError(value) }.flatMap {
+    value.asJsNumberOrError {
       it.toShort().toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Short") }
     }
 }
@@ -69,7 +72,7 @@ fun Byte.Companion.encoder() = object : Encoder<Byte> {
 
 fun Byte.Companion.decoder() = object : Decoder<Byte> {
   override fun decode(value: Json): Either<DecodingError, Byte> =
-    value.asJsNumber().toEither { JsNumberDecodingError(value) }.flatMap {
+    value.asJsNumberOrError {
       it.toByte().toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Byte") }
     }
 }
@@ -80,7 +83,7 @@ fun Boolean.Companion.encoder() = object : Encoder<Boolean> {
 
 fun Boolean.Companion.decoder() = object : Decoder<Boolean> {
   override fun decode(value: Json): Either<DecodingError, Boolean> =
-    value.asJsBoolean().map { it.value }.toEither { JsBooleanDecodingError(value) }
+    value.asJsBoolean().map(JsBoolean::value).toEither { JsBooleanDecodingError(value) }
 }
 
 fun String.Companion.encoder() = object : Encoder<String> {
@@ -121,12 +124,12 @@ interface PairDecoderInstance<out A, out B> : Decoder<Pair<A, B>> {
   fun decoderA(): Decoder<A>
   fun decoderB(): Decoder<B>
 
-  override fun decode(value: Json): Either<DecodingError, Pair<A, B>> {
-    val arr = value.asJsArray().toList().flatMap { it.value }
-    return if (arr.size == 2)
-      decoderA().decode(arr.first()).map2(decoderB().decode(arr.last())) { it.toPair() }.fix()
-    else JsArrayDecodingError(value).left()
-  }
+  override fun decode(value: Json): Either<DecodingError, Pair<A, B>> =
+    value.asJsArrayOrError {(arr) ->
+      if (arr.size == 2)
+        decoderA().decode(arr.first()).map2(decoderB().decode(arr.last())) { it.toPair() }.fix()
+      else JsArrayDecodingError(value).left()
+    }
 
   companion object {
     operator fun <A, B> invoke(decoderA: Decoder<A>, decoderB: Decoder<B>): Decoder<Pair<A, B>> =
@@ -175,9 +178,9 @@ interface TripleDecoderInstance<out A, out B, out C> : Decoder<Triple<A, B, C>> 
   fun decoderB(): Decoder<B>
   fun decoderC(): Decoder<C>
 
-  override fun decode(value: Json): Either<DecodingError, Triple<A, B, C>> {
-    val arr = value.asJsArray().toList().flatMap { it.value }
-    return if (arr.size == 3)
+  override fun decode(value: Json): Either<DecodingError, Triple<A, B, C>> =
+    value.asJsArrayOrError {(arr) ->
+    if (arr.size == 3)
       Either.applicative<DecodingError>().map(
         decoderA().decode(arr[0]),
         decoderB().decode(arr[1]),
@@ -242,7 +245,7 @@ fun <E : Enum<E>> Enum.Companion.encoder(): Encoder<Enum<E>> = object : Encoder<
 inline fun <reified E : Enum<E>> Enum.Companion.decoder(): Decoder<E> = object : Decoder<E> {
 
   override fun decode(value: Json): Either<DecodingError, E> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+    value.asJsStringOrError {
       Try {
         java.lang.Enum.valueOf(E::class.java, it.value.toString())
       }.toEither { EnumValueNotFound(value) }

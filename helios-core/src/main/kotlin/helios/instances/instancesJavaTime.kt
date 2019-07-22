@@ -2,6 +2,7 @@ package helios.instances
 
 import arrow.core.*
 import helios.core.*
+import helios.syntax.json.asJsStringOrError
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
 import java.time.*
@@ -23,10 +24,10 @@ interface InstantEncoderInstance : Encoder<Instant> {
 
 interface InstantDecoderInstance : Decoder<Instant> {
   override fun decode(value: Json): Either<DecodingError, Instant> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
-      Try { Instant.parse(it.value) }.toEither {
-        DateDecodingError(value, None)
-      }
+    value.asJsStringOrError {
+      Try {
+        Instant.parse(it.value)
+      }.toEither { DateDecodingError(value, None) }
     }
 
   companion object {
@@ -53,7 +54,7 @@ interface ZonedDateTimeDecoderInstance : Decoder<ZonedDateTime> {
   fun formatter(): DateTimeFormatter
 
   override fun decode(value: Json): Either<DecodingError, ZonedDateTime> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+    value.asJsStringOrError {
       Try { ZonedDateTime.parse(it.value, formatter()) }.toEither {
         DateDecodingError(value, formatter().some())
       }
@@ -86,7 +87,7 @@ interface LocalDateTimeDecoderInstance : Decoder<LocalDateTime> {
   fun formatter(): DateTimeFormatter
 
   override fun decode(value: Json): Either<DecodingError, LocalDateTime> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+    value.asJsStringOrError {
       Try { LocalDateTime.parse(it.value, formatter()) }.toEither {
         DateDecodingError(value, formatter().some())
       }
@@ -119,7 +120,7 @@ interface LocalDateDecoderInstance : Decoder<LocalDate> {
   fun formatter(): DateTimeFormatter
 
   override fun decode(value: Json): Either<DecodingError, LocalDate> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+    value.asJsStringOrError {
       Try { LocalDate.parse(it.value, formatter()) }.toEither {
         DateDecodingError(value, formatter().some())
       }
@@ -152,7 +153,7 @@ interface LocalTimeDecoderInstance : Decoder<LocalTime> {
   fun formatter(): DateTimeFormatter
 
   override fun decode(value: Json): Either<DecodingError, LocalTime> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+    value.asJsStringOrError {
       Try { LocalTime.parse(it.value, formatter()) }.toEither {
         DateDecodingError(value, formatter().some())
       }
@@ -185,7 +186,7 @@ interface OffsetDateTimeDecoderInstance : Decoder<OffsetDateTime> {
   fun formatter(): DateTimeFormatter
 
   override fun decode(value: Json): Either<DecodingError, OffsetDateTime> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+    value.asJsStringOrError {
       Try { OffsetDateTime.parse(it.value, formatter()) }.toEither {
         DateDecodingError(value, formatter().some())
       }
@@ -218,7 +219,7 @@ interface OffsetTimeDecoderInstance : Decoder<OffsetTime> {
   fun formatter(): DateTimeFormatter
 
   override fun decode(value: Json): Either<DecodingError, OffsetTime> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+    value.asJsStringOrError {
       Try { OffsetTime.parse(it.value, formatter()) }.toEither {
         DateDecodingError(value, formatter().some())
       }
@@ -242,7 +243,7 @@ interface MonthDayEncoderInstance : Encoder<MonthDay> {
 
 interface MonthDayDecoderInstance : Decoder<MonthDay> {
   override fun decode(value: Json): Either<DecodingError, MonthDay> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+    value.asJsStringOrError {
       Try { MonthDay.parse(it.value) }.toEither {
         DateDecodingError(value, None)
       }
@@ -263,7 +264,7 @@ interface YearEncoderInstance : Encoder<Year> {
 
 interface YearDecoderInstance : Decoder<Year> {
   override fun decode(value: Json): Either<DecodingError, Year> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+    value.asJsStringOrError {
       Try { Year.parse(it.value) }.toEither {
         DateDecodingError(value, None)
       }
@@ -284,7 +285,7 @@ interface YearMonthEncoderInstance : Encoder<YearMonth> {
 
 interface YearMonthDecoderInstance : Decoder<YearMonth> {
   override fun decode(value: Json): Either<DecodingError, YearMonth> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+    value.asJsStringOrError {
       Try { YearMonth.parse(it.value) }.toEither {
         DateDecodingError(value, None)
       }
@@ -305,7 +306,7 @@ interface PeriodEncoderInstance : Encoder<Period> {
 
 interface PeriodDecoderInstance : Decoder<Period> {
   override fun decode(value: Json): Either<DecodingError, Period> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+    value.asJsStringOrError {
       Try { Period.parse(it.value) }.toEither {
         DateDecodingError(value, None)
       }
@@ -326,7 +327,7 @@ interface DurationEncoderInstance : Encoder<Duration> {
 
 interface DurationDecoderInstance : Decoder<Duration> {
   override fun decode(value: Json): Either<DecodingError, Duration> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+    value.asJsStringOrError {
       Try { Duration.parse(it.value) }.toEither {
         DateDecodingError(value, None)
       }
@@ -347,7 +348,7 @@ interface ZoneIdEncoderInstance : Encoder<ZoneId> {
 
 interface ZoneIdDecoderInstance : Decoder<ZoneId> {
   override fun decode(value: Json): Either<DecodingError, ZoneId> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+    value.asJsStringOrError {
       Try { ZoneId.of(it.value.toString()) }.toEither {
         DateDecodingError(value, None)
       }
@@ -368,7 +369,7 @@ interface ZoneOffsetEncoderInstance : Encoder<ZoneOffset> {
 
 interface ZoneOffsetDecoderInstance : Decoder<ZoneOffset> {
   override fun decode(value: Json): Either<DecodingError, ZoneOffset> =
-    value.asJsString().toEither { JsStringDecodingError(value) }.flatMap {
+    value.asJsStringOrError {
       Try { ZoneOffset.of(it.value.toString()) }.toEither {
         DateDecodingError(value, None)
       }
