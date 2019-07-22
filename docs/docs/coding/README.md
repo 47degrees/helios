@@ -93,8 +93,8 @@ import helios.instances.decoder
 val personCustomDecoder = object : Decoder<Person> {
   override fun decode(value: Json): Either<DecodingError, Person> =
     Either.applicative<DecodingError>().map(
-      value["first_name"].fold({ Either.Left(KeyNotFound("first_name")) }, { it.decode(String.decoder()) }),
-      value["age"].fold({ Either.Left(KeyNotFound("age")) }, { it.decode(Int.decoder()) })
+      value["first_name"].fold({ Either.Left(DecodingError.KeyNotFound("first_name")) }, { it.decode(String.decoder()) }),
+      value["age"].fold({ Either.Left(DecodingError.KeyNotFound("age")) }, { it.decode(Int.decoder()) })
     ) { tuple ->
       Person(tuple.a, tuple.b)
     }.fix()
