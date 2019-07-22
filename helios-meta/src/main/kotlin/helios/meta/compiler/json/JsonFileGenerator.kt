@@ -139,7 +139,7 @@ class JsonFileGenerator(
       when {
         t.startsWith("arrow.core.Option") -> "value[\"$p\"].fold({ None.right() }, { ${t.decoder()}.run { decode(it) } })"
         t.endsWith('?') -> "value[\"$p\"].fold({ null.right() }, { ${t.decoder()}.run { decode(it) } })"
-        else -> "value[\"$p\"].fold({ Either.Left(DecodingError.KeyNotFound(\"$p\")) }, { ${t.decoder()}.run { decode(it) } })"
+        else -> "value[\"$p\"].fold({ Either.Left(KeyNotFound(\"$p\")) }, { ${t.decoder()}.run { decode(it) } })"
       }
     }
 

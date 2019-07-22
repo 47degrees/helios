@@ -5,7 +5,6 @@ import arrow.core.extensions.either.applicative.applicative
 import arrow.core.extensions.either.applicative.map2
 import arrow.extension
 import helios.core.*
-import helios.core.DecodingError.*
 import helios.syntax.json.asJsArrayOrError
 import helios.syntax.json.asJsNumberOrError
 import helios.syntax.json.asJsStringOrError
@@ -18,8 +17,8 @@ fun Double.Companion.encoder() = object : Encoder<Double> {
 
 fun Double.Companion.decoder() = object : Decoder<Double> {
   override fun decode(value: Json): Either<DecodingError, Double> =
-    value.asJsNumberOrError {
-      Try(it::toDouble).toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Double", it) }
+    value.asJsNumberOrError(JsNumberDecodingError.JsDoubleError(value)){
+      Try(it::toDouble).toEither { JsNumberDecodingError.JsDoubleError(value) }
     }
 }
 
@@ -29,8 +28,8 @@ fun Float.Companion.encoder() = object : Encoder<Float> {
 
 fun Float.Companion.decoder() = object : Decoder<Float> {
   override fun decode(value: Json): Either<DecodingError, Float> =
-    value.asJsNumberOrError {
-      Try(it::toFloat).toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Float", it) }
+    value.asJsNumberOrError(JsNumberDecodingError.JsFloatError(value)) {
+      Try(it::toFloat).toEither { JsNumberDecodingError.JsFloatError(value) }
     }
 }
 
@@ -40,8 +39,8 @@ fun Long.Companion.encoder() = object : Encoder<Long> {
 
 fun Long.Companion.decoder() = object : Decoder<Long> {
   override fun decode(value: Json): Either<DecodingError, Long> =
-    value.asJsNumberOrError {
-      Try(it::toLong).toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Long", it) }
+    value.asJsNumberOrError(JsNumberDecodingError.JsLongError(value)) {
+      Try(it::toLong).toEither { JsNumberDecodingError.JsLongError(value) }
     }
 }
 
@@ -51,8 +50,8 @@ fun Int.Companion.encoder() = object : Encoder<Int> {
 
 fun Int.Companion.decoder() = object : Decoder<Int> {
   override fun decode(value: Json): Either<DecodingError, Int> =
-    value.asJsNumberOrError {
-      it.toInt().toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Int") }
+    value.asJsNumberOrError(JsNumberDecodingError.JsIntError(value)) {
+      it.toInt().toEither { JsNumberDecodingError.JsIntError(value) }
     }
 }
 
@@ -62,8 +61,8 @@ fun Short.Companion.encoder() = object : Encoder<Short> {
 
 fun Short.Companion.decoder() = object : Decoder<Short> {
   override fun decode(value: Json): Either<DecodingError, Short> =
-    value.asJsNumberOrError {
-      it.toShort().toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Short") }
+    value.asJsNumberOrError(JsNumberDecodingError.JsShortError(value)) {
+      it.toShort().toEither { JsNumberDecodingError.JsShortError(value) }
     }
 }
 
@@ -73,8 +72,8 @@ fun Byte.Companion.encoder() = object : Encoder<Byte> {
 
 fun Byte.Companion.decoder() = object : Decoder<Byte> {
   override fun decode(value: Json): Either<DecodingError, Byte> =
-    value.asJsNumberOrError {
-      it.toByte().toEither { ExceptionOnDecoding(value, "Number cannot be decoded into Byte") }
+    value.asJsNumberOrError(JsNumberDecodingError.JsByteError(value)) {
+      it.toByte().toEither { JsNumberDecodingError.JsByteError(value) }
     }
 }
 

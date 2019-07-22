@@ -2,11 +2,7 @@ package helios.instances
 
 import arrow.core.Either
 import arrow.core.Try
-import helios.core.DecodingError
-import helios.core.DecodingError.ExceptionOnDecoding
-import helios.core.JsNumber
-import helios.core.JsString
-import helios.core.Json
+import helios.core.*
 import helios.syntax.json.asJsNumberOrError
 import helios.syntax.json.asJsStringOrError
 import helios.typeclasses.Decoder
@@ -46,10 +42,8 @@ interface BigDecimalEncoderInstance : Encoder<BigDecimal> {
 
 interface BigDecimalDecoderInstance : Decoder<BigDecimal> {
   override fun decode(value: Json): Either<DecodingError, BigDecimal> =
-    value.asJsNumberOrError {
-      Try(it::toBigDecimal).toEither { ex ->
-        ExceptionOnDecoding(value, "Cannot convert content to BigDecimal", ex)
-      }
+    value.asJsNumberOrError(JsNumberDecodingError.JsBigDecimalError(value)) {
+      Try(it::toBigDecimal).toEither { JsNumberDecodingError.JsBigDecimalError(value) }
     }
 
   companion object {
@@ -67,10 +61,8 @@ interface BigIntegerEncoderInstance : Encoder<BigInteger> {
 
 interface BigIntegerDecoderInstance : Decoder<BigInteger> {
   override fun decode(value: Json): Either<DecodingError, BigInteger> =
-    value.asJsNumberOrError {
-      Try(it::toBigInteger).toEither { ex ->
-        ExceptionOnDecoding(value, "Cannot convert content to BigInteger", ex)
-      }
+    value.asJsNumberOrError(JsNumberDecodingError.JsBigIntegerError(value)) {
+      Try(it::toBigInteger).toEither { JsNumberDecodingError.JsBigIntegerError(value) }
     }
 
   companion object {

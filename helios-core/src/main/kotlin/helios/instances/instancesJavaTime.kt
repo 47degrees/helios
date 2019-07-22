@@ -4,8 +4,8 @@ import arrow.core.Either
 import arrow.core.None
 import arrow.core.Try
 import arrow.core.some
+import helios.core.DateDecodingError
 import helios.core.DecodingError
-import helios.core.DecodingError.DateDecodingError
 import helios.core.JsString
 import helios.core.Json
 import helios.syntax.json.asJsStringOrError

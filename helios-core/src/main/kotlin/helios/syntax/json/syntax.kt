@@ -1,9 +1,10 @@
 package helios.syntax.json
 
 import arrow.core.Either
+import arrow.core.Try
+import arrow.core.flatMap
 import arrow.core.left
 import helios.core.*
-import helios.core.DecodingError.*
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -31,8 +32,8 @@ fun BigDecimal.toJson(): JsDecimal = JsNumber.fromDecimalStringUnsafe(this.toStr
 fun <B> Json.asJsStringOrError(f: (JsString) -> Either<DecodingError, B>) =
   asJsString().fold({ JsStringDecodingError(this).left() }, { f(it) })
 
-fun <B> Json.asJsNumberOrError(f: (JsNumber) -> Either<DecodingError, B>) =
-  asJsNumber().fold({ JsNumberDecodingError(this).left() }, { f(it) })
+fun <B> Json.asJsNumberOrError(onError: DecodingError, f: (JsNumber) -> Either<DecodingError, B>) =
+  asJsNumber().toEither { onError }.flatMap { f(it) }
 
 fun <B> Json.asJsBooleanOrError(f: (JsBoolean) -> Either<DecodingError, B>) =
   asJsBoolean().fold({ JsBooleanDecodingError(this).left() }, { f(it) })
