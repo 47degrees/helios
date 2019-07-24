@@ -1,7 +1,6 @@
 package helios.syntax.json
 
 import arrow.core.Either
-import arrow.core.Try
 import arrow.core.flatMap
 import arrow.core.left
 import helios.core.*

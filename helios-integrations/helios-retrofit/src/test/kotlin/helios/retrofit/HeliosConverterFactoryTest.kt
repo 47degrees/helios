@@ -68,7 +68,7 @@ class HeliosConverterFactoryTest : StringSpec() {
     "Converter should throw an exception if serialization fails" {
       server.enqueue(MockResponse().setBody("{}"))
 
-      val call = Try{service.getSomething(Something("value", 100)).execute() }.toOption()
+      val call = Try { service.getSomething(Something("value", 100)).execute() }.toOption()
       val result = call.map { it.body() }.orNull()
 
       result shouldBe null
