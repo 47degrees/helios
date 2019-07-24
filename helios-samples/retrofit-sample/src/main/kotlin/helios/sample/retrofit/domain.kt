@@ -21,8 +21,7 @@ data class Slideshow(
 
 @json
 data class Slide(
-  // https://github.com/47deg/helios/issues/93
-//  val items: Option<List<String>>,
+  val items: Option<List<String>>,
   val title: String,
   val type: String
 ) {
