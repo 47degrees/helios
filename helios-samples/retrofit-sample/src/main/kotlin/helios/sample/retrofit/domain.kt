@@ -1,5 +1,6 @@
 package helios.sample.retrofit
 
+import arrow.core.Option
 import helios.json
 
 @json
