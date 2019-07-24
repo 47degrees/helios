@@ -8,11 +8,13 @@ import arrow.test.UnitSpec
 import arrow.test.generators.functionAToB
 import arrow.test.laws.PrismLaws
 import arrow.typeclasses.Eq
-import helios.core.*
+import helios.core.JsFalse
+import helios.core.JsString
+import helios.core.Json
 import helios.test.generators.*
+import io.kotlintest.assertions.arrow.option.shouldBeNone
 import io.kotlintest.properties.Gen
 import io.kotlintest.properties.forAll
-import io.kotlintest.assertions.arrow.option.*
 
 class JsonDSLTest : UnitSpec() {
 

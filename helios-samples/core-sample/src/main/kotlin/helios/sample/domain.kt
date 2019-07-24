@@ -18,7 +18,12 @@ data class Company(
 }
 
 @json
-data class Address(val city: String, val street: Street, val number: Option<Int>) {
+data class Building(val door: String) {
+  companion object
+}
+
+@json
+data class Address(val city: String, val street: Street, val number: Option<Int>, val extra: Building) {
   companion object
 }
 
@@ -34,7 +39,7 @@ typealias DadSide = String
 data class Child(
   val name: String,
   val age: Int,
-  val family: Map<String, Either<MomSide, DadSide>>
+  val family: Map<UUID, Either<MomSide, DadSide>>
 ) {
   companion object
 }
@@ -46,7 +51,7 @@ typealias Husband = String
 data class Employee(
   val name: String,
   val lastName: String,
-  val married: Either<Wife, Husband>,
+  val married: Either<Wife, Husband>?,
   val childs: Option<List<Child>>
 ) {
   companion object

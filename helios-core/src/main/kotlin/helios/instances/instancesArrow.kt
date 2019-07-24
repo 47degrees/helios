@@ -3,9 +3,11 @@ package helios.instances
 import arrow.core.*
 import arrow.core.extensions.either.applicative.applicative
 import arrow.core.extensions.either.applicative.map2
-import arrow.extension
+import arrow.data.NonEmptyList
 import helios.core.*
-import helios.typeclasses.*
+import helios.syntax.json.asJsArrayOrError
+import helios.typeclasses.Decoder
+import helios.typeclasses.Encoder
 
 fun <A> Option.Companion.encoder(encoderA: Encoder<A>) = object : Encoder<Option<A>> {
   override fun Option<A>.encode(): Json =
@@ -29,6 +31,19 @@ fun <A, B> Either.Companion.decoder(decoderA: Decoder<A>, decoderB: Decoder<B>) 
       { v -> v.right().map { it.right() } })
 }
 
+fun <A> NonEmptyList.Companion.encoder(encoderA: Encoder<A>) = object : Encoder<NonEmptyList<A>> {
+  override fun NonEmptyList<A>.encode(): Json =
+    ListEncoderInstance(encoderA).run { all.encode() }
+}
+
+fun <A> NonEmptyList.Companion.decoder(decoderA: Decoder<A>) = object : Decoder<NonEmptyList<A>> {
+  override fun decode(value: Json): Either<DecodingError, NonEmptyList<A>> =
+    ListDecoderInstance(decoderA).decode(value).flatMap {
+      NonEmptyList.fromList(it)
+        .toEither { ExceptionOnDecoding(value, "Empty JsonArray cannot be decoded to NonEmptyList") }
+    }
+}
+
 fun <A, B> Tuple2.Companion.encoder(encoderA: Encoder<A>, encoderB: Encoder<B>) = object : Encoder<Tuple2<A, B>> {
   override fun Tuple2<A, B>.encode(): Json = JsArray(
     listOf(
@@ -39,12 +54,12 @@ fun <A, B> Tuple2.Companion.encoder(encoderA: Encoder<A>, encoderB: Encoder<B>) 
 }
 
 fun <A, B> Tuple2.Companion.decoder(decoderA: Decoder<A>, decoderB: Decoder<B>) = object : Decoder<Tuple2<A, B>> {
-  override fun decode(value: Json): Either<DecodingError, Tuple2<A, B>> {
-    val arr = value.asJsArray().toList().flatMap { it.value }
-    return if (arr.size == 2)
-      decoderA.decode(arr.first()).map2(decoderB.decode(arr.last())) { it }.fix()
-    else ArrayDecodingError(value).left()
-  }
+  override fun decode(value: Json): Either<DecodingError, Tuple2<A, B>> =
+    value.asJsArrayOrError { (arr) ->
+      if (arr.size == 2)
+        decoderA.decode(arr.first()).map2(decoderB.decode(arr.last())) { it }.fix()
+      else JsArrayDecodingError(value).left()
+    }
 }
 
 fun <A, B, C> Tuple3.Companion.encoder(
@@ -66,15 +81,17 @@ fun <A, B, C> Tuple3.Companion.decoder(
   decoderB: Decoder<B>,
   decoderC: Decoder<C>
 ) = object : Decoder<Tuple3<A, B, C>> {
-  override fun decode(value: Json): Either<DecodingError, Tuple3<A, B, C>> {
-    val arr = value.asJsArray().toList().flatMap { it.value }
-    return if (arr.size == 3)
-      Either.applicative<DecodingError>().map(
-        decoderA.decode(arr[0]),
-        decoderB.decode(arr[1]),
-        decoderC.decode(arr[2])
-      ) { it }.fix()
-    else ArrayDecodingError(value).left()
-  }
+
+  override fun decode(value: Json): Either<DecodingError, Tuple3<A, B, C>> =
+    value.asJsArrayOrError { (arr) ->
+      if (arr.size == 3)
+        Either.applicative<DecodingError>().map(
+          decoderA.decode(arr[0]),
+          decoderB.decode(arr[1]),
+          decoderC.decode(arr[2])
+        ) { it }.fix()
+      else JsArrayDecodingError(value).left()
+    }
+
 }
 

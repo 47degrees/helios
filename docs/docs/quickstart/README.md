@@ -66,7 +66,7 @@ val jsonFromPerson = with(Person.encoder()) {
   person.encode()
 }
 
-jsonFromPerson.toJsonString()
+jsonFromPerson.noSpaces()
 ```
 
 You can find more on the [`samples` module](https://github.com/47deg/helios/tree/master/helios-sample/src/main/kotlin/helios/sample).
