@@ -92,5 +92,5 @@ uploadBenchmark {
     token = System.getenv("GITHUB_ACCESS_TOKEN")
     repositoryOwner = POM_DEVELOPER_ID
     repositoryName = "helios"
-    commitMessage = "Upload benchmark [ci skip]"
+    commitMessage = "[ci skip] - Upload benchmark"
 }

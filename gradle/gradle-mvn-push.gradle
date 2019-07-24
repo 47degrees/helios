@@ -1,5 +1,3 @@
-version = VERSION_NAME
-group = GROUP
 
 def getReleaseRepositoryUrl() {
   return findProperty("RELEASE_REPOSITORY_URL") ?: "https://api.bintray.com/maven/47deg/helios/helios"

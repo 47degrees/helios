@@ -34,3 +34,4 @@ jobs:
     - stage: deploy
       script:
         - ./deploy-scripts/deploy.sh
+        - ./gradlew release
