@@ -6,4 +6,4 @@ dependencies {
     compile project(":helios-core")
 }
 
-apply from: rootProject.file('gradle/generated-kotlin-sources.gradle')
+apply from: rootProject.file("gradle/generated-kotlin-sources.gradle")

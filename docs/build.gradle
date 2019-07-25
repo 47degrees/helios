@@ -1,15 +1,15 @@
-apply plugin: 'ank-gradle-plugin'
-apply plugin: 'kotlin-kapt'
+apply plugin: "ank-gradle-plugin"
+apply plugin: "kotlin-kapt"
 
 dependencies {
     compile project(":helios-core")
     compile project(":helios-optics")
-    compile project(':helios-annotations')
+    compile project(":helios-annotations")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
     kapt "io.arrow-kt:arrow-meta:$arrowVersion"
-    kapt project(':helios-meta')
-    kapt project(':helios-dsl-meta')
+    kapt project(":helios-meta")
+    kapt project(":helios-dsl-meta")
     implementation "io.arrow-kt:arrow-ank:$arrowVersion"
 }
 
