@@ -64,7 +64,7 @@ val jObject = JsObject(
 "age" to JsNumber(23)
 )
 
-jObject.toJsonString()
+jObject.spaces2()
 ```
 
 ## Custom Encoders
@@ -82,7 +82,7 @@ val personCustomEncoder = object : Encoder<Person> {
 
 val personCustomJson = with(personCustomEncoder) { Person("Abc", 10).encode() }
 
-personCustomJson.toJsonString()
+personCustomJson.spaces2()
 ```
 
 
@@ -114,11 +114,11 @@ You can navigate `Json` using the `Json.path` DSL to select keys or traverse col
 ```kotlin:ank
 import helios.optics.*
 
-Json.path.select("name").string.modify(jObject, String::toUpperCase).toJsonString()
+Json.path.select("name").string.modify(jObject, String::toUpperCase).spaces2()
 ```
 
 Note that the code generation will give you an accessor for each json field.
 
 ```kotlin:ank
-Json.path.name.string.modify(jObject, String::toUpperCase).toJsonString()
+Json.path.name.string.modify(jObject, String::toUpperCase).spaces2()
 ```

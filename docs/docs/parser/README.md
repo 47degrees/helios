@@ -25,7 +25,7 @@ val jsonFromString : Json =
     JsString("")
   }
 
-jsonFromString.toJsonString()
+jsonFromString.spaces2()
 ```
 
 ## From Json to the ADT
