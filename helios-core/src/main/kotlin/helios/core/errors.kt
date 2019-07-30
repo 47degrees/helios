@@ -7,7 +7,7 @@ sealed class DecodingError
 
 sealed class JsNumberDecodingError : DecodingError() {
   abstract val value: Json
-  
+
   data class JsBigDecimalError(override val value: Json) : JsNumberDecodingError()
   data class JsBigIntegerError(override val value: Json) : JsNumberDecodingError()
   data class JsDoubleError(override val value: Json) : JsNumberDecodingError()

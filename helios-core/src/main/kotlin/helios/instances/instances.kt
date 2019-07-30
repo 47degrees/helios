@@ -17,7 +17,7 @@ fun Double.Companion.encoder() = object : Encoder<Double> {
 
 fun Double.Companion.decoder() = object : Decoder<Double> {
   override fun decode(value: Json): Either<DecodingError, Double> =
-    value.asJsNumberOrError(JsNumberDecodingError.JsDoubleError(value)){
+    value.asJsNumberOrError(JsNumberDecodingError.JsDoubleError(value)) {
       Try(it::toDouble).toEither { JsNumberDecodingError.JsDoubleError(value) }
     }
 }
