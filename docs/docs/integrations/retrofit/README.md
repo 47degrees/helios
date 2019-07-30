@@ -10,7 +10,7 @@ permalink: /docs/integrations/retrofit/
 
 ## Dependency
 
-To start to use **Helios** on a *Retrofit* project just add the following dependency:
+To start using **Helios** on a *Retrofit* project just add the following dependency:
 
 ```groovy
 "com.47deg:helios-integrations-retrofit:0.1.0"
@@ -24,9 +24,9 @@ This converter is constructed using the `create` function
 which needs a list of the `classes` and the class `Encoder` and `Decoder`.
 
 ## Example
-Let's build a little example of how to add the **Helios'** *Retrofit* integration.
+Let's look at an example of how to add the **Helios'** *Retrofit* integration.
 
-First of all we need a little model for our example:
+First of all, we need a model for our example:
 
 ```kotlin
 @json
