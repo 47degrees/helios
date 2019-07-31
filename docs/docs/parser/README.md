@@ -8,7 +8,7 @@ permalink: /docs/parser/
 
 We can decode from a `String`, a `File`, etc:
 
-```kotlin:ank:silent
+```kotlin:ank
 import arrow.core.*
 import helios.*
 import helios.core.*
@@ -25,6 +25,7 @@ val jsonFromString : Json =
     JsString("")
   }
 
+jsonFromString.spaces2()
 ```
 
 ## From Json to the ADT
@@ -53,5 +54,5 @@ val jsonFromPerson = with(Person.encoder()) {
   person.encode()
 }
 
-jsonFromPerson.toJsonString()
+jsonFromPerson.noSpaces()
 ```

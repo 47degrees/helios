@@ -18,7 +18,7 @@ class JsNumberTest : UnitSpec() {
 
     "helios serialization works both ways" {
       forAll(jsLongs) { longs: JsArray ->
-        val string = longs.toJsonString()
+        val string = longs.noSpaces()
         Json.parseUnsafe(string).asJsArray() == longs.some()
       }
     }
