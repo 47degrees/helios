@@ -70,7 +70,6 @@ buildscript {
 }
 
 apply plugin: "kotlin"
-apply plugin: "net.researchgate.release"
 apply plugin: "com.github.ben-manes.versions"
 
 apply from: "detekt.gradle"
