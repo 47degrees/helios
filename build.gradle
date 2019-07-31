@@ -19,7 +19,7 @@ buildscript {
         //Plugins
         gradleVersionsPluginVersion = "0.21.0"
         jmhVersion = "0.4.8"
-        hoodVersion = "0.6.2-SNAPSHOT"
+        hoodVersion = "0.7.0"
         bintrayVersion = "1.8.4"
         gitPublishVersion = "2.1.1"
 
