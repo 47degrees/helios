@@ -1,4 +1,4 @@
-apply plugin: 'kotlin-kapt'
+apply plugin: "kotlin-kapt"
 
 dependencies {
     compile project(":helios-core")
@@ -6,7 +6,7 @@ dependencies {
     compile project(":helios-parser")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
-    kapt project(':helios-meta')
+    kapt project(":helios-meta")
     
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
 
@@ -15,10 +15,10 @@ dependencies {
     testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
     testImplementation("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
 
-    kaptTest project(':helios-meta')
+    kaptTest project(":helios-meta")
     
-    testCompile project(':helios-test')
-    testCompileOnly project(':helios-meta')
+    testCompile project(":helios-test")
+    testCompileOnly project(":helios-meta")
 }
 
-apply from: rootProject.file('gradle/generated-kotlin-sources.gradle')
+apply from: rootProject.file("gradle/generated-kotlin-sources.gradle")

@@ -56,7 +56,7 @@ Enum.decoder<Foo>().decode(fooJson)
 
 ## Building a Json
 
-You can build your own Json object like this:
+You can build your own `Json` object like this:
 
 ```kotlin:ank
 val jObject = JsObject(
@@ -88,7 +88,7 @@ personCustomJson.spaces2()
 
 ## Custom Decoders
 
-You can follow the same approach to create a custom Decoder:
+You can follow the same approach to create a custom `Decoder`:
 
 ```kotlin:ank
 import arrow.core.extensions.either.applicative.applicative

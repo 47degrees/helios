@@ -30,7 +30,7 @@ jsonFromString.spaces2()
 
 ## From Json to the ADT
 
-Once we have a Json, we can parse it to an ADT:
+Once we have a `Json`, we can parse it to an ADT:
 
 ```kotlin:ank
 

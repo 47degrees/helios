@@ -41,4 +41,4 @@ dependencies {
 
 ## Quickstart
 
-To see how to start working with Helios, lets take a look to the [Quickstart](quickstart/)
+To see how to start working with **Helios**, lets take a look to the [Quickstart](quickstart/)
