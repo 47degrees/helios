@@ -72,28 +72,19 @@ class InstancesTest : UnitSpec() {
 
     "Pair should be encoded and decoded successfully"{
       assertAll(Gen.pair(Gen.double(), Gen.alphaStr())) { sample ->
-        PairDecoderInstance(
-          Double.decoder(),
-          String.decoder()
-        ).decode(PairEncoderInstance(
-          Double.encoder(),
-          String.encoder()
-        ).run { sample.encode() }
-        ) should beRight(sample)
+        PairDecoderInstance(Double.decoder(), String.decoder()).decode(
+          PairEncoderInstance(Double.encoder(), String.encoder()).run {
+            sample.encode()
+          }) should beRight(sample)
       }
     }
 
     "Triple should be encoded and decoded successfully"{
       assertAll(Gen.triple(Gen.bool(), Gen.intSmall(), Gen.alphaStr())) { sample ->
-        TripleDecoderInstance(
-          Boolean.decoder(),
-          Int.decoder(),
-          String.decoder()
-        ).decode(TripleEncoderInstance(
-          Boolean.encoder(),
-          Int.encoder(),
-          String.encoder()
-        ).run { sample.encode() }
+        TripleDecoderInstance(Boolean.decoder(), Int.decoder(), String.decoder()).decode(
+          TripleEncoderInstance(Boolean.encoder(), Int.encoder(), String.encoder()).run {
+            sample.encode()
+          }
         ) should beRight(sample)
       }
     }
