@@ -6,7 +6,7 @@ permalink: /docs/quickstart/
 
 # QuickStart
 
-Once Helios is added to your project, you can start adding the necessary imports:
+Once **Helios** is added to your project, you can start adding the necessary imports:
 
 ```kotlin:ank:silent
 import arrow.core.*
@@ -27,7 +27,7 @@ data class Person(val name: String, val age: Int) {
 ```
 
 The `@json` annotation will provide the decoder and encoder for that data class,
-so we are able to read from and write to Json.
+so we are able to read from and write to `Json`.
 
 ## Decode
 

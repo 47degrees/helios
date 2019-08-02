@@ -1,4 +1,4 @@
-apply plugin: 'kotlin-kapt'
+apply plugin: "kotlin-kapt"
 
 dependencies {
     compile project(":helios-core")
@@ -11,18 +11,18 @@ dependencies {
     compile "io.arrow-kt:arrow-typeclasses:$arrowVersion"
 
     kapt "io.arrow-kt:arrow-meta:$arrowVersion"
-    kapt project(':helios-meta')
+    kapt project(":helios-meta")
 
     testImplementation("io.arrow-kt:arrow-test:$arrowVersion")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
     testImplementation("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
 
-    kaptTest project(':helios-meta')
+    kaptTest project(":helios-meta")
     kaptTest "io.arrow-kt:arrow-meta:$arrowVersion"
 
-    testCompile project(':helios-test')
+    testCompile project(":helios-test")
     testCompileOnly "io.arrow-kt:arrow-meta:$arrowVersion"
-    testCompileOnly project(':helios-meta')
+    testCompileOnly project(":helios-meta")
 }
 
-apply from: rootProject.file('gradle/generated-kotlin-sources.gradle')
+apply from: rootProject.file("gradle/generated-kotlin-sources.gradle")

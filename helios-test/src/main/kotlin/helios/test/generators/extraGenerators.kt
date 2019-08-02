@@ -3,7 +3,8 @@ package helios.test.generators
 import io.kotlintest.properties.Gen
 import java.math.BigDecimal
 
-fun Gen.Companion.alphaStr() = Gen.string().map { str -> str.filter { it.isLetterOrDigit() } }.filter { it.isNotBlank() }
+fun Gen.Companion.alphaStr() =
+  Gen.string().map { str -> str.filter(Char::isLetterOrDigit) }.filter(String::isNotBlank)
 
 inline fun <reified A> Gen.Companion.array(genA: Gen<A>): Gen<Array<A>> = Gen.list(genA).map { it.toTypedArray() }
 

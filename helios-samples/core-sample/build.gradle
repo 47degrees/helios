@@ -1,10 +1,10 @@
-apply plugin: 'kotlin-kapt'
+apply plugin: "kotlin-kapt"
 
 dependencies {
     compile project(":helios-core")
     compile project(":helios-optics")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
-    kapt project(':helios-meta')
-    kapt project(':helios-dsl-meta')
+    kapt project(":helios-meta")
+    kapt project(":helios-dsl-meta")
 }

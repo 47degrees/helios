@@ -2,7 +2,7 @@
 
 **Helios** is a library used to transform `Json` text into a model and vice versa.
 It's based on part of the [Jawn Parser](https://github.com/non/jawn) built on `Arrow`,
-a Functional companion to Kotlin's Standard Library.
+a Functional companion to `Kotlin`'s Standard Library.
 
 Learn more on [**47deg.github.io/helios**](https://47deg.github.io/helios)
 
@@ -13,7 +13,7 @@ with the advantage of using the `Arrow` library for functional programming.
 
 ## Adding the dependency
 
-**Helios** uses Kotlin version `1.3.31` and `Arrow` version `0.9.0`.
+**Helios** uses `Kotlin` version `1.3.31` and `Arrow` version `0.9.0`.
 
 To import the library on `Gradle`, add the following repository and dependencies:
 
@@ -33,13 +33,13 @@ dependencies {
 
 ## Running Benchmarks
 
-To run the benchmarks for comparing Helios with other Json libraries, execute the following command:
+To run the benchmarks for comparing **Helios** with other `Json` libraries, execute the following command:
 
 ```bash
 ./gradlew :helios-benchmarks:executeBenchmarks
 ```
 
-To run the benchmarks with Helios' performance, execute the following command:
+To run the benchmarks with **Helios**' performance, execute the following command:
 
 ```bash
 ./gradlew :helios-benchmarks:executeHeliosBenchmark

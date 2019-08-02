@@ -2,4 +2,4 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }
 
-apply from: rootProject.file('gradle/generated-kotlin-sources.gradle')
+apply from: rootProject.file("gradle/generated-kotlin-sources.gradle")

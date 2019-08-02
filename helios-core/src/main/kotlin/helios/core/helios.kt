@@ -146,12 +146,12 @@ sealed class JsNumber : Json() {
     if (asInt.compareTo(it) == 0) Some(asInt) else None
   }
 
-  open fun toShort(): Option<Short> = toLong().let {
+  open fun toShort(): Option<Short> = toInt().flatMap {
     val asShort: Short = it.toShort()
     if (asShort.compareTo(it) == 0) Some(asShort) else None
   }
 
-  open fun toByte(): Option<Byte> = toLong().let {
+  open fun toByte(): Option<Byte> = toInt().flatMap {
     val asByte: Byte = it.toByte()
     if (asByte.compareTo(it) == 0) Some(asByte) else None
   }

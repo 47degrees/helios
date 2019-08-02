@@ -1,7 +1,10 @@
 package helios.retrofit
 
+import arrow.core.Try
 import arrow.core.Tuple3
 import io.kotlintest.Description
+import io.kotlintest.assertions.arrow.`try`.shouldBeFailure
+import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
@@ -26,7 +29,7 @@ class HeliosConverterFactoryTest : StringSpec() {
   private lateinit var service: Service
 
   private val jsonables: List<JsonableEvidence<*>> = listOf(
-    Tuple3(Something::class.java, Something.encoder(), Something.decoder())
+    Tuple3(Something::class, Something.encoder(), Something.decoder())
   )
 
   override fun beforeTest(description: Description) {
@@ -42,7 +45,7 @@ class HeliosConverterFactoryTest : StringSpec() {
 
   init {
     "Converter can encode body of request if encoder instance is provided to factory" {
-      server.enqueue(MockResponse().setBody(""""{"name":"Test","quantity":1}"""))
+      server.enqueue(MockResponse().setBody("""{"name":"Test","quantity":1}"""))
 
       val call = service.getSomething(Something("value", 100))
       call.execute()
@@ -55,23 +58,20 @@ class HeliosConverterFactoryTest : StringSpec() {
     "Converter can decode body of response if decoder instance is provided to factory" {
       server.enqueue(MockResponse().setBody("""{"name":"Test","quantity":1}"""))
 
-      val call = service.getSomething(Something("value", 100))
-      val response = call.execute()
-      val result = response.body()
+      val call = service.getSomething(Something("value", 100)).execute()
+      val result = call.body()
 
       result shouldNotBe null
       result!!.name shouldBe "Test"
       result.quantity shouldBe 1
     }
 
-    "Converter should return null if serialization fails" {
+    "Converter should throw an exception if serialization fails" {
       server.enqueue(MockResponse().setBody("{}"))
 
-      val call = service.getSomething(Something("value", 100))
-      val response = call.execute()
-      val result = response.body()
-
-      result shouldBe null
+      Try {
+        service.getSomething(Something("value", 100)).execute().body()
+      }.isFailure() shouldBe true
     }
 
   }
