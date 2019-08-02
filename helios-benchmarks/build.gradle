@@ -85,7 +85,7 @@ compareBenchmarkCI {
     repositoryName = "helios"
     pullRequestSha = System.getenv("TRAVIS_PULL_REQUEST_SHA")
     pullRequestNumber = (System.getenv("TRAVIS_PULL_REQUEST") != "false") ? System.getenv("TRAVIS_PULL_REQUEST")?.toInteger() : -1
-    statusTargetUrl = URI.create(System.getenv("TRAVIS_JOB_WEB_URL"))
+    statusTargetUrl = System.getenv("TRAVIS_JOB_WEB_URL") ? URI.create(System.getenv("TRAVIS_JOB_WEB_URL")) : null
 }
 
 uploadBenchmark {

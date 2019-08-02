@@ -1,6 +1,7 @@
 package helios.instances
 
 import arrow.test.UnitSpec
+import helios.test.generators.jsBoolean
 import helios.test.generators.jsString
 import io.kotlintest.assertions.arrow.either.beLeft
 import io.kotlintest.assertions.arrow.either.beRight
@@ -161,7 +162,7 @@ class InstancesJavaTimeTest : UnitSpec() {
     }
 
     "ZoneOffset should fail for wrong content"{
-      assertAll(Gen.jsString()) { sample ->
+      assertAll(Gen.jsBoolean()) { sample ->
         ZoneOffsetDecoderInstance().decode(sample) should beLeft()
       }
     }
