@@ -9,6 +9,8 @@ import arrow.test.UnitSpec
 import arrow.test.generators.*
 import helios.core.JsArray
 import helios.test.generators.alphaStr
+import helios.test.generators.jsBoolean
+import helios.test.generators.jsString
 import io.kotlintest.assertions.arrow.either.beLeft
 import io.kotlintest.assertions.arrow.either.beRight
 import io.kotlintest.properties.Gen
@@ -26,12 +28,24 @@ class InstancesArrowTest : UnitSpec() {
       }
     }
 
+    "Option should fail for wrong content"{
+      assertAll(Gen.jsBoolean()) { sample ->
+        Option.decoder(String.decoder()).decode(sample) should beLeft()
+      }
+    }
+
     "Either should be encoded and decoded successfully"{
       assertAll(Gen.either(Gen.alphaStr(), Gen.double())) { sample ->
         Either.decoder(String.decoder(), Double.decoder()).decode(
           Either.encoder(String.encoder(), Double.encoder()).run {
             sample.encode()
           }) should beRight(sample)
+      }
+    }
+
+    "Either should fail for wrong content"{
+      assertAll(Gen.jsBoolean()) { sample ->
+        Either.decoder(String.decoder(), Double.decoder()).decode(sample) should beLeft()
       }
     }
 
@@ -44,6 +58,12 @@ class InstancesArrowTest : UnitSpec() {
       }
     }
 
+    "Tuple2 should fail for wrong content"{
+      assertAll(Gen.jsString()) { sample ->
+        Tuple2.decoder(String.decoder(), Double.decoder()).decode(sample) should beLeft()
+      }
+    }
+
     "Tuple3 should be encoded and decoded successfully"{
       assertAll(Gen.tuple3(Gen.alphaStr(), Gen.double(), Gen.bool())) { sample ->
         Tuple3.decoder(String.decoder(), Double.decoder(), Boolean.decoder()).decode(
@@ -53,11 +73,23 @@ class InstancesArrowTest : UnitSpec() {
       }
     }
 
+    "Tuple3 should fail for wrong content"{
+      assertAll(Gen.jsString()) { sample ->
+        Tuple3.decoder(String.decoder(), Double.decoder(), Boolean.decoder()).decode(sample) should beLeft()
+      }
+    }
+
     "NonEmptyList should be encode and decode successfully" {
-      assertAll(Gen.nonEmptyList(Gen.alphaStr())) { list ->
+      assertAll(Gen.nonEmptyList(Gen.alphaStr())) { sample ->
         NonEmptyList.decoder(String.decoder()).decode(NonEmptyList.encoder(String.encoder()).run {
-          list.encode()
-        }) should beRight(list)
+          sample.encode()
+        }) should beRight(sample)
+      }
+    }
+
+    "NonEmptyList should fail for wrong content" {
+      assertAll(Gen.jsString()) { sample ->
+        NonEmptyList.decoder(String.decoder()).decode(sample) should beLeft()
       }
     }
 
