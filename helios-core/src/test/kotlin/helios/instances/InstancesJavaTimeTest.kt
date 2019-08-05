@@ -19,7 +19,7 @@ class InstancesJavaTimeTest : UnitSpec() {
     }
 
     "Instant should fail for wrong content"{
-      assertAll(Gen.jsString()) { sample ->
+      assertAll(Gen.jsBoolean()) { sample ->
         InstantDecoderInstance().decode(sample) should beLeft()
       }
     }
@@ -30,7 +30,7 @@ class InstancesJavaTimeTest : UnitSpec() {
     }
 
     "ZonedDateTime should fail for wrong content"{
-      assertAll(Gen.jsString()) { sample ->
+      assertAll(Gen.jsBoolean()) { sample ->
         ZonedDateTimeDecoderInstance().decode(sample) should beLeft()
       }
     }
@@ -41,7 +41,7 @@ class InstancesJavaTimeTest : UnitSpec() {
     }
 
     "LocalDateTime should fail for wrong content"{
-      assertAll(Gen.jsString()) { sample ->
+      assertAll(Gen.jsBoolean()) { sample ->
         LocalDateTimeDecoderInstance().decode(sample) should beLeft()
       }
     }
@@ -52,7 +52,7 @@ class InstancesJavaTimeTest : UnitSpec() {
     }
 
     "LocalDate should fail for wrong content"{
-      assertAll(Gen.jsString()) { sample ->
+      assertAll(Gen.jsBoolean()) { sample ->
         LocalDateDecoderInstance().decode(sample) should beLeft()
       }
     }
@@ -63,7 +63,7 @@ class InstancesJavaTimeTest : UnitSpec() {
     }
 
     "LocalTime should fail for wrong content"{
-      assertAll(Gen.jsString()) { sample ->
+      assertAll(Gen.jsBoolean()) { sample ->
         LocalTimeDecoderInstance().decode(sample) should beLeft()
       }
     }
@@ -74,7 +74,7 @@ class InstancesJavaTimeTest : UnitSpec() {
     }
 
     "OffsetDateTime should fail for wrong content"{
-      assertAll(Gen.jsString()) { sample ->
+      assertAll(Gen.jsBoolean()) { sample ->
         OffsetDateTimeDecoderInstance().decode(sample) should beLeft()
       }
     }
@@ -85,7 +85,7 @@ class InstancesJavaTimeTest : UnitSpec() {
     }
 
     "OffsetTime should fail for wrong content"{
-      assertAll(Gen.jsString()) { sample ->
+      assertAll(Gen.jsBoolean()) { sample ->
         OffsetTimeDecoderInstance().decode(sample) should beLeft()
       }
     }
@@ -96,7 +96,7 @@ class InstancesJavaTimeTest : UnitSpec() {
     }
 
     "MonthDay should fail for wrong content"{
-      assertAll(Gen.jsString()) { sample ->
+      assertAll(Gen.jsBoolean()) { sample ->
         MonthDayDecoderInstance().decode(sample) should beLeft()
       }
     }
@@ -107,7 +107,7 @@ class InstancesJavaTimeTest : UnitSpec() {
     }
 
     "Year should fail for wrong content"{
-      assertAll(Gen.jsString()) { sample ->
+      assertAll(Gen.jsBoolean()) { sample ->
         YearDecoderInstance().decode(sample) should beLeft()
       }
     }
@@ -118,7 +118,7 @@ class InstancesJavaTimeTest : UnitSpec() {
     }
 
     "YearMonth should fail for wrong content"{
-      assertAll(Gen.jsString()) { sample ->
+      assertAll(Gen.jsBoolean()) { sample ->
         YearMonthDecoderInstance().decode(sample) should beLeft()
       }
     }
@@ -129,7 +129,7 @@ class InstancesJavaTimeTest : UnitSpec() {
     }
 
     "Period should fail for wrong content"{
-      assertAll(Gen.jsString()) { sample ->
+      assertAll(Gen.jsBoolean()) { sample ->
         PeriodDecoderInstance().decode(sample) should beLeft()
       }
     }
@@ -140,7 +140,7 @@ class InstancesJavaTimeTest : UnitSpec() {
     }
 
     "Duration should fail for wrong content"{
-      assertAll(Gen.jsString()) { sample ->
+      assertAll(Gen.jsBoolean()) { sample ->
         DurationDecoderInstance().decode(sample) should beLeft()
       }
     }
@@ -151,7 +151,7 @@ class InstancesJavaTimeTest : UnitSpec() {
     }
 
     "ZoneId should fail for wrong content"{
-      assertAll(Gen.jsString()) { sample ->
+      assertAll(Gen.jsBoolean()) { sample ->
         ZoneIdDecoderInstance().decode(sample) should beLeft()
       }
     }
