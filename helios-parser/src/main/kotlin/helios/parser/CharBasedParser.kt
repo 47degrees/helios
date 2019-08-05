@@ -41,10 +41,9 @@ interface CharBasedParser<J> : Parser<J> {
 
     var c = at(j)
     while (c != '"') {
-      if (c < ' ') {
-        die(j, "control char (${c.toInt()}) in string")
-      } else if (c == '\\') {
-        when (at(j + 1)) {
+      when {
+        c < ' ' -> die(j, "control char (${c.toInt()}) in string")
+        c == '\\' -> when (at(j + 1)) {
           'b' -> {
             sb.append('\b'); j += 2
           }
@@ -78,14 +77,15 @@ interface CharBasedParser<J> : Parser<J> {
 
           c -> die(j, "illegal escape sequence (\\$c)")
         }
-      } else {
-        // this case is for "normal" code points that are just one Char.
-        //
-        // we don't have to worry about surrogate pairs, since those
-        // will all be in the ranges D800–DBFF (high surrogates) or
-        // DC00–DFFF (low surrogates).
-        sb.append(c)
-        j += 1
+        else -> {
+          // this case is for "normal" code points that are just one Char.
+          //
+          // we don't have to worry about surrogate pairs, since those
+          // will all be in the ranges D800–DBFF (high surrogates) or
+          // DC00–DFFF (low surrogates).
+          sb.append(c)
+          j += 1
+        }
       }
       j = reset(j)
       c = at(j)

@@ -13,7 +13,7 @@ import helios.benchmarks.sample.Friends
 import helios.benchmarks.sample.decoder
 import helios.benchmarks.sample.sampleJson
 
-val jsonString: String = sampleJson
+const val jsonString: String = sampleJson
 
 val klaxonParser: Parser = Parser.default()
 

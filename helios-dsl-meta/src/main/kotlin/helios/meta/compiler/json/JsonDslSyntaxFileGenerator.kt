@@ -31,9 +31,9 @@ class JsonDslSyntaxFileGenerator(
   jsonAnnotatedList: List<JsonAnnotated>
 ) {
 
-  private val Json = "Json"
-  private val Optional = "Optional"
-  private val Travesal = "Travesal"
+  private val json = "Json"
+  private val optional = "Optional"
+  private val travesal = "Travesal"
   private val imports = """
       |import arrow.optics.Optional
       |import arrow.optics.Traversal
@@ -66,13 +66,13 @@ class JsonDslSyntaxFileGenerator(
           |/**
           |  * Select $it key in [JsObject].
           |  */
-          |inline val $Optional<$Json, $Json>.$it: $Optional<$Json, $Json>
+          |inline val $optional<$json, $json>.$it: $optional<$json, $json>
           |    inline get() = select("$it")
           |
           |/**
           |  * Select $it key in [JsObject].
           |  */
-          |inline val $Traversal<$Json, $Json>.$it: $Traversal<$Json, $Json>
+          |inline val $Traversal<$json, $json>.$it: $Traversal<$json, $json>
           |    inline get() = select("$it")
           |""".trimMargin()
     }
@@ -82,13 +82,13 @@ class JsonDslSyntaxFileGenerator(
           |/**
           |  * Extract [$name] from [Json.Companion.path]
           |  */
-          |fun $Optional<$Json, $Json>.to$name(): $Optional<$Json, $name>
+          |fun $optional<$json, $json>.to$name(): $optional<$json, $name>
           |    = extract($name.decoder(), $name.encoder())
           |
           |/**
           |  * Extract [$name] from [Json.Companion.path]
           |  */
-          |fun $Traversal<$Json, $Json>.to$name(): $Traversal<$Json, $name>
+          |fun $Traversal<$json, $json>.to$name(): $Traversal<$json, $name>
           |    = extract($name.decoder(), $name.encoder())
           |""".trimMargin()
     }

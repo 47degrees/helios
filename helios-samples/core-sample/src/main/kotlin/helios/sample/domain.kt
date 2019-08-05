@@ -52,7 +52,7 @@ data class Employee(
   val name: String,
   val lastName: String,
   val married: Either<Wife, Husband>?,
-  val childs: Option<List<Child>>
+  val children: Option<List<Child>>
 ) {
   companion object
 }

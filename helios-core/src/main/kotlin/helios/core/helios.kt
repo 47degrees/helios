@@ -18,8 +18,9 @@ import java.nio.channels.ReadableByteChannel
 const val MaxLongString = "9223372036854775807"
 const val MinLongString = "-9223372036854775808"
 
-fun String.withPrefixPerLine(prefix: String) = this.lines().joinToString(separator = "\n") { "$prefix$it" }
+fun String.withPrefixPerLine(prefix: String) = lines().joinToString(separator = "\n") { "$prefix$it" }
 
+@Suppress("unused")
 sealed class Json {
 
   inline val isNull inline get() = this === JsNull

@@ -12,7 +12,7 @@ import java.nio.ByteBuffer
  * The parser makes absolute calls to the ByteBuffer, which will not
  * update its own mutable position fields.
  */
-class ByteBufferParser<J>(val src: ByteBuffer) : SyncParser<J>, ByteBasedParser<J> {
+class ByteBufferParser<J>(private val src: ByteBuffer) : SyncParser<J>, ByteBasedParser<J> {
   private val start = src.position()
   private val limit = src.limit() - start
 

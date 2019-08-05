@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package helios.benchmarks
 
 import arrow.core.flatMap

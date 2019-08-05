@@ -123,15 +123,15 @@ interface Parser<J> {
       k += 1
       c = at(k)
     }
-    if (c == '0') {
-      k += 1
-      c = at(k)
-    } else if (c in '1'..'9') {
-      while (c in '0'..'9') {
+    when (c) {
+      '0' -> {
+        k += 1
+        c = at(k)
+      }
+      in '1'..'9' -> while (c in '0'..'9') {
         k += 1; c = at(k)
       }
-    } else {
-      die(i, "expected digit")
+      else -> die(i, "expected digit")
     }
 
     if (c == '.') {
@@ -193,15 +193,8 @@ interface Parser<J> {
       j += 1
       c = at(j)
     }
-    if (c == '0') {
-      j += 1
-      if (atEof(j)) {
-        ctxt.add(facade.jnum(at(i, j), decIndex, expIndex))
-        return j
-      }
-      c = at(j)
-    } else if (c in '1'..'9') {
-      while (c in '0'..'9') {
+    when (c) {
+      '0' -> {
         j += 1
         if (atEof(j)) {
           ctxt.add(facade.jnum(at(i, j), decIndex, expIndex))
@@ -209,8 +202,15 @@ interface Parser<J> {
         }
         c = at(j)
       }
-    } else {
-      die(i, "expected digit")
+      in '1'..'9' -> while (c in '0'..'9') {
+        j += 1
+        if (atEof(j)) {
+          ctxt.add(facade.jnum(at(i, j), decIndex, expIndex))
+          return j
+        }
+        c = at(j)
+      }
+      else -> die(i, "expected digit")
     }
 
     if (c == '.') {

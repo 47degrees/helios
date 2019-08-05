@@ -74,12 +74,12 @@ const val ASYNC_PREVAL = -1
  *       are being parsed. We can return each complete element as we
  *       parse it.
  *
- *   -1: No streaming is occuring. Only a single JSON value is
+ *   -1: No streaming is occurring. Only a single JSON value is
  *       allowed.
  */
 class AsyncParser<J>(
   private var state: Int,
-  private var curr: Int,
+  private var i: Int,
   private var stack: List<FContext<J>>,
   private var data: ByteArray,
   private var len: Int,
@@ -92,7 +92,7 @@ class AsyncParser<J>(
   companion object {
     operator fun <J> invoke(mode: Mode = SingleValue): AsyncParser<J> =
       AsyncParser(
-        state = mode.start, curr = 0, stack = emptyList(),
+        state = mode.start, i = 0, stack = emptyList(),
         data = ByteArray(131072), len = 0, allocated = 131072,
         offset = 0, done = false, streamMode = mode.value
       )
@@ -110,14 +110,14 @@ class AsyncParser<J>(
   override fun column(i: Int) = i - pos
 
   fun copy() =
-    AsyncParser(state, curr, stack, data.clone(), len, allocated, offset, done, streamMode)
+    AsyncParser(state, i, stack, data.clone(), len, allocated, offset, done, streamMode)
 
-  fun absorb(buf: ByteBuffer, facade: Facade<J>): Either<ParseException, List<J>> {
+  private fun absorb(buf: ByteBuffer, facade: Facade<J>): Either<ParseException, List<J>> {
     done = false
-    val buflen = buf.limit() - buf.position()
-    val need = len + buflen
+    val bufLength = buf.limit() - buf.position()
+    val need = len + bufLength
     resizeIfNecessary(need)
-    buf.get(data, len, buflen)
+    buf.get(data, len, bufLength)
     len = need
     return churn(facade)
   }
@@ -133,22 +133,22 @@ class AsyncParser<J>(
     return churn(facade)
   }
 
-  fun resizeIfNecessary(need: Int) {
+  private fun resizeIfNecessary(need: Int) {
     // if we don't have enough free space available we'll need to grow our
     // data array. we never shrink the data array, assuming users will call
     // feed with similarly-sized buffers.
     if (need > allocated) {
       val doubled = if (allocated < 0x40000000) allocated * 2 else Int.MAX_VALUE
-      val newsize = max(need, doubled)
-      val newdata = ByteArray(newsize)
-      System.arraycopy(data, 0, newdata, 0, len)
-      data = newdata
-      allocated = newsize
+      val newSize = max(need, doubled)
+      val newData = ByteArray(newSize)
+      System.arraycopy(data, 0, newData, 0, len)
+      data = newData
+      allocated = newSize
     }
   }
 
   //TODO Either from Try
-  fun churn(facade: Facade<J>): Either<ParseException, List<J>> {
+  private fun churn(facade: Facade<J>): Either<ParseException, List<J>> {
 
     // accumulates json values
     val results = arrayListOf<J>()
@@ -210,19 +210,19 @@ class AsyncParser<J>(
           }
 
         } else {
-          // jump straight back into rparse
+          // jump straight back into parse
           offset = reset(offset)
           val (value, j) = if (state <= 0) {
             parse(offset, facade)
           } else {
-            rparse(state, curr, stack, facade)
+            rparse(state, i, stack, facade)
           }
           state = when {
             streamMode > 0 -> ASYNC_POSTVAL
             streamMode == 0 -> ASYNC_PREVAL
             else -> ASYNC_END
           }
-          curr = j
+          i = j
           offset = j
           stack = emptyList()
           results.add(value)
@@ -260,13 +260,13 @@ class AsyncParser<J>(
    * seen. If we hit an AsyncException, we can later resume from this
    * point.
    *
-   * This method is called during every loop of rparse, and the
+   * This method is called during every loop of parse, and the
    * arguments are the exact arguments we can pass to rparse to
    * continue where we left off.
    */
   override fun checkpoint(state: Int, i: Int, stack: List<FContext<J>>) {
     this.state = state
-    this.curr = i
+    this.i = i
     this.stack = stack
   }
 
