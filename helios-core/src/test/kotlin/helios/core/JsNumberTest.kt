@@ -11,10 +11,7 @@ class JsNumberTest : UnitSpec() {
 
   init {
 
-    val jsLongs: Gen<JsArray> =
-      Gen.list(
-        Gen.long().map(::JsLong)
-      ).map(::JsArray)
+    val jsLongs: Gen<JsArray> = Gen.list(Gen.long().map(::JsLong)).map(::JsArray)
 
     "helios serialization works both ways" {
       forAll(jsLongs) { longs: JsArray ->

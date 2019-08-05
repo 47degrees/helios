@@ -12,4 +12,8 @@ fun Gen.Companion.short(): Gen<Short> = choose(Short.MIN_VALUE.toInt(), Short.MA
 
 fun Gen.Companion.byte(): Gen<Byte> = choose(Byte.MIN_VALUE.toInt(), Byte.MAX_VALUE.toInt()).map { it.toByte() }
 
-fun Gen.Companion.bigDecimal(): Gen<BigDecimal> = Gen.double().map { it.toBigDecimal() }
+fun Gen.Companion.bigDecimal(): Gen<BigDecimal> =
+  Gen.double().filterNot { it.isInfinite() || it.isNaN() }.map { it.toBigDecimal() }
+
+fun <A, B, C> Gen.Companion.triple(genA: Gen<A>, genB: Gen<B>, genC: Gen<C>): Gen<Triple<A, B, C>> =
+  bind(genA, genB, genC) { a, b, c -> Triple(a, b, c) }
