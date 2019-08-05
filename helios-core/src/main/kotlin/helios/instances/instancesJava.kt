@@ -1,7 +1,10 @@
 package helios.instances
 
 import arrow.core.Either
+import arrow.core.Try
 import helios.core.*
+import helios.syntax.json.asJsNumberOrError
+import helios.syntax.json.asJsStringOrError
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
 import java.math.BigDecimal
@@ -18,7 +21,11 @@ interface UUIDEncoderInstance : Encoder<UUID> {
 
 interface UUIDDecoderInstance : Decoder<UUID> {
   override fun decode(value: Json): Either<DecodingError, UUID> =
-    value.asJsString().map { UUID.fromString(it.value.toString()) }.toEither { StringDecodingError(value) }
+    value.asJsStringOrError {
+      Try { UUID.fromString(it.value.toString()) }.toEither { ex ->
+        ExceptionOnDecoding(value, "Invalid String cannot be decoded to UUID", ex)
+      }
+    }
 
   companion object {
     operator fun invoke() = object : UUIDDecoderInstance {}
@@ -35,7 +42,9 @@ interface BigDecimalEncoderInstance : Encoder<BigDecimal> {
 
 interface BigDecimalDecoderInstance : Decoder<BigDecimal> {
   override fun decode(value: Json): Either<DecodingError, BigDecimal> =
-    value.asJsNumber().map(JsNumber::toBigDecimal).toEither { NumberDecodingError(value) }
+    value.asJsNumberOrError(JsNumberDecodingError.JsBigDecimalError(value)) {
+      Try(it::toBigDecimal).toEither { JsNumberDecodingError.JsBigDecimalError(value) }
+    }
 
   companion object {
     operator fun invoke() = object : BigDecimalDecoderInstance {}
@@ -52,7 +61,9 @@ interface BigIntegerEncoderInstance : Encoder<BigInteger> {
 
 interface BigIntegerDecoderInstance : Decoder<BigInteger> {
   override fun decode(value: Json): Either<DecodingError, BigInteger> =
-    value.asJsNumber().map(JsNumber::toBigInteger).toEither { NumberDecodingError(value) }
+    value.asJsNumberOrError(JsNumberDecodingError.JsBigIntegerError(value)) {
+      Try(it::toBigInteger).toEither { JsNumberDecodingError.JsBigIntegerError(value) }
+    }
 
   companion object {
     operator fun invoke() = object : BigIntegerDecoderInstance {}

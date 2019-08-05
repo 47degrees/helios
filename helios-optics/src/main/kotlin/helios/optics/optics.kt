@@ -3,7 +3,10 @@
 package helios.optics
 
 import arrow.Kind
-import arrow.core.*
+import arrow.core.Option
+import arrow.core.identity
+import arrow.core.some
+import arrow.core.toOption
 import arrow.optics.Iso
 import arrow.optics.PPrism
 import arrow.optics.Prism

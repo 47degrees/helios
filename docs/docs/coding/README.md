@@ -29,15 +29,42 @@ Person.decoder().decode(personJson)
 //sampleEnd
 ```
 
-## Building a Json
+## Enum Encoding/Decoding
 
-You can build your own Json object like this:
+The `@json` annotation does not support `Enum` types, so a custom `Encoder` and `Decoder` must be used.
+For example, given the following `Enum`:
 
 ```kotlin:ank:silent
+enum class Foo {
+  A
+}
+```
+
+You will be able to encode and decode using the following:
+
+```kotlin:ank
+import arrow.core.*
+import helios.*
+import helios.instances.*
+
+val fooJson = Enum.encoder<Foo>().run {
+  Foo.A.encode()
+}
+
+Enum.decoder<Foo>().decode(fooJson)
+```
+
+## Building a Json
+
+You can build your own `Json` object like this:
+
+```kotlin:ank
 val jObject = JsObject(
 "name" to JsString("Elia"),
 "age" to JsNumber(23)
 )
+
+jObject.spaces2()
 ```
 
 ## Custom Encoders
@@ -54,12 +81,14 @@ val personCustomEncoder = object : Encoder<Person> {
 }
 
 val personCustomJson = with(personCustomEncoder) { Person("Abc", 10).encode() }
+
+personCustomJson.spaces2()
 ```
 
 
 ## Custom Decoders
 
-You can follow the same approach to create a custom Decoder:
+You can follow the same approach to create a custom `Decoder`:
 
 ```kotlin:ank
 import arrow.core.extensions.either.applicative.applicative
@@ -85,11 +114,11 @@ You can navigate `Json` using the `Json.path` DSL to select keys or traverse col
 ```kotlin:ank
 import helios.optics.*
 
-Json.path.select("name").string.modify(jObject, String::toUpperCase)
+Json.path.select("name").string.modify(jObject, String::toUpperCase).spaces2()
 ```
 
 Note that the code generation will give you an accessor for each json field.
 
 ```kotlin:ank
-Json.path.name.string.modify(jObject, String::toUpperCase)
+Json.path.name.string.modify(jObject, String::toUpperCase).spaces2()
 ```

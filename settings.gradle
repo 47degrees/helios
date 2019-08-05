@@ -1,15 +1,16 @@
-rootProject.name = 'helios'
+rootProject.name = "helios"
 
-include 'docs'
-include ':helios-annotations'
-include ':helios-meta'
-include ':helios-core'
-include ':helios-parser'
-include ':helios-benchmarks'
-include ':helios-sample'
-include ':helios-optics'
-include ':helios-dsl-meta'
-include 'helios-test'
-include 'helios-integrations:helios-retrofit'
+include "docs"
+include ":helios-annotations"
+include ":helios-meta"
+include ":helios-core"
+include ":helios-parser"
+include ":helios-benchmarks"
+include ":helios-samples:core-sample"
+include ":helios-samples:retrofit-sample"
+include ":helios-optics"
+include ":helios-dsl-meta"
+include "helios-test"
+include "helios-integrations:helios-retrofit"
 
-startParameter.excludedTaskNames << ':docs:bintrayUpload'
+startParameter.excludedTaskNames << ":docs:bintrayUpload"

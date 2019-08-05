@@ -1,7 +1,8 @@
-package helios.core
+package helios.sample
 
 import arrow.core.Either
 import arrow.core.getOrHandle
+import helios.core.*
 import helios.optics.*
 
 object Sample {
@@ -50,7 +51,9 @@ object Sample {
       street.encode()
     }
 
-    println(streetJson.toJsonString())
+    println(streetJson.noSpaces())
+    println(streetJson.spaces2())
+    println(streetJson.spaces4())
 
     Json.path.select("name").string.modify(companyJson, String::toUpperCase).let(::println)
     Json.path.name.string.modify(companyJson, String::toUpperCase).let(::println)
@@ -62,7 +65,9 @@ object Sample {
     Json.path.select("employees").every.select("lastName").string
     val employeeLastNames = Json.path.employees.every.lastName.string
 
-    employeeLastNames.modify(companyJson, String::capitalize).let(employeeLastNames::getAll).let(::println)
+    employeeLastNames.modify(companyJson, String::capitalize).let {
+      employeeLastNames.getAll(it)
+    }.let(::println)
 
     Json.path.employees.filterIndex { it == 0 }.name.string.getAll(companyJson).let(::println)
 
@@ -85,6 +90,10 @@ object Sample {
         )
       )
     )
+
+    println(json.noSpaces())
+    println(json.spaces2())
+    println(json.spaces4())
 
     Json.path.select("siblings")[1]
       .toSibling()

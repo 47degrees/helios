@@ -3,8 +3,8 @@ package helios.benchmarks
 import arrow.core.flatMap
 import helios.benchmarks.sample.Friends
 import helios.core.Json
-import kotlinx.serialization.json.Json as Jsonx
 import org.openjdk.jmh.annotations.*
+import kotlinx.serialization.json.Json as Jsonx
 
 @State(Scope.Benchmark)
 @Fork(1)
