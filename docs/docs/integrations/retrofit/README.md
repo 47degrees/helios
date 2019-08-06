@@ -13,7 +13,7 @@ permalink: /docs/integrations/retrofit/
 To start using **Helios** on a *Retrofit* project just add the following dependency:
 
 ```groovy
-"com.47deg:helios-integrations-retrofit:0.1.0"
+"com.47deg:helios-integrations-retrofit:0.2.0"
 ```
 
 ## Usage
