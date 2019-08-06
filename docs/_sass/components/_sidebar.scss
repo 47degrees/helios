@@ -1,64 +1,84 @@
 // Sidebar
 // -----------------------------------------------
 // -----------------------------------------------
-#sidebar {
-    left: 0;
-    display: block;
-    width: ($base-point-grid * 32);
-    height: 100%;
-    background-color: $brand-secondary;
-    background-image: url("../img/helios-background-masthead.svg");
-    background-position: center center;
-    background-repeat: no-repeat;
-    @extend .w3-sidebar;
-    @extend .w3-collapse;
-    @extend .w3-bar-block;
 
-    .sidebar-brand {
-        @include flexbox;
-        @include justify-content(space-between);
-        @include align-items(center);
-        padding: ($base-point-grid * 2) ($base-point-grid * 3);
-        background: rgba($white, 0.16);
+#site-sidebar {
+  position: fixed;
+  background-color: $brand-secondary;
+  background-image: url("../img/helios-background-masthead.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 250px;
+  height: 100%;
+  left: 0;
+  z-index: 2;
+  transition: left $base-duration $base-timing;
+
+  &.toggled {
+    left: -100%;
+  }
+
+  .sidebar-brand {
+    height: 88px;
+    padding: ($base-point-grid * 2);
+    background: rgba($white, 0.1);
+    display: flex;
+    justify-content: space-between;
+
+    a {
+      display: flex;
+      align-items: center;
+      color: $white;
+      width: 100%;
+      justify-content: space-evenly;
+
+      &:visited,
+      &:hover,
+      &:active {
+        color: $white;
+        text-decoration: none;
+      }
+
+      img {
+        height: 60px;
+      }
+
+      span {
+        font-size: 2.143rem;
+      }
     }
-    .sidebar-nav {
-        margin-top: ($base-point-grid * 2);
+  }
 
-        li {
-            a {
-                display: block;
-                padding: ($base-point-grid * 2) ($base-point-grid * 3);
-                color: $white;
-                transition: background $base-duration $base-timing;
-                &:visited {
-                    color: $white;
-                }
-                &:hover {
-                    background: rgba($white, 0.08);
-                    color: $white;
-                    text-decoration: none;
-                }
-                &:active {
-                    color: $white;
-                }
-            }
-            &.active {
-                a {
-                    padding-left: (($base-point-grid * 3) - 3);
-                    background: rgba($white, 0.16);
-                    border-left: 3px solid $white;
-                    pointer-events: none;
-                }
+  .sidebar-toggle {
+    display: none;
+  }
 
-            }
-        }
-    }
+  .sidebar-menu {
+    margin-top: ($base-point-grid * 2);
+  }
 }
 
-// Responsive mode
-@include bp(large) {
-    #sidebar {
-        left: -300px;
-        transition: left 266ms ease-out;
+// Responsive
+// -----------------------------------------------
+@include bp(medium) {
+  #site-sidebar {
+    left: -100%;
+    width: 100%;
+
+    &.toggled {
+      left: 0;
     }
+
+    .sidebar-toggle {
+      padding: 24px 32px;
+      display: block;
+      opacity: 0.7;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+
+      &:hover {
+        opacity: 1;
+        transform: rotate(-180deg);
+      }
+    }
+  }
 }

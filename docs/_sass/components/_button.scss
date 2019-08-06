@@ -1,54 +1,47 @@
-// Buttons 
-// -----------------------------------------------
-// -----------------------------------------------
+// Buttons
+// ----------------------------------------------
+// ----------------------------------------------
 .button {
-    display: inline-block;
-    color: $white;
-    font-weight: $font-semibold;
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: background $base-duration $base-timing;
+  display: block;
+  background: none;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  position: relative;
 
-    &.button-line {
-        padding: ($base-point-grid * 1.5) ($base-point-grid * 5);
-        background: none;
-        border: 2px solid $white;
-        font-size: 0.875rem;
+  &:hover {
+    cursor: pointer;
+  }
 
-        &:visited {
-            color: $white;
-        }
-        &:hover {
-            color: $brand-secondary;
-            background: $white;
-            text-decoration: none;
-        }
-        &:active {
-            background:  rgba($white, 0.9);
-        }
+  > img {
+    vertical-align: bottom;
+  }
+}
 
 
-    }
+.close {
+  height: 28px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 32px;
 
+  &::before,
+  &::after {
+    background-color: #fff;
+    content: " ";
+    height: 100%;
+    left: 98%;
+    position: absolute;
+    top: 50%;
+    width: 2px;
+  }
 
-    &.button-small {
-        padding: ($base-point-grid - 1) ($base-point-grid * 3);
-        border: 2px solid $brand-secondary;
-        font-size: 0.75rem;
-        font-weight: $font-bold;
-        color: $brand-secondary;
-        
-         &:visited {
-            color: $brand-secondary;
-        }
-        &:hover {
-            color: $white;
-            background: $brand-secondary;
-            text-decoration: none;
-        }
-        &:active {
-            background: $brand-secondary;
-        }
+  &::before {
+    transform: rotate(45deg);
+  }
 
-    }
+  &::after {
+    transform: rotate(-45deg);
+  }
 }
