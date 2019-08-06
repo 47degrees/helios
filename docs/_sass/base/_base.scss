@@ -23,7 +23,7 @@ html {
 // -----------------------------------------------
 body {
     color: $base-font-color;
-    background: $white;
+    background: rgba($gray-primary, 0.2);
     font-family: $base-font-family;
     font-weight: $font-regular;
     line-height: $base-line-height;
@@ -68,13 +68,11 @@ hr {
     border: none;
 }
 
-#content {
-  flex: 1 1 0;
-}
 
 // Helpers
 // -----------------------------------------------
 .wrap {
+    padding: 0 $base-point-grid * 3;
     margin: 0 auto;
     box-sizing: border-box;
     max-width: $bp-xlarge;
