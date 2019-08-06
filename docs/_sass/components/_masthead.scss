@@ -25,6 +25,33 @@
         width: 100%;
         height: auto
     }
+
+    .header-button {
+      padding: ($base-point-grid * 1.5) ($base-point-grid * 6);
+      display: inline-block;
+      font-weight: $font-semibold;
+      text-transform: uppercase;
+      color: $brand-tertiary;
+      border: 2px solid $white;
+      background: none;
+      transition: background-color $base-duration $base-timing;
+
+      &:visited {
+          color: $white;
+      }
+
+      &:hover {
+          text-decoration: none;
+          color: $brand-secondary;
+          background: $white;
+      }
+
+      &:active {
+          color: $brand-secondary;
+          background: rgba($white, 0.9);
+
+      }
+  }
 }
 
 // Responsive mode

@@ -40,3 +40,19 @@ $bp-large: 992px;
 $bp-xlarge: 1130px;
 // Border
 $border-color: rgba($gray-primary, 0.1);
+
+// Grid
+// -----------------------------------------------
+$column-1: (1/12*100%);
+$column-2: (2/12*100%);
+$column-3: (3/12*100%);
+$column-4: (4/12*100%);
+$column-5: (5/12*100%);
+$column-6: (6/12*100%);
+$column-7: (7/12*100%);
+$column-8: (8/12*100%);
+$column-9: (9/12*100%);
+$column-10: (10/12*100%);
+$column-11: (11/12*100%);
+$column-12: (12/12*100%);
+$gutter-margin: ($base-point-grid * 4);

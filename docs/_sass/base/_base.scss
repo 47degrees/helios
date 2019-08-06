@@ -68,13 +68,11 @@ hr {
     border: none;
 }
 
-#content {
-  flex: 1 1 0;
-}
 
 // Helpers
 // -----------------------------------------------
 .wrap {
+    padding: 0 $base-point-grid * 3;
     margin: 0 auto;
     box-sizing: border-box;
     max-width: $bp-xlarge;
