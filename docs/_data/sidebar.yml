@@ -12,8 +12,12 @@ options:
   - title: Coding/Encoding
     url: /docs/coding/
 
-  - title: Retrofit Integration
-    url: /docs/integrations/retrofit/
+  - title: Integrations
+
+    nested_options:
+
+      - title: Retrofit
+        url: /docs/integrations/retrofit/
 
   - title: Benchmarks
     url: /docs/benchmarks/
