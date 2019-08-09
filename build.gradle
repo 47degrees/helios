@@ -118,6 +118,7 @@ subprojects { project ->
     
     bintray {
         publish = true
+        override = true
         user = findPropertyOrEnv("BINTRAY_USER") ?: "no.bintray.user"
         key = findPropertyOrEnv("BINTRAY_API_KEY") ?: "no.bintray.api.key"
         publications = ["HeliosPublication"]
