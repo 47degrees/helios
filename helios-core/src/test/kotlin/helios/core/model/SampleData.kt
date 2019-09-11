@@ -1,6 +1,6 @@
 package helios.core.model
 
-import arrow.data.NonEmptyList
+import arrow.core.NonEmptyList
 import arrow.optics.optics
 import arrow.test.generators.nonEmptyList
 import helios.json

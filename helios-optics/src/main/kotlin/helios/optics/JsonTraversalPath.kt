@@ -8,7 +8,7 @@ import arrow.optics.PTraversal
 import arrow.optics.Traversal
 import arrow.optics.dsl.at
 import arrow.optics.extensions.ListFilterIndex
-import arrow.optics.extensions.MapFilterIndex
+import arrow.optics.extensions.filterMapIndex
 import helios.core.*
 import helios.instances.decoder
 import helios.instances.encoder
@@ -131,4 +131,4 @@ fun Traversal<Json, Json>.filterIndex(p: Predicate<Int>): PTraversal<Json, Json,
  * Filter [JsObject] by keys that satisfy the predicate [p].
  */
 fun Traversal<Json, Json>.filterKeys(p: Predicate<String>): PTraversal<Json, Json, Json, Json> =
-  `object` compose MapFilterIndex<String, Json>().filter(p)
+  `object` compose filterMapIndex<String, Json>().filter(p)

@@ -4,7 +4,7 @@ import arrow.core.Either
 import arrow.core.Option
 import arrow.core.Tuple2
 import arrow.core.Tuple3
-import arrow.data.NonEmptyList
+import arrow.core.NonEmptyList
 import arrow.test.UnitSpec
 import arrow.test.generators.*
 import helios.core.JsArray

@@ -1,6 +1,6 @@
 package helios.sample.retrofit
 
-import arrow.effects.IO
+import arrow.fx.IO
 import helios.retrofit.HeliosConverterFactory
 import helios.retrofit.JsonableEvidence
 import retrofit2.Retrofit

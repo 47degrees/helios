@@ -1,7 +1,7 @@
 package helios.instances
 
 import arrow.core.extensions.eq
-import arrow.data.extensions.list.foldable.forAll
+import arrow.core.extensions.list.foldable.forAll
 import arrow.extension
 import arrow.typeclasses.Eq
 import helios.core.*

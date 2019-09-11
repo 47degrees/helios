@@ -8,7 +8,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
     compile "io.arrow-kt:arrow-optics:$arrowVersion"
-    compile "io.arrow-kt:arrow-typeclasses:$arrowVersion"
 
     kapt "io.arrow-kt:arrow-meta:$arrowVersion"
     kapt project(":helios-meta")

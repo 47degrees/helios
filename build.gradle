@@ -25,9 +25,9 @@ buildscript {
 
         // Libraries
         javaVersion = JavaVersion.VERSION_1_7
-        kotlinTestVersion = "3.1.11"
+        kotlinTestVersion = "3.4.1"
         kotlinVersion = "1.3.31"
-        arrowVersion = "0.9.0"
+        arrowVersion = "0.10.0"
         kotlinMetadataVersion = "1.4.0"
         googleTestingVersion = "0.15"
         autoServiceVersion = "1.0-rc5"
@@ -40,7 +40,7 @@ buildscript {
         kotsonVersion ="2.5.0"
         jacksonVersion = "2.9.8"
         jsoniterVersion = "0.9.23"
-        
+
         // Retrofit integration libraries
         retrofitVersion = "2.6.0"
         mockwebserverVersion = "3.14.2"
@@ -115,7 +115,7 @@ subprojects { project ->
 
         executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
     }
-    
+
     bintray {
         publish = true
         user = findPropertyOrEnv("BINTRAY_USER") ?: "no.bintray.user"

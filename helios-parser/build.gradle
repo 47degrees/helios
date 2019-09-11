@@ -1,7 +1,6 @@
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     compile "io.arrow-kt:arrow-core-data:$arrowVersion"
-    compile "io.arrow-kt:arrow-core-extensions:$arrowVersion"
 }
 
 apply from: rootProject.file("gradle/generated-kotlin-sources.gradle")
