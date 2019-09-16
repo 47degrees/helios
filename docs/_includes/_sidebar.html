@@ -1,19 +1,57 @@
-<div id="sidebar">
+<div id="site-sidebar">
     <div class="sidebar-brand">
-        <a href="{{ site.baseurl }}/">
-            <img src="{{ site.baseurl }}/img/helios-logo-sidebar.svg" alt="">
+        <a href="{{ site.baseurl }}/" title="{{ site.name }}">
+            <img src="{{ site.baseurl }}/img/helios-logo-sidebar.svg" alt="{{ site.name }}">
+            <span>{{ site.name }}</span>
         </a>
-        <a class="w3-hide-large" href="#" onclick="w3_close()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-                <path fill="#fff" d="M16.264979,14.8514792 L23.3146353,8.27180001 L24.6853647,9.72819999 L17.680091,16.2664555 L23.7070771,22.2928635 L22.2929229,23.7071365 L16.217109,17.6319053 L9.6853647,23.7282 L8.3146353,22.2718 L14.801997,16.2169291 L8.29292289,9.70847923 L9.70707711,8.29420632 L16.264979,14.8514792 Z"/>
-            </svg>
-        </a>
+        <button
+          type="button"
+          title="Close"
+          class="button sidebar-toggle"
+          onClick="toggleClass('#site-sidebar', 'toggled')">
+            <span class="close"></span>
+        </button>
     </div>
-    <ul class="sidebar-nav">
+    <div class="sidebar-menu">
         {% for item in site.data.sidebar.options %}
-        <li class="{% if item.url == page.url %}active{% endif %}">
-            <a href="{{ item.url | relative_url }}" alt="{{ item.title }}">{{ item.title }}</a>
-        </li>
+
+        {% comment %}
+        <!-- Needed logic to show the submenu open when the active entry is an inner element -->
+        {% endcomment %}
+        {% assign open_submenu = '' %}
+        {% if item.nested_options %}
+          {% for nested_item in item.nested_options %}
+            {% if nested_item.url == page.url %}
+              {% assign open_submenu = 'open' %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        <div class="sidebar-menu-item {% if item.url == page.url or open_submenu == 'open' %}active{% endif %} {{ open_submenu }}">
+        {% if item.nested_options %}
+            <button
+              type="button"
+              title="Open {{ item.title }}"
+              class="button"
+              onClick="activateParent(event.target, 'open');">
+                {{ item.title }}
+            </button>
+
+            <div class="caret"></div>
+
+            <div class="sub-menu">
+                {% for nested_item in item.nested_options %}
+                <a  class="sidebar-menu-item {% if nested_item.url == page.url %}active{% endif %}"
+                    href="{{ nested_item.url | relative_url }}"
+                    title="{{ nested_item.title }}">{{ nested_item.title }}</a>
+                {% endfor %}
+            </div>
+        {% else %}
+          <a
+            href="{{ item.url | relative_url }}"
+            title="{{ item.title }}">{{ item.title }}</a>
+        {% endif %}
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 </div>

@@ -1,29 +1,48 @@
-// Features 
+// Features
 // -----------------------------------------------
 // -----------------------------------------------
-.features {
-    padding: {
-        top: ($base-point-grid * 3);
-        /*64px*/
-        bottom: ($base-point-grid * 10);
-        /*80px*/
-    }
+#features {
+    padding: ($base-point-grid * 10) 0;
     background: $white;
-    .feature-item {
-        margin-top: ($base-point-grid * 5);
-        text-align: center;
-        h2 {
-            margin: {
-                top: ($base-point-grid * 3);
-                /*24px*/
-                bottom: ($base-point-grid * 2);
-                /*16px*/
+
+    .main-flex {
+        display: flex;
+        justify-content: space-between;
+
+        .main-item {
+            width: $column-4;
+            text-align: center;
+
+            &:not(:last-child) {
+                margin-right: $gutter-margin;
             }
-            font-size: 1.429rem;
+
+            img {
+                margin-bottom: $base-point-grid;
+            }
+
+            h2 {
+                margin-bottom: $base-point-grid;
+                font-size: 1.429rem;
+            }
         }
-        
-        p {
-            margin-bottom: ($base-point-grid * 3);
+    }
+}
+
+// Responsive
+// -----------------------------------------------
+@include bp(medium) {
+    #features {
+        .main-flex {
+            flex-direction: column;
+            .main-item {
+                width: $column-12;
+
+                &:not(:last-child) {
+                    margin-right: 0;
+                    margin-bottom: ($base-point-grid * 8);
+                }
+            }
         }
     }
 }

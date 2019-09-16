@@ -23,11 +23,11 @@ repositories {
 }
 
 dependencies {
-    compile "com.47deg:helios-core:0.1.0"
-    compile "com.47deg:helios-parser:0.1.0"
-    compile "com.47deg:helios-optics:0.1.0"
-    kapt "com.47deg:helios-meta:0.1.0"
-    kapt "com.47deg:helios-dsl-meta:0.1.0"
+    compile "com.47deg:helios-core:0.2.0"
+    compile "com.47deg:helios-parser:0.2.0"
+    compile "com.47deg:helios-optics:0.2.0"
+    kapt "com.47deg:helios-meta:0.2.0"
+    kapt "com.47deg:helios-dsl-meta:0.2.0"
 }
 ```
 

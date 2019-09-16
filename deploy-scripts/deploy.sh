@@ -1,4 +1,4 @@
-gradle-mvn-push.gradle#!/usr/bin/env bash
+#!/usr/bin/env bash
 . $(dirname $0)/deploy_common.sh
 
 echo "Branch '$TRAVIS_BRANCH'"

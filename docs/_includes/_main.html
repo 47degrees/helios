@@ -1,12 +1,12 @@
-<main id="content">
+<main id="features">
     <section class="features">
-        <div class="wrap container-fluid">
-            <div class="row">
+        <div class="wrap">
+            <div class="main-flex">
                {% for item in site.data.features.content %}
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="main-item">
                     <div class="feature-item">
                         <img src="{{ item.icon }}" title="{{ item.title }}" />
-                        <h2 class="feature-title">{{ item.title }}</h2>
+                        <h2>{{ item.title }}</h2>
                         <p>{{ item.description }}</p>
                     </div>
                 </div>

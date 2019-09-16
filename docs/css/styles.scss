@@ -2,8 +2,6 @@
 ---
 
 // Vendor
-@import "vendors/flexboxgrid";
-@import "vendors/w3";
 @import "vendors/highlight/tomorrow";
 
 // Utils
@@ -21,7 +19,6 @@
 @import "components/features";
 @import "components/footer";
 @import "components/sidebar";
-@import "components/doc-wrapper";
-@import "components/doc-content";
-@import "components/doc-header";
+@import "components/sidebar-menu";
+@import "components/doc";
 @import "components/code";

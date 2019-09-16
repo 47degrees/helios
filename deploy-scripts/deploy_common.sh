@@ -5,4 +5,4 @@ set -e
 SLUG="47deg/helios"
 JDK="oraclejdk8"
 BRANCH="master"
-VERSION_NAME=$(getProperty "VERSION_NAME")
+VERSION_NAME=$(getProperty "version")
