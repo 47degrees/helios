@@ -2,7 +2,6 @@ package helios.instances
 
 import arrow.test.UnitSpec
 import helios.test.generators.jsBoolean
-import helios.test.generators.jsString
 import io.kotlintest.assertions.arrow.either.beLeft
 import io.kotlintest.assertions.arrow.either.beRight
 import io.kotlintest.properties.Gen
@@ -26,7 +25,9 @@ class InstancesJavaTimeTest : UnitSpec() {
 
     "ZonedDateTime should be encoded and decoded successfully"{
       val now = ZonedDateTime.now()
-      ZonedDateTimeDecoderInstance().decode(ZonedDateTimeEncoderInstance().run { now.encode() }) should beRight(now)
+      ZonedDateTimeDecoderInstance().decode(ZonedDateTimeEncoderInstance().run { now.encode() }) should beRight(
+        now
+      )
     }
 
     "ZonedDateTime should fail for wrong content"{
@@ -37,7 +38,9 @@ class InstancesJavaTimeTest : UnitSpec() {
 
     "LocalDateTime should be encoded and decoded successfully"{
       val now = LocalDateTime.now()
-      LocalDateTimeDecoderInstance().decode(LocalDateTimeEncoderInstance().run { now.encode() }) should beRight(now)
+      LocalDateTimeDecoderInstance().decode(LocalDateTimeEncoderInstance().run { now.encode() }) should beRight(
+        now
+      )
     }
 
     "LocalDateTime should fail for wrong content"{
@@ -48,7 +51,9 @@ class InstancesJavaTimeTest : UnitSpec() {
 
     "LocalDate should be encoded and decoded successfully"{
       val now = LocalDate.now()
-      LocalDateDecoderInstance().decode(LocalDateEncoderInstance().run { now.encode() }) should beRight(now)
+      LocalDateDecoderInstance().decode(LocalDateEncoderInstance().run { now.encode() }) should beRight(
+        now
+      )
     }
 
     "LocalDate should fail for wrong content"{
@@ -59,7 +64,9 @@ class InstancesJavaTimeTest : UnitSpec() {
 
     "LocalTime should be encoded and decoded successfully"{
       val now = LocalTime.now()
-      LocalTimeDecoderInstance().decode(LocalTimeEncoderInstance().run { now.encode() }) should beRight(now)
+      LocalTimeDecoderInstance().decode(LocalTimeEncoderInstance().run { now.encode() }) should beRight(
+        now
+      )
     }
 
     "LocalTime should fail for wrong content"{
@@ -70,7 +77,9 @@ class InstancesJavaTimeTest : UnitSpec() {
 
     "OffsetDateTime should be encoded and decoded successfully"{
       val now = OffsetDateTime.now()
-      OffsetDateTimeDecoderInstance().decode(OffsetDateTimeEncoderInstance().run { now.encode() }) should beRight(now)
+      OffsetDateTimeDecoderInstance().decode(OffsetDateTimeEncoderInstance().run { now.encode() }) should beRight(
+        now
+      )
     }
 
     "OffsetDateTime should fail for wrong content"{
@@ -81,7 +90,9 @@ class InstancesJavaTimeTest : UnitSpec() {
 
     "OffsetTime should be encoded and decoded successfully"{
       val now = OffsetTime.now()
-      OffsetTimeDecoderInstance().decode(OffsetTimeEncoderInstance().run { now.encode() }) should beRight(now)
+      OffsetTimeDecoderInstance().decode(OffsetTimeEncoderInstance().run { now.encode() }) should beRight(
+        now
+      )
     }
 
     "OffsetTime should fail for wrong content"{
@@ -114,7 +125,9 @@ class InstancesJavaTimeTest : UnitSpec() {
 
     "YearMonth should be encoded and decoded successfully"{
       val now = YearMonth.now()
-      YearMonthDecoderInstance().decode(YearMonthEncoderInstance().run { now.encode() }) should beRight(now)
+      YearMonthDecoderInstance().decode(YearMonthEncoderInstance().run { now.encode() }) should beRight(
+        now
+      )
     }
 
     "YearMonth should fail for wrong content"{
@@ -158,7 +171,9 @@ class InstancesJavaTimeTest : UnitSpec() {
 
     "ZoneOffset should be encoded and decoded successfully"{
       val now = ZoneOffset.UTC
-      ZoneOffsetDecoderInstance().decode(ZoneOffsetEncoderInstance().run { now.encode() }) should beRight(now)
+      ZoneOffsetDecoderInstance().decode(ZoneOffsetEncoderInstance().run { now.encode() }) should beRight(
+        now
+      )
     }
 
     "ZoneOffset should fail for wrong content"{

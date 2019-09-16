@@ -157,33 +157,33 @@ class AsyncParser<J>(
       while (true) {
         if (state < 0) {
           when (at(offset)) {
-            '\n' -> {
+            '\n'            -> {
               newline(offset)
               offset += 1
             }
             ' ', '\t', '\r' -> offset += 1
-            '[' -> {
+            '['             -> {
               when (state) {
                 ASYNC_PRESTART -> {
                   offset += 1
                   state = ASYNC_START
                 }
-                ASYNC_END -> die(offset, "expected eof")
-                ASYNC_POSTVAL -> die(offset, "expected , or ]")
-                else -> state = 0
+                ASYNC_END      -> die(offset, "expected eof")
+                ASYNC_POSTVAL  -> die(offset, "expected , or ]")
+                else           -> state = 0
               }
             }
-            ',' -> {
+            ','             -> {
               when (state) {
                 ASYNC_POSTVAL -> {
                   offset += 1
                   state = ASYNC_PREVAL
                 }
-                ASYNC_END -> die(offset, "expected eof")
-                else -> die(offset, "expected json value")
+                ASYNC_END     -> die(offset, "expected eof")
+                else          -> die(offset, "expected json value")
               }
             }
-            ']' -> {
+            ']'             -> {
               if (state == ASYNC_POSTVAL || state == ASYNC_START) {
                 if (streamMode > 0) {
                   offset += 1
@@ -197,11 +197,11 @@ class AsyncParser<J>(
                 die(offset, "expected json value")
               }
             }
-            else -> {
+            else            -> {
               when (state) {
-                ASYNC_END -> die(offset, "expected eof")
+                ASYNC_END     -> die(offset, "expected eof")
                 ASYNC_POSTVAL -> die(offset, "expected ] or ,")
-                else -> {
+                else          -> {
                   if (state == ASYNC_PRESTART && streamMode > 0) streamMode = -1
                   state = 0
                 }
@@ -218,9 +218,9 @@ class AsyncParser<J>(
             rparse(state, i, stack, facade)
           }
           state = when {
-            streamMode > 0 -> ASYNC_POSTVAL
+            streamMode > 0  -> ASYNC_POSTVAL
             streamMode == 0 -> ASYNC_PREVAL
-            else -> ASYNC_END
+            else            -> ASYNC_END
           }
           i = j
           offset = j

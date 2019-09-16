@@ -65,7 +65,8 @@ object Sample {
     Json.path.select("employees").every.select("lastName").string
     val employeeLastNames = Json.path.employees.every.lastName.string
 
-    employeeLastNames.modify(companyJson, String::capitalize).let(employeeLastNames::getAll).let(::println)
+    employeeLastNames.modify(companyJson, String::capitalize).let(employeeLastNames::getAll)
+      .let(::println)
 
     Json.path.employees.filterIndex { it == 0 }.name.string.getAll(companyJson).let(::println)
 

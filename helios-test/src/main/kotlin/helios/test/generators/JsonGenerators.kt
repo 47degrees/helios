@@ -15,15 +15,16 @@ private fun genJson(): Gen<Json> =
     Gen.jsString().map { identity<Json>(it) },
     Gen.jsNull().map { identity<Json>(it) })
 
-fun Gen.Companion.jsInt(): Gen<JsInt> = Gen.int().map(::JsInt)
+fun Gen.Companion.jsInt(): Gen<JsInt> = int().map(::JsInt)
 
-fun Gen.Companion.jsLong(): Gen<JsLong> = Gen.long().map(::JsLong)
+fun Gen.Companion.jsLong(): Gen<JsLong> = long().map(::JsLong)
 
-fun Gen.Companion.jsFloat(): Gen<JsFloat> = Gen.float().filterNot(Float::isNaN).map(::JsFloat)
+fun Gen.Companion.jsFloat(): Gen<JsFloat> = float().filterNot(Float::isNaN).map(::JsFloat)
 
-fun Gen.Companion.jsDouble(): Gen<JsDouble> = Gen.double().filterNot(Double::isNaN).map(::JsDouble)
+fun Gen.Companion.jsDouble(): Gen<JsDouble> = double().filterNot(Double::isNaN).map(::JsDouble)
 
-fun Gen.Companion.jsDecimal(): Gen<JsDecimal> = Gen.double().filterNot(Double::isNaN).map { JsDecimal(it.toString()) }
+fun Gen.Companion.jsDecimal(): Gen<JsDecimal> =
+  double().filterNot(Double::isNaN).map { JsDecimal(it.toString()) }
 
 fun Gen.Companion.jsNumber(): Gen<JsNumber> =
   oneOf(
@@ -34,16 +35,16 @@ fun Gen.Companion.jsNumber(): Gen<JsNumber> =
 
 fun Gen.Companion.jsString(): Gen<JsString> = Gen.alphaStr().map(::JsString)
 
-fun Gen.Companion.jsBoolean(): Gen<JsBoolean> = Gen.bool().map(::JsBoolean)
+fun Gen.Companion.jsBoolean(): Gen<JsBoolean> = bool().map(::JsBoolean)
 
 fun Gen.Companion.jsNull(): Gen<JsNull> = constant(JsNull)
 
-fun Gen.Companion.jsArray(): Gen<JsArray> = Gen.list(genJson()).map(::JsArray)
+fun Gen.Companion.jsArray(): Gen<JsArray> = list(genJson()).map(::JsArray)
 
 fun <T> Gen.Companion.jsArray(valid: Gen<T>, EN: Encoder<T>): Gen<JsArray> =
-  Gen.list(valid).map { list -> JsArray(list.map { elem -> EN.run { elem.encode() } }) }
+  list(valid).map { list -> JsArray(list.map { elem -> EN.run { elem.encode() } }) }
 
-fun Gen.Companion.jsObject(): Gen<JsObject> = Gen.map(Gen.alphaStr(), genJson()).map(::JsObject)
+fun Gen.Companion.jsObject(): Gen<JsObject> = map(Gen.alphaStr(), genJson()).map(::JsObject)
 
 fun <T> Gen.Companion.json(valid: Gen<T>, EN: Encoder<T>): Gen<Json> =
   valid.map { EN.run { it.encode() } }

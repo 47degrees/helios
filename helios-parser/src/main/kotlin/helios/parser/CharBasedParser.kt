@@ -42,28 +42,28 @@ interface CharBasedParser<J> : Parser<J> {
     var c = at(j)
     while (c != '"') {
       when {
-        c < ' ' -> die(j, "control char (${c.toInt()}) in string")
+        c < ' '   -> die(j, "control char (${c.toInt()}) in string")
         c == '\\' -> when (at(j + 1)) {
-          'b' -> {
+          'b'  -> {
             sb.append('\b'); j += 2
           }
-          'f' -> {
+          'f'  -> {
             sb.append('\u000C'); j += 2
           }
-          'n' -> {
+          'n'  -> {
             sb.append('\n'); j += 2
           }
-          'r' -> {
+          'r'  -> {
             sb.append('\r'); j += 2
           }
-          't' -> {
+          't'  -> {
             sb.append('\t'); j += 2
           }
 
-          '"' -> {
+          '"'  -> {
             sb.append('"'); j += 2
           }
-          '/' -> {
+          '/'  -> {
             sb.append('/'); j += 2
           }
           '\\' -> {
@@ -71,13 +71,13 @@ interface CharBasedParser<J> : Parser<J> {
           }
 
           // if there's a problem then descape will explode
-          'u' -> {
+          'u'  -> {
             sb.append(descape(at(j + 2, j + 6))); j += 6
           }
 
-          c -> die(j, "illegal escape sequence (\\$c)")
+          c    -> die(j, "illegal escape sequence (\\$c)")
         }
-        else -> {
+        else      -> {
           // this case is for "normal" code points that are just one Char.
           //
           // we don't have to worry about surrogate pairs, since those

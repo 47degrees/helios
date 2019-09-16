@@ -16,7 +16,10 @@ import helios.core.*
 import helios.optics.jsarray.each.each
 import helios.optics.jsobject.each.each
 
-fun <S, A : S> PPrism.Companion.fromOption(getOption: (S) -> Option<A>, reverseGet: (A) -> S): Prism<S, A> =
+fun <S, A : S> PPrism.Companion.fromOption(
+  getOption: (S) -> Option<A>,
+  reverseGet: (A) -> S
+): Prism<S, A> =
   Prism({ s: S -> getOption(s).toEither { s } }, { a: A -> reverseGet(a) })
 
 @PublishedApi
@@ -65,12 +68,14 @@ inline val Json.Companion.jsNull: Prism<Json, JsNull>
   inline get() = `null`
 
 @PublishedApi
-internal val number = Prism.fromOption<Json, JsNumber>({ (it as? JsNumber).toOption() }, { identity(it) })
+internal val number =
+  Prism.fromOption<Json, JsNumber>({ (it as? JsNumber).toOption() }, { identity(it) })
 inline val Json.Companion.jsNumber: Prism<Json, JsNumber>
   inline get() = number
 
 @PublishedApi
-internal val double = Prism.fromOption<JsNumber, JsDouble>({ JsDouble(it.toDouble()).some() }, { identity(it) })
+internal val double =
+  Prism.fromOption<JsNumber, JsDouble>({ JsDouble(it.toDouble()).some() }, { identity(it) })
 inline val JsNumber.Companion.jsDouble: Prism<JsNumber, JsDouble>
   inline get() = double
 
@@ -80,7 +85,8 @@ inline val JsDouble.Companion.value: Iso<JsDouble, Double>
   inline get() = doubleValue
 
 @PublishedApi
-internal val float = Prism.fromOption<JsNumber, JsFloat>({ JsFloat(it.toFloat()).some() }, { identity(it) })
+internal val float =
+  Prism.fromOption<JsNumber, JsFloat>({ JsFloat(it.toFloat()).some() }, { identity(it) })
 inline val JsNumber.Companion.jsFloat: Prism<JsNumber, JsFloat>
   inline get() = float
 
@@ -110,7 +116,8 @@ inline val JsInt.Companion.value: Iso<JsInt, Int>
   inline get() = intValue
 
 @PublishedApi
-internal val decimal = Prism.fromOption<JsNumber, JsDecimal>({ (it as? JsDecimal).toOption() }, { identity(it) })
+internal val decimal =
+  Prism.fromOption<JsNumber, JsDecimal>({ (it as? JsDecimal).toOption() }, { identity(it) })
 inline val JsNumber.Companion.jsDecimal: Prism<JsNumber, JsDecimal>
   inline get() = decimal
 

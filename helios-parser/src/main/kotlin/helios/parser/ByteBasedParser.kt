@@ -60,9 +60,9 @@ interface ByteBasedParser<J> : Parser<J> {
     var c: Int = (byte(j).toInt() and 0xff)
     while (c != 34) { // "
       when {
-        c == 92 -> // \
+        c == 92            -> // \
           when (byte(j + 1).toInt()) {
-            98 -> {
+            98  -> {
               sb.append('\b'); j += 2
             }
             102 -> {
@@ -78,13 +78,13 @@ interface ByteBasedParser<J> : Parser<J> {
               sb.append('\t'); j += 2
             }
 
-            34 -> {
+            34  -> {
               sb.append('"'); j += 2
             }
-            47 -> {
+            47  -> {
               sb.append('/'); j += 2
             }
-            92 -> {
+            92  -> {
               sb.append('\\'); j += 2
             }
 
@@ -93,10 +93,10 @@ interface ByteBasedParser<J> : Parser<J> {
               sb.append(descape(at(j + 2, j + 6))); j += 6
             }
 
-            c -> die(j, "invalid escape sequence (\\${c.toChar()})")
+            c   -> die(j, "invalid escape sequence (\\${c.toChar()})")
           }
-        c < 32 -> die(j, "control char ($c) in string")
-        c < 128 -> {
+        c < 32             -> die(j, "control char ($c) in string")
+        c < 128            -> {
           // 1-byte UTF-8 sequence
           sb.append(c.toChar())
           j += 1
@@ -116,7 +116,7 @@ interface ByteBasedParser<J> : Parser<J> {
           sb.extend(at(j, j + 4))
           j += 4
         }
-        else -> die(j, "invalid UTF-8 encoding")
+        else               -> die(j, "invalid UTF-8 encoding")
       }
       c = byte(j).toInt() and 0xff
     }

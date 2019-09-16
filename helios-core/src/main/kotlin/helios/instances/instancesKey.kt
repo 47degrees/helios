@@ -9,7 +9,7 @@ import helios.typeclasses.KeyDecoder
 import helios.typeclasses.KeyEncoder
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.util.*
+import java.util.UUID
 
 fun Double.Companion.keyEncoder() = object : KeyEncoder<Double> {
   override fun Double.keyEncode(): JsString = JsString(this.toString())

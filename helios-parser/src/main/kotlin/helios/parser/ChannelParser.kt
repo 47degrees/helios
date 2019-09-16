@@ -46,10 +46,10 @@ class ChannelParser<J>(private val ch: ReadableByteChannel, bufferSize: Int) : S
      */
     fun computeBufferSize(x: Int): Int =
       when {
-        x < 0 -> throw IllegalArgumentException("negative bufferSize ($x)")
-        x > 0x40000000 -> throw IllegalArgumentException("bufferSize too large ($x)")
+        x < 0            -> throw IllegalArgumentException("negative bufferSize ($x)")
+        x > 0x40000000   -> throw IllegalArgumentException("bufferSize too large ($x)")
         bitCount(x) == 1 -> x
-        else -> highestOneBit(x) shl 1
+        else             -> highestOneBit(x) shl 1
       }
   }
 
@@ -130,7 +130,7 @@ class ChannelParser<J>(private val ch: ReadableByteChannel, bufferSize: Int) : S
     when {
       i < bufSize -> curr[i]
       i < allSize -> next[i and mask]
-      else -> {
+      else        -> {
         grow(); byte(i)
       }
     }
@@ -144,7 +144,7 @@ class ChannelParser<J>(private val ch: ReadableByteChannel, bufferSize: Int) : S
     when {
       i < bufSize -> curr[i].toChar()
       i < allSize -> next[i and mask].toChar()
-      else -> {
+      else        -> {
         grow(); at(i)
       }
     }
@@ -159,13 +159,13 @@ class ChannelParser<J>(private val ch: ReadableByteChannel, bufferSize: Int) : S
   override tailrec fun at(i: Int, j: Int): CharSequence {
     val len = j - i
     return when {
-      j > allSize -> {
+      j > allSize  -> {
         grow()
         at(i, j)
       }
       j <= bufSize -> String(curr, i, len, utf8)
       i >= bufSize -> String(next, i - bufSize, len, utf8)
-      else -> {
+      else         -> {
         val arr = ByteArray(len)
         val mid = bufSize - i
         System.arraycopy(curr, i, arr, 0, mid)

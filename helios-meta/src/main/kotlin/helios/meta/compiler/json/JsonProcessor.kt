@@ -28,7 +28,7 @@ class JsonProcessor : AbstractProcessor() {
       .map { element ->
         when (element.kind) {
           ElementKind.CLASS -> processClass(element as TypeElement)
-          else -> knownError("$jsonAnnotationName can only be used on immutable data classes")
+          else              -> knownError("$jsonAnnotationName can only be used on immutable data classes")
         }
       }
 

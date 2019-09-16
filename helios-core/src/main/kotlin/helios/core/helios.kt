@@ -52,7 +52,7 @@ sealed class Json {
 
   operator fun get(key: String): Option<Json> = when (this) {
     is JsObject -> Option.fromNullable(this.value[key])
-    else -> None
+    else        -> None
   }
 
   fun <A> decode(decoder: Decoder<A>): Either<DecodingError, A> =
@@ -112,6 +112,8 @@ sealed class Json {
   override fun equals(other: Any?): Boolean = Json.eq().run {
     (other as? Json)?.let { eqv(it) } ?: false
   }
+
+  override fun hashCode(): Int = javaClass.hashCode()
 
 }
 

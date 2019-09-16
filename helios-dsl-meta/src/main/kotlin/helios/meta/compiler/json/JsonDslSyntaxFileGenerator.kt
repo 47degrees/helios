@@ -46,13 +46,14 @@ class JsonDslSyntaxFileGenerator(
     .map { JsonElement(it.classOrPackageProto.`package`, it) }
     .groupBy(JsonElement::`package`)
     .mapValues { (_, v) ->
-      DslContent(v.flatMap { element ->
-        element.properties.map {
-          element.nameResolver.getName(
-            it.name
-          )
-        }
-      }.distinct(),
+      DslContent(
+        v.flatMap { element ->
+          element.properties.map {
+            element.nameResolver.getName(
+              it.name
+            )
+          }
+        }.distinct(),
         v.mapNotNull(JsonElement::typeName)
       )
     }.toList()

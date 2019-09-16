@@ -4,7 +4,7 @@ import arrow.core.Either
 import arrow.core.Option
 import arrow.optics.optics
 import helios.json
-import java.util.*
+import java.util.UUID
 
 @json
 data class Company(
