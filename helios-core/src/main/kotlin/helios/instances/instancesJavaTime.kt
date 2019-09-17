@@ -14,7 +14,6 @@ import helios.typeclasses.Encoder
 import java.time.*
 import java.time.format.DateTimeFormatter
 
-//TODO find an one for all structure
 interface InstantEncoder : Encoder<Instant> {
 
   fun formatter(): DateTimeFormatter
