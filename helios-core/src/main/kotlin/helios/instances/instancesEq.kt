@@ -12,7 +12,7 @@ import helios.instances.json.eq.eq
 
 
 @extension
-interface JsObjectEqInstance : Eq<JsObject> {
+interface JsObjectEq : Eq<JsObject> {
   override fun JsObject.eqv(b: JsObject): Boolean = with(Json.eq()) {
     this@eqv.value.entries.zip(b.value.entries) { aa, bb ->
       aa.key == bb.key && aa.value.eqv(bb.value)
@@ -21,7 +21,7 @@ interface JsObjectEqInstance : Eq<JsObject> {
 }
 
 @extension
-interface JsArrayEqInstance : Eq<JsArray> {
+interface JsArrayEq : Eq<JsArray> {
   override fun JsArray.eqv(b: JsArray): Boolean = with(Json.eq()) {
     this@eqv.value.zip(b.value) { a, b -> a.eqv(b) }
       .forAll { it }
@@ -29,7 +29,7 @@ interface JsArrayEqInstance : Eq<JsArray> {
 }
 
 @extension
-interface JsonEqInstance : Eq<Json> {
+interface JsonEq : Eq<Json> {
   override fun Json.eqv(b: Json): Boolean = when {
     this is JsObject && b is JsObject -> JsObject.eq().run { this@eqv.eqv(b) }
     this is JsString && b is JsString -> String.eq().run {
@@ -44,7 +44,7 @@ interface JsonEqInstance : Eq<Json> {
 }
 
 @extension
-interface JsNumberEqInstance : Eq<JsNumber> {
+interface JsNumberEq : Eq<JsNumber> {
   override fun JsNumber.eqv(b: JsNumber): Boolean = when (this) {
     is JsDecimal -> when (b) {
       is JsDecimal -> String.eq().run { this@eqv.value.eqv(b.value) }

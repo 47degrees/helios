@@ -85,11 +85,11 @@ class JsonFileGenerator(
 
   private fun String.encoder(): String =
     when {
-      this.endsWith('?') -> "NullableEncoderInstance<${substringBeforeLast('?')}>(${substringBefore('?').encoder()})"
-      this.startsWith("kotlin.collections.List") -> complexEncoder("ListEncoderInstance")
+      this.endsWith('?') -> "NullableEncoder<${substringBeforeLast('?')}>(${substringBefore('?').encoder()})"
+      this.startsWith("kotlin.collections.List") -> complexEncoder("ListEncoder")
       this.startsWith("kotlin.collections.Map") ->
-        "MapEncoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyEncoder()}, ${getTypeParameters.last().encoder()})"
-      this.startsWith("java") -> "${substringAfterLast('.')}EncoderInstance()"
+        "MapEncoder<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyEncoder()}, ${getTypeParameters.last().encoder()})"
+      this.startsWith("java") -> "${substringAfterLast('.')}Encoder"
       this.contains('<') -> complexEncoder("${substringBefore('<')}.Companion.encoder")
       else -> "$this.encoder()"
     }
@@ -111,12 +111,12 @@ class JsonFileGenerator(
 
   private fun String.decoder(): String =
     when {
-      this.endsWith('?') -> "NullableDecoderInstance<${substringBeforeLast('?')}>(${substringBefore('?').decoder()})"
+      this.endsWith('?') -> "NullableDecoder<${substringBeforeLast('?')}>(${substringBefore('?').decoder()})"
       this.startsWith("kotlin.collections.List") ->
-        complexDecoder("ListDecoderInstance")
+        complexDecoder("ListDecoder")
       this.startsWith("kotlin.collections.Map") ->
-        "MapDecoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyDecoder()}, ${getTypeParameters.last().decoder()})"
-      this.startsWith("java") -> "${substringAfterLast('.')}DecoderInstance()"
+        "MapDecoder<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyDecoder()}, ${getTypeParameters.last().decoder()})"
+      this.startsWith("java") -> "${substringAfterLast('.')}Decoder"
       this.contains('<') -> complexDecoder("${substringBefore('<')}.Companion.decoder")
       else -> "$this.decoder()"
     }

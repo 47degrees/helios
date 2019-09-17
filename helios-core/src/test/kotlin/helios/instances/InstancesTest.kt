@@ -9,7 +9,7 @@ import io.kotlintest.properties.Gen
 import io.kotlintest.properties.assertAll
 import io.kotlintest.should
 
-class InstancesTest : UnitSpec() {
+class sTest : UnitSpec() {
   init {
 
     "Double should be encoded and decoded successfully"{
@@ -110,8 +110,8 @@ class InstancesTest : UnitSpec() {
 
     "Pair should be encoded and decoded successfully"{
       assertAll(Gen.pair(Gen.double(), Gen.alphaStr())) { sample ->
-        PairDecoderInstance(Double.decoder(), String.decoder()).decode(
-          PairEncoderInstance(Double.encoder(), String.encoder()).run {
+        PairDecoder(Double.decoder(), String.decoder()).decode(
+          PairEncoder(Double.encoder(), String.encoder()).run {
             sample.encode()
           }) should beRight(sample)
       }
@@ -119,14 +119,14 @@ class InstancesTest : UnitSpec() {
 
     "Pair should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        PairDecoderInstance(Double.decoder(), String.decoder()).decode(sample) should beLeft()
+        PairDecoder(Double.decoder(), String.decoder()).decode(sample) should beLeft()
       }
     }
 
     "Triple should be encoded and decoded successfully"{
       assertAll(Gen.triple(Gen.bool(), Gen.intSmall(), Gen.alphaStr())) { sample ->
-        TripleDecoderInstance(Boolean.decoder(), Int.decoder(), String.decoder()).decode(
-          TripleEncoderInstance(Boolean.encoder(), Int.encoder(), String.encoder()).run {
+        TripleDecoder(Boolean.decoder(), Int.decoder(), String.decoder()).decode(
+          TripleEncoder(Boolean.encoder(), Int.encoder(), String.encoder()).run {
             sample.encode()
           }
         ) should beRight(sample)
@@ -135,7 +135,7 @@ class InstancesTest : UnitSpec() {
 
     "Triple should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        TripleDecoderInstance(Boolean.decoder(), Int.decoder(), String.decoder()).decode(sample) should beLeft()
+        TripleDecoder(Boolean.decoder(), Int.decoder(), String.decoder()).decode(sample) should beLeft()
       }
     }
 

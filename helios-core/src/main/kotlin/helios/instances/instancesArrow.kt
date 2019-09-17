@@ -33,12 +33,12 @@ fun <A, B> Either.Companion.decoder(decoderA: Decoder<A>, decoderB: Decoder<B>) 
 
 fun <A> NonEmptyList.Companion.encoder(encoderA: Encoder<A>) = object : Encoder<NonEmptyList<A>> {
   override fun NonEmptyList<A>.encode(): Json =
-    ListEncoderInstance(encoderA).run { all.encode() }
+    ListEncoder(encoderA).run { all.encode() }
 }
 
 fun <A> NonEmptyList.Companion.decoder(decoderA: Decoder<A>) = object : Decoder<NonEmptyList<A>> {
   override fun decode(value: Json): Either<DecodingError, NonEmptyList<A>> =
-    ListDecoderInstance(decoderA).decode(value).flatMap {
+    ListDecoder(decoderA).decode(value).flatMap {
       NonEmptyList.fromList(it)
         .toEither { ExceptionOnDecoding(value, "Empty JsonArray cannot be decoded to NonEmptyList") }
     }
