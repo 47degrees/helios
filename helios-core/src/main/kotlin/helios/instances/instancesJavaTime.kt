@@ -14,21 +14,24 @@ import helios.typeclasses.Encoder
 import java.time.*
 import java.time.format.DateTimeFormatter
 
-interface InstantEncoderInstance : Encoder<Instant> {
+//TODO find an one for all structure
+interface InstantEncoder : Encoder<Instant> {
 
   fun formatter(): DateTimeFormatter
 
   override fun Instant.encode() = JsString(formatter().format(this))
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_INSTANT) =
-      object : InstantEncoderInstance {
+    fun withFormatter(formatter: DateTimeFormatter) =
+      object : InstantEncoder {
         override fun formatter(): DateTimeFormatter = formatter
       }
+
+    val instance: Encoder<Instant> by lazy { withFormatter(DateTimeFormatter.ISO_INSTANT) }
   }
 }
 
-interface InstantDecoderInstance : Decoder<Instant> {
+interface InstantDecoder : Decoder<Instant> {
   override fun decode(value: Json): Either<DecodingError, Instant> =
     value.asJsStringOrError {
       Try {
@@ -37,25 +40,27 @@ interface InstantDecoderInstance : Decoder<Instant> {
     }
 
   companion object {
-    operator fun invoke() = object : InstantDecoderInstance {}
+    val instance by lazy { object : InstantDecoder {} }
   }
 }
 
-interface ZonedDateTimeEncoderInstance : Encoder<ZonedDateTime> {
+interface ZonedDateTimeEncoder : Encoder<ZonedDateTime> {
 
   fun formatter(): DateTimeFormatter
 
   override fun ZonedDateTime.encode() = JsString(formatter().format(this))
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME) =
-      object : ZonedDateTimeEncoderInstance {
+    fun withFormatter(formatter: DateTimeFormatter) =
+      object : ZonedDateTimeEncoder {
         override fun formatter(): DateTimeFormatter = formatter
       }
+
+    val instance by lazy { withFormatter(DateTimeFormatter.ISO_ZONED_DATE_TIME) }
   }
 }
 
-interface ZonedDateTimeDecoderInstance : Decoder<ZonedDateTime> {
+interface ZonedDateTimeDecoder : Decoder<ZonedDateTime> {
 
   fun formatter(): DateTimeFormatter
 
@@ -67,28 +72,32 @@ interface ZonedDateTimeDecoderInstance : Decoder<ZonedDateTime> {
     }
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME) =
-      object : ZonedDateTimeDecoderInstance {
+    fun withFormatter(formatter: DateTimeFormatter) =
+      object : ZonedDateTimeDecoder {
         override fun formatter(): DateTimeFormatter = formatter
       }
+
+    val instance by lazy { withFormatter(DateTimeFormatter.ISO_ZONED_DATE_TIME) }
   }
 }
 
-interface LocalDateTimeEncoderInstance : Encoder<LocalDateTime> {
+interface LocalDateTimeEncoder : Encoder<LocalDateTime> {
 
   fun formatter(): DateTimeFormatter
 
   override fun LocalDateTime.encode() = JsString(formatter().format(this))
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME) =
-      object : LocalDateTimeEncoderInstance {
+    fun withFormatter(formatter: DateTimeFormatter) =
+      object : LocalDateTimeEncoder {
         override fun formatter(): DateTimeFormatter = formatter
       }
+
+    val instance by lazy { withFormatter(DateTimeFormatter.ISO_LOCAL_DATE_TIME) }
   }
 }
 
-interface LocalDateTimeDecoderInstance : Decoder<LocalDateTime> {
+interface LocalDateTimeDecoder : Decoder<LocalDateTime> {
 
   fun formatter(): DateTimeFormatter
 
@@ -100,28 +109,32 @@ interface LocalDateTimeDecoderInstance : Decoder<LocalDateTime> {
     }
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME) =
-      object : LocalDateTimeDecoderInstance {
+    fun withFormatter(formatter: DateTimeFormatter) =
+      object : LocalDateTimeDecoder {
         override fun formatter(): DateTimeFormatter = formatter
       }
+
+    val instance: Decoder<LocalDateTime> by lazy { withFormatter(DateTimeFormatter.ISO_LOCAL_DATE_TIME) }
   }
 }
 
-interface LocalDateEncoderInstance : Encoder<LocalDate> {
+interface LocalDateEncoder : Encoder<LocalDate> {
 
   fun formatter(): DateTimeFormatter
 
   override fun LocalDate.encode() = JsString(formatter().format(this))
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE) =
-      object : LocalDateEncoderInstance {
+    fun withFormatter(formatter: DateTimeFormatter) =
+      object : LocalDateEncoder {
         override fun formatter(): DateTimeFormatter = formatter
       }
+
+    val instance by lazy { withFormatter(DateTimeFormatter.ISO_LOCAL_DATE) }
   }
 }
 
-interface LocalDateDecoderInstance : Decoder<LocalDate> {
+interface LocalDateDecoder : Decoder<LocalDate> {
 
   fun formatter(): DateTimeFormatter
 
@@ -133,28 +146,32 @@ interface LocalDateDecoderInstance : Decoder<LocalDate> {
     }
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE) =
-      object : LocalDateDecoderInstance {
+    fun withFormatter(formatter: DateTimeFormatter) =
+      object : LocalDateDecoder {
         override fun formatter(): DateTimeFormatter = formatter
       }
+
+    val instance: Decoder<LocalDate> by lazy { withFormatter(DateTimeFormatter.ISO_LOCAL_DATE) }
   }
 }
 
-interface LocalTimeEncoderInstance : Encoder<LocalTime> {
+interface LocalTimeEncoder : Encoder<LocalTime> {
 
   fun formatter(): DateTimeFormatter
 
   override fun LocalTime.encode() = JsString(formatter().format(this))
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME) =
-      object : LocalTimeEncoderInstance {
+    fun withFormatter(formatter: DateTimeFormatter) =
+      object : LocalTimeEncoder {
         override fun formatter(): DateTimeFormatter = formatter
       }
+
+    val instance: Encoder<LocalTime> by lazy { withFormatter(DateTimeFormatter.ISO_LOCAL_TIME) }
   }
 }
 
-interface LocalTimeDecoderInstance : Decoder<LocalTime> {
+interface LocalTimeDecoder : Decoder<LocalTime> {
 
   fun formatter(): DateTimeFormatter
 
@@ -166,28 +183,32 @@ interface LocalTimeDecoderInstance : Decoder<LocalTime> {
     }
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME) =
-      object : LocalTimeDecoderInstance {
+    fun withFormatter(formatter: DateTimeFormatter) =
+      object : LocalTimeDecoder {
         override fun formatter(): DateTimeFormatter = formatter
       }
+
+    val instance by lazy { withFormatter(DateTimeFormatter.ISO_LOCAL_TIME) }
   }
 }
 
-interface OffsetDateTimeEncoderInstance : Encoder<OffsetDateTime> {
+interface OffsetDateTimeEncoder : Encoder<OffsetDateTime> {
 
   fun formatter(): DateTimeFormatter
 
   override fun OffsetDateTime.encode() = JsString(formatter().format(this))
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME) =
-      object : OffsetDateTimeEncoderInstance {
+    fun withFormatter(formatter: DateTimeFormatter) =
+      object : OffsetDateTimeEncoder {
         override fun formatter(): DateTimeFormatter = formatter
       }
+
+    val instance by lazy { withFormatter(DateTimeFormatter.ISO_OFFSET_DATE_TIME) }
   }
 }
 
-interface OffsetDateTimeDecoderInstance : Decoder<OffsetDateTime> {
+interface OffsetDateTimeDecoder : Decoder<OffsetDateTime> {
 
   fun formatter(): DateTimeFormatter
 
@@ -199,28 +220,32 @@ interface OffsetDateTimeDecoderInstance : Decoder<OffsetDateTime> {
     }
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME) =
-      object : OffsetDateTimeDecoderInstance {
+    fun withFormatter(formatter: DateTimeFormatter) =
+      object : OffsetDateTimeDecoder {
         override fun formatter(): DateTimeFormatter = formatter
       }
+
+    val instance by lazy { withFormatter(DateTimeFormatter.ISO_OFFSET_DATE_TIME) }
   }
 }
 
-interface OffsetTimeEncoderInstance : Encoder<OffsetTime> {
+interface OffsetTimeEncoder : Encoder<OffsetTime> {
 
   fun formatter(): DateTimeFormatter
 
   override fun OffsetTime.encode() = JsString(formatter().format(this))
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_TIME) =
-      object : OffsetTimeEncoderInstance {
+    fun withFormatter(formatter: DateTimeFormatter) =
+      object : OffsetTimeEncoder {
         override fun formatter(): DateTimeFormatter = formatter
       }
+
+    val instance by lazy { withFormatter(DateTimeFormatter.ISO_OFFSET_TIME) }
   }
 }
 
-interface OffsetTimeDecoderInstance : Decoder<OffsetTime> {
+interface OffsetTimeDecoder : Decoder<OffsetTime> {
 
   fun formatter(): DateTimeFormatter
 
@@ -232,22 +257,24 @@ interface OffsetTimeDecoderInstance : Decoder<OffsetTime> {
     }
 
   companion object {
-    operator fun invoke(formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_TIME) =
-      object : OffsetTimeDecoderInstance {
+    fun withFormatter(formatter: DateTimeFormatter) =
+      object : OffsetTimeDecoder {
         override fun formatter(): DateTimeFormatter = formatter
       }
+
+    val instance by lazy { withFormatter(DateTimeFormatter.ISO_OFFSET_TIME) }
   }
 }
 
-interface MonthDayEncoderInstance : Encoder<MonthDay> {
+interface MonthDayEncoder : Encoder<MonthDay> {
   override fun MonthDay.encode() = JsString(this.toString())
 
   companion object {
-    operator fun invoke() = object : MonthDayEncoderInstance {}
+    val instance by lazy { object : MonthDayEncoder {} }
   }
 }
 
-interface MonthDayDecoderInstance : Decoder<MonthDay> {
+interface MonthDayDecoder : Decoder<MonthDay> {
   override fun decode(value: Json): Either<DecodingError, MonthDay> =
     value.asJsStringOrError {
       Try { MonthDay.parse(it.value) }.toEither {
@@ -256,19 +283,19 @@ interface MonthDayDecoderInstance : Decoder<MonthDay> {
     }
 
   companion object {
-    operator fun invoke() = object : MonthDayDecoderInstance {}
+    val instance by lazy { object : MonthDayDecoder {} }
   }
 }
 
-interface YearEncoderInstance : Encoder<Year> {
+interface YearEncoder : Encoder<Year> {
   override fun Year.encode() = JsString(this.toString())
 
   companion object {
-    operator fun invoke() = object : YearEncoderInstance {}
+    val instance by lazy { object : YearEncoder {} }
   }
 }
 
-interface YearDecoderInstance : Decoder<Year> {
+interface YearDecoder : Decoder<Year> {
   override fun decode(value: Json): Either<DecodingError, Year> =
     value.asJsStringOrError {
       Try { Year.parse(it.value) }.toEither {
@@ -277,19 +304,19 @@ interface YearDecoderInstance : Decoder<Year> {
     }
 
   companion object {
-    operator fun invoke() = object : YearDecoderInstance {}
+    val instance by lazy { object : YearDecoder {} }
   }
 }
 
-interface YearMonthEncoderInstance : Encoder<YearMonth> {
+interface YearMonthEncoder : Encoder<YearMonth> {
   override fun YearMonth.encode() = JsString(this.toString())
 
   companion object {
-    operator fun invoke() = object : YearMonthEncoderInstance {}
+    val instance by lazy { object : YearMonthEncoder {} }
   }
 }
 
-interface YearMonthDecoderInstance : Decoder<YearMonth> {
+interface YearMonthDecoder : Decoder<YearMonth> {
   override fun decode(value: Json): Either<DecodingError, YearMonth> =
     value.asJsStringOrError {
       Try { YearMonth.parse(it.value) }.toEither {
@@ -298,19 +325,19 @@ interface YearMonthDecoderInstance : Decoder<YearMonth> {
     }
 
   companion object {
-    operator fun invoke() = object : YearMonthDecoderInstance {}
+    val instance by lazy { object : YearMonthDecoder {} }
   }
 }
 
-interface PeriodEncoderInstance : Encoder<Period> {
+interface PeriodEncoder : Encoder<Period> {
   override fun Period.encode() = JsString(this.toString())
 
   companion object {
-    operator fun invoke() = object : PeriodEncoderInstance {}
+    val instance by lazy { object : PeriodEncoder {} }
   }
 }
 
-interface PeriodDecoderInstance : Decoder<Period> {
+interface PeriodDecoder : Decoder<Period> {
   override fun decode(value: Json): Either<DecodingError, Period> =
     value.asJsStringOrError {
       Try { Period.parse(it.value) }.toEither {
@@ -319,19 +346,19 @@ interface PeriodDecoderInstance : Decoder<Period> {
     }
 
   companion object {
-    operator fun invoke() = object : PeriodDecoderInstance {}
+    val instance by lazy { object : PeriodDecoder {} }
   }
 }
 
-interface DurationEncoderInstance : Encoder<Duration> {
+interface DurationEncoder : Encoder<Duration> {
   override fun Duration.encode() = JsString(this.toString())
 
   companion object {
-    operator fun invoke() = object : DurationEncoderInstance {}
+    val instance by lazy { object : DurationEncoder {} }
   }
 }
 
-interface DurationDecoderInstance : Decoder<Duration> {
+interface DurationDecoder : Decoder<Duration> {
   override fun decode(value: Json): Either<DecodingError, Duration> =
     value.asJsStringOrError {
       Try { Duration.parse(it.value) }.toEither {
@@ -340,19 +367,19 @@ interface DurationDecoderInstance : Decoder<Duration> {
     }
 
   companion object {
-    operator fun invoke() = object : DurationDecoderInstance {}
+    val instance by lazy { object : DurationDecoder {} }
   }
 }
 
-interface ZoneIdEncoderInstance : Encoder<ZoneId> {
+interface ZoneIdEncoder : Encoder<ZoneId> {
   override fun ZoneId.encode() = JsString(this.toString())
 
   companion object {
-    operator fun invoke() = object : ZoneIdEncoderInstance {}
+    val instance by lazy { object : ZoneIdEncoder {} }
   }
 }
 
-interface ZoneIdDecoderInstance : Decoder<ZoneId> {
+interface ZoneIdDecoder : Decoder<ZoneId> {
   override fun decode(value: Json): Either<DecodingError, ZoneId> =
     value.asJsStringOrError {
       Try { ZoneId.of(it.value.toString()) }.toEither {
@@ -361,19 +388,19 @@ interface ZoneIdDecoderInstance : Decoder<ZoneId> {
     }
 
   companion object {
-    operator fun invoke() = object : ZoneIdDecoderInstance {}
+    val instance by lazy { object : ZoneIdDecoder {} }
   }
 }
 
-interface ZoneOffsetEncoderInstance : Encoder<ZoneOffset> {
+interface ZoneOffsetEncoder : Encoder<ZoneOffset> {
   override fun ZoneOffset.encode() = JsString(this.toString())
 
   companion object {
-    operator fun invoke() = object : ZoneOffsetEncoderInstance {}
+    val instance by lazy { object : ZoneOffsetEncoder {} }
   }
 }
 
-interface ZoneOffsetDecoderInstance : Decoder<ZoneOffset> {
+interface ZoneOffsetDecoder : Decoder<ZoneOffset> {
   override fun decode(value: Json): Either<DecodingError, ZoneOffset> =
     value.asJsStringOrError {
       Try { ZoneOffset.of(it.value.toString()) }.toEither {
@@ -382,7 +409,7 @@ interface ZoneOffsetDecoderInstance : Decoder<ZoneOffset> {
     }
 
   companion object {
-    operator fun invoke() = object : ZoneOffsetDecoderInstance {}
+    val instance by lazy { object : ZoneOffsetDecoder {} }
   }
 }
 

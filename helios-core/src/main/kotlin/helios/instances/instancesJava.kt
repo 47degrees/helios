@@ -11,49 +11,61 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.UUID
 
-val UUIDEncoder: Encoder<UUID> by lazy {
-  object : Encoder<UUID> {
-    override fun UUID.encode(): Json = JsString(this.toString())
+interface UUIDEncoder : Encoder<UUID> {
+  override fun UUID.encode(): Json = JsString(this.toString())
+
+  companion object {
+    val instance by lazy { object : UUIDEncoder {} }
   }
 }
 
-val UUIDDecoder: Decoder<UUID> by lazy {
-  object : Decoder<UUID> {
-    override fun decode(value: Json): Either<DecodingError, UUID> =
-      value.asJsStringOrError {
-        Try { UUID.fromString(it.value.toString()) }.toEither { ex ->
-          ExceptionOnDecoding(value, "Invalid String cannot be decoded to UUID", ex)
-        }
+interface UUIDDecoder : Decoder<UUID> {
+  override fun decode(value: Json): Either<DecodingError, UUID> =
+    value.asJsStringOrError {
+      Try { UUID.fromString(it.value.toString()) }.toEither { ex ->
+        ExceptionOnDecoding(value, "Invalid String cannot be decoded to UUID", ex)
       }
+    }
+
+  companion object {
+    val instance by lazy { object : UUIDDecoder {} }
   }
 }
 
-val bigDecimalEncoder: Encoder<BigDecimal> by lazy {
-  object : Encoder<BigDecimal> {
-    override fun BigDecimal.encode(): Json = JsNumber(this)
+interface BigDecimalEncoder : Encoder<BigDecimal> {
+  override fun BigDecimal.encode(): Json = JsNumber(this)
+
+  companion object {
+    val instance by lazy { object : BigDecimalEncoder {} }
   }
 }
 
-val bigDecimalDecoder: Decoder<BigDecimal> by lazy {
-  object : Decoder<BigDecimal> {
-    override fun decode(value: Json): Either<DecodingError, BigDecimal> =
-      value.asJsNumberOrError(JsNumberDecodingError.JsBigDecimalError(value)) {
-        Try(it::toBigDecimal).toEither { JsNumberDecodingError.JsBigDecimalError(value) }
-      }
+interface BigDecimalDecoder : Decoder<BigDecimal> {
+  override fun decode(value: Json): Either<DecodingError, BigDecimal> =
+    value.asJsNumberOrError(JsNumberDecodingError.JsBigDecimalError(value)) {
+      Try(it::toBigDecimal).toEither { JsNumberDecodingError.JsBigDecimalError(value) }
+    }
+
+  companion object {
+    val instance by lazy { object : BigDecimalDecoder {} }
   }
 }
 
-val bigIntegerEncoder: Encoder<BigInteger> by lazy {
-  object : Encoder<BigInteger> {
-    override fun BigInteger.encode(): Json = JsNumber(this)
+interface BigIntegerEncoder : Encoder<BigInteger> {
+  override fun BigInteger.encode(): Json = JsNumber(this)
+
+  companion object {
+    val instance by lazy { object : BigIntegerEncoder {} }
   }
 }
 
-val bigIntegerDecoder: Decoder<BigInteger> by lazy {
-  object : Decoder<BigInteger> {
-    override fun decode(value: Json): Either<DecodingError, BigInteger> =
-      value.asJsNumberOrError(JsNumberDecodingError.JsBigIntegerError(value)) {
-        Try(it::toBigInteger).toEither { JsNumberDecodingError.JsBigIntegerError(value) }
-      }
+interface BigIntegerDecoder : Decoder<BigInteger> {
+  override fun decode(value: Json): Either<DecodingError, BigInteger> =
+    value.asJsNumberOrError(JsNumberDecodingError.JsBigIntegerError(value)) {
+      Try(it::toBigInteger).toEither { JsNumberDecodingError.JsBigIntegerError(value) }
+    }
+
+  companion object {
+    val instance by lazy { object : BigIntegerDecoder {} }
   }
 }

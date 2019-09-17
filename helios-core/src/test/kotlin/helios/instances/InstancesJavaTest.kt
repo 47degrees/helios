@@ -14,37 +14,37 @@ class InstancesJavaTest : UnitSpec() {
 
     "UUID should be encoded and decoded successfully"{
       assertAll(Gen.uuid()) { sample ->
-        UUIDDecoder.decode(UUIDEncoder.run { sample.encode() }) should beRight(sample)
+        UUIDDecoder.instance.decode(UUIDEncoder.instance.run { sample.encode() }) should beRight(sample)
       }
     }
 
     "UUID should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        UUIDDecoder.decode(sample) should beLeft()
+        UUIDDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "BigDecimal should be encoded and decoded successfully"{
       assertAll(Gen.bigDecimal()) { sample ->
-        bigDecimalDecoder.decode(bigDecimalEncoder.run { sample.encode() }) should beRight(sample)
+        BigDecimalDecoder.instance.decode(BigDecimalEncoder.instance.run { sample.encode() }) should beRight(sample)
       }
     }
 
     "BigDecimal should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        bigDecimalDecoder.decode(sample) should beLeft()
+        BigDecimalDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "BigInteger should be encoded and decoded successfully"{
       assertAll(Gen.bigInteger()) { sample ->
-        bigIntegerDecoder.decode(bigIntegerEncoder.run { sample.encode() }) should beRight(sample)
+        BigIntegerDecoder.instance.decode(BigIntegerEncoder.instance.run { sample.encode() }) should beRight(sample)
       }
     }
 
     "BigInteger should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        bigIntegerDecoder.decode(sample) should beLeft()
+        BigIntegerDecoder.instance.decode(sample) should beLeft()
       }
     }
 

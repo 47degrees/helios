@@ -80,8 +80,7 @@ class JsonFileGenerator(
     postfix = ")"
   ) { it.encoder() }
 
-  private fun String.keyEncoder(): String =
-    if (this.startsWith("java")) "${this.split('.').last()}KeyEncoder" else "$this.keyEncoder()"
+  private fun String.keyEncoder(): String = "${this.split('.').last()}KeyEncoder"
 
   private fun String.encoder(): String =
     when {
@@ -89,7 +88,7 @@ class JsonFileGenerator(
       this.startsWith("kotlin.collections.List") -> complexEncoder("ListEncoder")
       this.startsWith("kotlin.collections.Map") ->
         "MapEncoder<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyEncoder()}, ${getTypeParameters.last().encoder()})"
-      this.startsWith("java") -> "${substringAfterLast('.')}Encoder"
+      this.startsWith("java") -> "${substringAfterLast('.')}Encoder.instance"
       this.contains('<') -> complexEncoder("${substringBefore('<')}.Companion.encoder")
       else -> "$this.encoder()"
     }
@@ -106,8 +105,7 @@ class JsonFileGenerator(
     postfix = ")"
   ) { it.decoder() }
 
-  private fun String.keyDecoder(): String =
-    if (this.startsWith("java")) "${this.split('.').last()}KeyDecoder" else "$this.keyDecoder()"
+  private fun String.keyDecoder(): String = "${this.split('.').last()}KeyDecoder"
 
   private fun String.decoder(): String =
     when {
@@ -116,7 +114,7 @@ class JsonFileGenerator(
         complexDecoder("ListDecoder")
       this.startsWith("kotlin.collections.Map") ->
         "MapDecoder<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyDecoder()}, ${getTypeParameters.last().decoder()})"
-      this.startsWith("java") -> "${substringAfterLast('.')}Decoder"
+      this.startsWith("java") -> "${substringAfterLast('.')}Decoder.instance"
       this.contains('<') -> complexDecoder("${substringBefore('<')}.Companion.decoder")
       else -> "$this.decoder()"
     }
