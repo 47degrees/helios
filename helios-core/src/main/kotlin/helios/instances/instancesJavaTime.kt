@@ -26,7 +26,7 @@ interface InstantEncoder : Encoder<Instant> {
         override fun formatter(): DateTimeFormatter = formatter
       }
 
-    val instance: Encoder<Instant> by lazy { withFormatter(DateTimeFormatter.ISO_INSTANT) }
+    val instance: Encoder<Instant> = withFormatter(DateTimeFormatter.ISO_INSTANT)
   }
 }
 
@@ -39,7 +39,7 @@ interface InstantDecoder : Decoder<Instant> {
     }
 
   companion object {
-    val instance by lazy { object : InstantDecoder {} }
+    val instance = object : InstantDecoder {}
   }
 }
 
@@ -55,7 +55,7 @@ interface ZonedDateTimeEncoder : Encoder<ZonedDateTime> {
         override fun formatter(): DateTimeFormatter = formatter
       }
 
-    val instance by lazy { withFormatter(DateTimeFormatter.ISO_ZONED_DATE_TIME) }
+    val instance = withFormatter(DateTimeFormatter.ISO_ZONED_DATE_TIME)
   }
 }
 
@@ -76,7 +76,7 @@ interface ZonedDateTimeDecoder : Decoder<ZonedDateTime> {
         override fun formatter(): DateTimeFormatter = formatter
       }
 
-    val instance by lazy { withFormatter(DateTimeFormatter.ISO_ZONED_DATE_TIME) }
+    val instance = withFormatter(DateTimeFormatter.ISO_ZONED_DATE_TIME)
   }
 }
 
@@ -92,7 +92,7 @@ interface LocalDateTimeEncoder : Encoder<LocalDateTime> {
         override fun formatter(): DateTimeFormatter = formatter
       }
 
-    val instance by lazy { withFormatter(DateTimeFormatter.ISO_LOCAL_DATE_TIME) }
+    val instance = withFormatter(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
   }
 }
 
@@ -113,7 +113,7 @@ interface LocalDateTimeDecoder : Decoder<LocalDateTime> {
         override fun formatter(): DateTimeFormatter = formatter
       }
 
-    val instance: Decoder<LocalDateTime> by lazy { withFormatter(DateTimeFormatter.ISO_LOCAL_DATE_TIME) }
+    val instance: Decoder<LocalDateTime> = withFormatter(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
   }
 }
 
@@ -129,7 +129,7 @@ interface LocalDateEncoder : Encoder<LocalDate> {
         override fun formatter(): DateTimeFormatter = formatter
       }
 
-    val instance by lazy { withFormatter(DateTimeFormatter.ISO_LOCAL_DATE) }
+    val instance = withFormatter(DateTimeFormatter.ISO_LOCAL_DATE)
   }
 }
 
@@ -150,7 +150,7 @@ interface LocalDateDecoder : Decoder<LocalDate> {
         override fun formatter(): DateTimeFormatter = formatter
       }
 
-    val instance: Decoder<LocalDate> by lazy { withFormatter(DateTimeFormatter.ISO_LOCAL_DATE) }
+    val instance: Decoder<LocalDate> = withFormatter(DateTimeFormatter.ISO_LOCAL_DATE)
   }
 }
 
@@ -166,7 +166,7 @@ interface LocalTimeEncoder : Encoder<LocalTime> {
         override fun formatter(): DateTimeFormatter = formatter
       }
 
-    val instance: Encoder<LocalTime> by lazy { withFormatter(DateTimeFormatter.ISO_LOCAL_TIME) }
+    val instance: Encoder<LocalTime> = withFormatter(DateTimeFormatter.ISO_LOCAL_TIME)
   }
 }
 
@@ -187,7 +187,7 @@ interface LocalTimeDecoder : Decoder<LocalTime> {
         override fun formatter(): DateTimeFormatter = formatter
       }
 
-    val instance by lazy { withFormatter(DateTimeFormatter.ISO_LOCAL_TIME) }
+    val instance = withFormatter(DateTimeFormatter.ISO_LOCAL_TIME)
   }
 }
 
@@ -203,7 +203,7 @@ interface OffsetDateTimeEncoder : Encoder<OffsetDateTime> {
         override fun formatter(): DateTimeFormatter = formatter
       }
 
-    val instance by lazy { withFormatter(DateTimeFormatter.ISO_OFFSET_DATE_TIME) }
+    val instance = withFormatter(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
   }
 }
 
@@ -224,7 +224,7 @@ interface OffsetDateTimeDecoder : Decoder<OffsetDateTime> {
         override fun formatter(): DateTimeFormatter = formatter
       }
 
-    val instance by lazy { withFormatter(DateTimeFormatter.ISO_OFFSET_DATE_TIME) }
+    val instance = withFormatter(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
   }
 }
 
@@ -240,7 +240,7 @@ interface OffsetTimeEncoder : Encoder<OffsetTime> {
         override fun formatter(): DateTimeFormatter = formatter
       }
 
-    val instance by lazy { withFormatter(DateTimeFormatter.ISO_OFFSET_TIME) }
+    val instance = withFormatter(DateTimeFormatter.ISO_OFFSET_TIME)
   }
 }
 
@@ -261,7 +261,7 @@ interface OffsetTimeDecoder : Decoder<OffsetTime> {
         override fun formatter(): DateTimeFormatter = formatter
       }
 
-    val instance by lazy { withFormatter(DateTimeFormatter.ISO_OFFSET_TIME) }
+    val instance = withFormatter(DateTimeFormatter.ISO_OFFSET_TIME)
   }
 }
 
@@ -269,7 +269,7 @@ interface MonthDayEncoder : Encoder<MonthDay> {
   override fun MonthDay.encode() = JsString(this.toString())
 
   companion object {
-    val instance by lazy { object : MonthDayEncoder {} }
+    val instance = object : MonthDayEncoder {}
   }
 }
 
@@ -282,7 +282,7 @@ interface MonthDayDecoder : Decoder<MonthDay> {
     }
 
   companion object {
-    val instance by lazy { object : MonthDayDecoder {} }
+    val instance = object : MonthDayDecoder {}
   }
 }
 
@@ -290,7 +290,7 @@ interface YearEncoder : Encoder<Year> {
   override fun Year.encode() = JsString(this.toString())
 
   companion object {
-    val instance by lazy { object : YearEncoder {} }
+    val instance = object : YearEncoder {}
   }
 }
 
@@ -303,7 +303,7 @@ interface YearDecoder : Decoder<Year> {
     }
 
   companion object {
-    val instance by lazy { object : YearDecoder {} }
+    val instance = object : YearDecoder {}
   }
 }
 
@@ -311,7 +311,7 @@ interface YearMonthEncoder : Encoder<YearMonth> {
   override fun YearMonth.encode() = JsString(this.toString())
 
   companion object {
-    val instance by lazy { object : YearMonthEncoder {} }
+    val instance = object : YearMonthEncoder {}
   }
 }
 
@@ -324,7 +324,7 @@ interface YearMonthDecoder : Decoder<YearMonth> {
     }
 
   companion object {
-    val instance by lazy { object : YearMonthDecoder {} }
+    val instance = object : YearMonthDecoder {}
   }
 }
 
@@ -332,7 +332,7 @@ interface PeriodEncoder : Encoder<Period> {
   override fun Period.encode() = JsString(this.toString())
 
   companion object {
-    val instance by lazy { object : PeriodEncoder {} }
+    val instance = object : PeriodEncoder {}
   }
 }
 
@@ -345,7 +345,7 @@ interface PeriodDecoder : Decoder<Period> {
     }
 
   companion object {
-    val instance by lazy { object : PeriodDecoder {} }
+    val instance = object : PeriodDecoder {}
   }
 }
 
@@ -353,7 +353,7 @@ interface DurationEncoder : Encoder<Duration> {
   override fun Duration.encode() = JsString(this.toString())
 
   companion object {
-    val instance by lazy { object : DurationEncoder {} }
+    val instance = object : DurationEncoder {}
   }
 }
 
@@ -366,7 +366,7 @@ interface DurationDecoder : Decoder<Duration> {
     }
 
   companion object {
-    val instance by lazy { object : DurationDecoder {} }
+    val instance = object : DurationDecoder {}
   }
 }
 
@@ -374,7 +374,7 @@ interface ZoneIdEncoder : Encoder<ZoneId> {
   override fun ZoneId.encode() = JsString(this.toString())
 
   companion object {
-    val instance by lazy { object : ZoneIdEncoder {} }
+    val instance = object : ZoneIdEncoder {}
   }
 }
 
@@ -387,7 +387,7 @@ interface ZoneIdDecoder : Decoder<ZoneId> {
     }
 
   companion object {
-    val instance by lazy { object : ZoneIdDecoder {} }
+    val instance = object : ZoneIdDecoder {}
   }
 }
 
@@ -395,7 +395,7 @@ interface ZoneOffsetEncoder : Encoder<ZoneOffset> {
   override fun ZoneOffset.encode() = JsString(this.toString())
 
   companion object {
-    val instance by lazy { object : ZoneOffsetEncoder {} }
+    val instance = object : ZoneOffsetEncoder {}
   }
 }
 
@@ -408,7 +408,7 @@ interface ZoneOffsetDecoder : Decoder<ZoneOffset> {
     }
 
   companion object {
-    val instance by lazy { object : ZoneOffsetDecoder {} }
+    val instance = object : ZoneOffsetDecoder {}
   }
 }
 

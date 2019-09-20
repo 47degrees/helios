@@ -15,7 +15,7 @@ interface UUIDEncoder : Encoder<UUID> {
   override fun UUID.encode(): Json = JsString(this.toString())
 
   companion object {
-    val instance by lazy { object : UUIDEncoder {} }
+    val instance = object : UUIDEncoder {}
   }
 }
 
@@ -28,7 +28,7 @@ interface UUIDDecoder : Decoder<UUID> {
     }
 
   companion object {
-    val instance by lazy { object : UUIDDecoder {} }
+    val instance = object : UUIDDecoder {}
   }
 }
 
@@ -36,7 +36,7 @@ interface BigDecimalEncoder : Encoder<BigDecimal> {
   override fun BigDecimal.encode(): Json = JsNumber(this)
 
   companion object {
-    val instance by lazy { object : BigDecimalEncoder {} }
+    val instance = object : BigDecimalEncoder {}
   }
 }
 
@@ -47,7 +47,7 @@ interface BigDecimalDecoder : Decoder<BigDecimal> {
     }
 
   companion object {
-    val instance by lazy { object : BigDecimalDecoder {} }
+    val instance = object : BigDecimalDecoder {}
   }
 }
 
@@ -55,7 +55,7 @@ interface BigIntegerEncoder : Encoder<BigInteger> {
   override fun BigInteger.encode(): Json = JsNumber(this)
 
   companion object {
-    val instance by lazy { object : BigIntegerEncoder {} }
+    val instance = object : BigIntegerEncoder {}
   }
 }
 
@@ -66,6 +66,6 @@ interface BigIntegerDecoder : Decoder<BigInteger> {
     }
 
   companion object {
-    val instance by lazy { object : BigIntegerDecoder {} }
+    val instance = object : BigIntegerDecoder {}
   }
 }

@@ -11,133 +11,119 @@ import helios.syntax.json.asJsStringOrError
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
 
-val doubleEncoder: Encoder<Double> by lazy {
-  object : Encoder<Double> {
-    override fun Double.encode(): Json = JsNumber(this)
-  }
+val doubleEncoder: Encoder<Double> = object : Encoder<Double> {
+  override fun Double.encode(): Json = JsNumber(this)
 }
 
 fun Double.Companion.encoder(): Encoder<Double> = doubleEncoder
 
-val doubleDecoder: Decoder<Double> by lazy {
-  object : Decoder<Double> {
-    override fun decode(value: Json): Either<DecodingError, Double> =
-      value.asJsNumberOrError(JsNumberDecodingError.JsDoubleError(value)) {
-        Try(it::toDouble).toEither { JsNumberDecodingError.JsDoubleError(value) }
-      }
-  }
+val doubleDecoder: Decoder<Double> = object : Decoder<Double> {
+  override fun decode(value: Json): Either<DecodingError, Double> =
+    value.asJsNumberOrError(JsNumberDecodingError.JsDoubleError(value)) {
+      Try(it::toDouble).toEither { JsNumberDecodingError.JsDoubleError(value) }
+    }
 }
 
 fun Double.Companion.decoder(): Decoder<Double> = doubleDecoder
 
-val floatEncoder: Encoder<Float> by lazy {
-  object : Encoder<Float> {
-    override fun Float.encode(): Json = JsNumber(this)
-  }
+val floatEncoder: Encoder<Float> = object : Encoder<Float> {
+  override fun Float.encode(): Json = JsNumber(this)
 }
 
 fun Float.Companion.encoder(): Encoder<Float> = floatEncoder
 
-val floatDecoder: Decoder<Float> by lazy {
-  object : Decoder<Float> {
-    override fun decode(value: Json): Either<DecodingError, Float> =
-      value.asJsNumberOrError(JsNumberDecodingError.JsFloatError(value)) {
-        Try(it::toFloat).toEither { JsNumberDecodingError.JsFloatError(value) }
-      }
-  }
+val floatDecoder: Decoder<Float> = object : Decoder<Float> {
+  override fun decode(value: Json): Either<DecodingError, Float> =
+    value.asJsNumberOrError(JsNumberDecodingError.JsFloatError(value)) {
+      Try(it::toFloat).toEither { JsNumberDecodingError.JsFloatError(value) }
+    }
 }
 
 fun Float.Companion.decoder(): Decoder<Float> = floatDecoder
 
-val longEncoder: Encoder<Long> by lazy {
-  object : Encoder<Long> {
-    override fun Long.encode(): Json = JsNumber(this)
-  }
+val longEncoder: Encoder<Long> = object : Encoder<Long> {
+  override fun Long.encode(): Json = JsNumber(this)
 }
 
 fun Long.Companion.encoder(): Encoder<Long> = longEncoder
 
-val longDecoder: Decoder<Long> by lazy {
-  object : Decoder<Long> {
-    override fun decode(value: Json): Either<DecodingError, Long> =
-      value.asJsNumberOrError(JsNumberDecodingError.JsLongError(value)) {
-        Try(it::toLong).toEither { JsNumberDecodingError.JsLongError(value) }
-      }
-  }
+val longDecoder: Decoder<Long> = object : Decoder<Long> {
+  override fun decode(value: Json): Either<DecodingError, Long> =
+    value.asJsNumberOrError(JsNumberDecodingError.JsLongError(value)) {
+      Try(it::toLong).toEither { JsNumberDecodingError.JsLongError(value) }
+    }
 }
 
 fun Long.Companion.decoder(): Decoder<Long> = longDecoder
 
-val intEncoder: Encoder<Int> by lazy {
-  object : Encoder<Int> {
-    override fun Int.encode(): Json = JsNumber(this)
-  }
+val intEncoder: Encoder<Int> = object : Encoder<Int> {
+  override fun Int.encode(): Json = JsNumber(this)
 }
 
 fun Int.Companion.encoder(): Encoder<Int> = intEncoder
 
-val intDecoder: Decoder<Int> by lazy { object : Decoder<Int> {
+val intDecoder: Decoder<Int> = object : Decoder<Int> {
   override fun decode(value: Json): Either<DecodingError, Int> =
     value.asJsNumberOrError(JsNumberDecodingError.JsIntError(value)) {
       it.toInt().toEither { JsNumberDecodingError.JsIntError(value) }
     }
-} }
+}
 
 fun Int.Companion.decoder(): Decoder<Int> = intDecoder
 
-val shortEncoder: Encoder<Short> by lazy { object : Encoder<Short> {
+val shortEncoder: Encoder<Short> = object : Encoder<Short> {
   override fun Short.encode(): Json = JsNumber(this)
-} }
+}
 
 fun Short.Companion.encoder(): Encoder<Short> = shortEncoder
 
-val shortDecoder: Decoder<Short> by lazy { object : Decoder<Short> {
+val shortDecoder: Decoder<Short> = object : Decoder<Short> {
   override fun decode(value: Json): Either<DecodingError, Short> =
     value.asJsNumberOrError(JsNumberDecodingError.JsShortError(value)) {
       it.toShort().toEither { JsNumberDecodingError.JsShortError(value) }
     }
-} }
+}
 
 fun Short.Companion.decoder(): Decoder<Short> = shortDecoder
 
-val byteEncoder: Encoder<Byte> by lazy { object : Encoder<Byte> {
+val byteEncoder: Encoder<Byte> = object : Encoder<Byte> {
   override fun Byte.encode(): Json = JsNumber(this)
-} }
+}
 
 fun Byte.Companion.encoder(): Encoder<Byte> = byteEncoder
 
-val byteDecoder: Decoder<Byte> by lazy { object : Decoder<Byte> {
+val byteDecoder: Decoder<Byte> = object : Decoder<Byte> {
   override fun decode(value: Json): Either<DecodingError, Byte> =
     value.asJsNumberOrError(JsNumberDecodingError.JsByteError(value)) {
       it.toByte().toEither { JsNumberDecodingError.JsByteError(value) }
     }
-} }
+}
 
 fun Byte.Companion.decoder(): Decoder<Byte> = byteDecoder
 
-val booleanEncoder: Encoder<Boolean> by lazy { object : Encoder<Boolean> {
+val booleanEncoder: Encoder<Boolean> = object : Encoder<Boolean> {
   override fun Boolean.encode(): Json = JsBoolean(this)
-} }
+}
 
 fun Boolean.Companion.encoder(): Encoder<Boolean> = booleanEncoder
 
-val booleanDecoder: Decoder<Boolean> by lazy { object : Decoder<Boolean> {
+val booleanDecoder: Decoder<Boolean> = object : Decoder<Boolean> {
   override fun decode(value: Json): Either<DecodingError, Boolean> =
     value.asJsBoolean().map(JsBoolean::value).toEither { JsBooleanDecodingError(value) }
-} }
+}
 
 fun Boolean.Companion.decoder(): Decoder<Boolean> = booleanDecoder
 
-val stringEncoder: Encoder<String> by lazy { object : Encoder<String> {
+val stringEncoder: Encoder<String> = object : Encoder<String> {
   override fun String.encode(): Json = JsString(this)
-} }
+}
 
 fun String.Companion.encoder(): Encoder<String> = stringEncoder
 
-val stringDecoder: Decoder<String> by lazy { object : Decoder<String> {
+val stringDecoder: Decoder<String> = object : Decoder<String> {
   override fun decode(value: Json): Either<DecodingError, String> =
     value.asJsString().map { it.value.toString() }.toEither { JsStringDecodingError(value) }
-} }
+}
 
 fun String.Companion.decoder(): Decoder<String> = stringDecoder
 
