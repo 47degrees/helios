@@ -6,7 +6,7 @@ import helios.core.*
 import helios.optics.*
 
 object Sample {
-  const val companyJsonString = """
+  private const val companyJsonString = """
     {
       "name": "Arrow",
       "address": {
@@ -65,9 +65,8 @@ object Sample {
     Json.path.select("employees").every.select("lastName").string
     val employeeLastNames = Json.path.employees.every.lastName.string
 
-    employeeLastNames.modify(companyJson, String::capitalize).let {
-      employeeLastNames.getAll(it)
-    }.let(::println)
+    employeeLastNames.modify(companyJson, String::capitalize).let(employeeLastNames::getAll)
+      .let(::println)
 
     Json.path.employees.filterIndex { it == 0 }.name.string.getAll(companyJson).let(::println)
 

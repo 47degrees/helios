@@ -30,7 +30,7 @@ data class Friend(
   companion object
 }
 
-val sampleJson: String = """
+const val sampleJson: String = """
         {
   "friends": [
     {

@@ -135,7 +135,11 @@ class InstancesTest : UnitSpec() {
 
     "Triple should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        TripleDecoderInstance(Boolean.decoder(), Int.decoder(), String.decoder()).decode(sample) should beLeft()
+        TripleDecoderInstance(
+          Boolean.decoder(),
+          Int.decoder(),
+          String.decoder()
+        ).decode(sample) should beLeft()
       }
     }
 

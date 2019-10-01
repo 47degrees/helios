@@ -9,7 +9,7 @@ import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.util.*
+import java.util.UUID
 
 interface UUIDEncoderInstance : Encoder<UUID> {
   override fun UUID.encode(): Json = JsString(this.toString())

@@ -15,7 +15,9 @@ class HeliosResponseBodyConverter<T>(private val decoder: Decoder<T>) : Converte
   override fun convert(value: ResponseBody): T = value.use { body ->
     Json
       .parseFromByteBuffer(ByteBuffer.wrap(body.byteStream().readBytes()))
-      .flatMap { json -> json.decode(decoder).mapLeft { IOException("Decode failed with the error: $it") } }
+      .flatMap { json ->
+        json.decode(decoder).mapLeft { IOException("Decode failed with the error: $it") }
+      }
       .fold({ throw it }, { it })
   }
 

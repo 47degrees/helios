@@ -72,18 +72,19 @@ interface ArrayEncoderInstance<A> : Encoder<Array<A>> {
 
 }
 
-inline fun <reified A> ArrayDecoderInstance(decoderA: Decoder<A>): Decoder<Array<A>> = object : Decoder<Array<A>> {
+inline fun <reified A> ArrayDecoderInstance(decoderA: Decoder<A>): Decoder<Array<A>> =
+  object : Decoder<Array<A>> {
 
-  override fun decode(value: Json): Either<DecodingError, Array<A>> =
-    with(decoderA) {
-      value.asJsArrayOrError { (arrValue) ->
-        arrValue.map(this::decode).sequence(Either.applicative()).fix().map {
-          it.fix().toTypedArray()
+    override fun decode(value: Json): Either<DecodingError, Array<A>> =
+      with(decoderA) {
+        value.asJsArrayOrError { (arrValue) ->
+          arrValue.map(this::decode).sequence(Either.applicative()).fix().map {
+            it.fix().toTypedArray()
+          }
         }
       }
-    }
 
-}
+  }
 
 @extension
 interface DoubleArrayEncoderInstance : Encoder<DoubleArray> {

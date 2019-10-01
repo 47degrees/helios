@@ -123,15 +123,15 @@ interface Parser<J> {
       k += 1
       c = at(k)
     }
-    if (c == '0') {
-      k += 1
-      c = at(k)
-    } else if (c in '1'..'9') {
-      while (c in '0'..'9') {
+    when (c) {
+      '0'         -> {
+        k += 1
+        c = at(k)
+      }
+      in '1'..'9' -> while (c in '0'..'9') {
         k += 1; c = at(k)
       }
-    } else {
-      die(i, "expected digit")
+      else        -> die(i, "expected digit")
     }
 
     if (c == '.') {
@@ -193,15 +193,8 @@ interface Parser<J> {
       j += 1
       c = at(j)
     }
-    if (c == '0') {
-      j += 1
-      if (atEof(j)) {
-        ctxt.add(facade.jnum(at(i, j), decIndex, expIndex))
-        return j
-      }
-      c = at(j)
-    } else if (c in '1'..'9') {
-      while (c in '0'..'9') {
+    when (c) {
+      '0'         -> {
         j += 1
         if (atEof(j)) {
           ctxt.add(facade.jnum(at(i, j), decIndex, expIndex))
@@ -209,8 +202,15 @@ interface Parser<J> {
         }
         c = at(j)
       }
-    } else {
-      die(i, "expected digit")
+      in '1'..'9' -> while (c in '0'..'9') {
+        j += 1
+        if (atEof(j)) {
+          ctxt.add(facade.jnum(at(i, j), decIndex, expIndex))
+          return j
+        }
+        c = at(j)
+      }
+      else        -> die(i, "expected digit")
     }
 
     if (c == '.') {
@@ -323,22 +323,22 @@ interface Parser<J> {
   tailrec fun parse(i: Int, facade: Facade<J>): Pair<J, Int> =
     when (at(i)) {
       // ignore whitespace
-      ' ' -> parse(i + 1, facade)
-      '\t' -> parse(i + 1, facade)
-      '\r' -> parse(i + 1, facade)
-      '\n' -> {
+      ' '                                                   -> parse(i + 1, facade)
+      '\t'                                                  -> parse(i + 1, facade)
+      '\r'                                                  -> parse(i + 1, facade)
+      '\n'                                                  -> {
         newline(i); parse(i + 1, facade)
       }
 
       // if we have a recursive top-level structure, we'll delegate the parsing
       // duties to our good friend rparse().
-      '[' -> rparse(
+      '['                                                   -> rparse(
         ARRBEG,
         i + 1,
         listOf(facade.arrayContext()),
         facade
       )
-      '{' -> rparse(
+      '{'                                                   -> rparse(
         OBJBEG,
         i + 1,
         listOf(facade.objectContext()),
@@ -353,19 +353,19 @@ interface Parser<J> {
       }
 
       // we have a single top-level string
-      '"' -> {
+      '"'                                                   -> {
         val ctxt = facade.singleContext()
         val j = parseString(i, ctxt)
         ctxt.finish() to j
       }
 
       // we have a single top-level constant
-      't' -> (parseTrue(i, facade) to i + 4)
-      'f' -> (parseFalse(i, facade) to i + 5)
-      'n' -> (parseNull(i, facade) to i + 4)
+      't'                                                   -> (parseTrue(i, facade) to i + 4)
+      'f'                                                   -> (parseFalse(i, facade) to i + 5)
+      'n'                                                   -> (parseNull(i, facade) to i + 4)
 
       // invalid
-      else -> die(i, "expected json value")
+      else                                                  -> die(i, "expected json value")
     }
 
   /**

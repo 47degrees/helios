@@ -20,8 +20,8 @@ data class JsonElement(
       target.classOrPackageProto as ClassOrPackageDataWrapper.Class,
       true
     )
-    val pname = target.classOrPackageProto.nameResolver.getString(it.name)
-    pname to retType.removeBackticks()
+    val pName = target.classOrPackageProto.nameResolver.getString(it.name)
+    pName to retType.removeBackticks()
   }
 
 }
@@ -67,7 +67,7 @@ class JsonFileGenerator(
   private inline val String.getTypeParameters
     get() = {
       val inside = this.substringAfter('<').substringBeforeLast('>')
-      inside.split(',').map { it.trim() }.fold(emptyList()) { acc: List<String>, str: String ->
+      inside.split(',').map(String::trim).fold(emptyList()) { acc: List<String>, str: String ->
         val maybeLast = acc.lastOrNull()
         if (maybeLast != null && maybeLast.isComplex && maybeLast.notClosed)
           acc.subList(0, acc.size - 1) + "$maybeLast, $str"
@@ -85,13 +85,15 @@ class JsonFileGenerator(
 
   private fun String.encoder(): String =
     when {
-      this.endsWith('?') -> "NullableEncoderInstance<${substringBeforeLast('?')}>(${substringBefore('?').encoder()})"
+      this.endsWith('?')                         -> "NullableEncoderInstance<${substringBeforeLast('?')}>(${substringBefore(
+        '?'
+      ).encoder()})"
       this.startsWith("kotlin.collections.List") -> complexEncoder("ListEncoderInstance")
-      this.startsWith("kotlin.collections.Map") ->
+      this.startsWith("kotlin.collections.Map")  ->
         "MapEncoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyEncoder()}, ${getTypeParameters.last().encoder()})"
-      this.startsWith("java") -> "${substringAfterLast('.')}EncoderInstance()"
-      this.contains('<') -> complexEncoder("${substringBefore('<')}.Companion.encoder")
-      else -> "$this.encoder()"
+      this.startsWith("java")                    -> "${substringAfterLast('.')}EncoderInstance()"
+      this.contains('<')                         -> complexEncoder("${substringBefore('<')}.Companion.encoder")
+      else                                       -> "$this.encoder()"
     }
 
   private fun jsonProperties(je: JsonElement): String =
@@ -111,19 +113,22 @@ class JsonFileGenerator(
 
   private fun String.decoder(): String =
     when {
-      this.endsWith('?') -> "NullableDecoderInstance<${substringBeforeLast('?')}>(${substringBefore('?').decoder()})"
+      this.endsWith('?')                         -> "NullableDecoderInstance<${substringBeforeLast('?')}>(${substringBefore(
+        '?'
+      ).decoder()})"
       this.startsWith("kotlin.collections.List") ->
         complexDecoder("ListDecoderInstance")
-      this.startsWith("kotlin.collections.Map") ->
+      this.startsWith("kotlin.collections.Map")  ->
         "MapDecoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyDecoder()}, ${getTypeParameters.last().decoder()})"
-      this.startsWith("java") -> "${substringAfterLast('.')}DecoderInstance()"
-      this.contains('<') -> complexDecoder("${substringBefore('<')}.Companion.decoder")
-      else -> "$this.decoder()"
+      this.startsWith("java")                    -> "${substringAfterLast('.')}DecoderInstance()"
+      this.contains('<')                         -> complexDecoder("${substringBefore('<')}.Companion.decoder")
+      else                                       -> "$this.decoder()"
     }
 
   private fun genFromJson(je: JsonElement): String {
 
-    val extraImports = if (je.pairs.size != 1) "import arrow.core.extensions.either.applicative.applicative" else ""
+    val extraImports =
+      if (je.pairs.size != 1) "import arrow.core.extensions.either.applicative.applicative" else ""
 
     val params = je.pairs.joinToString(
       prefix = if (je.pairs.size > 1) "(" else "",
@@ -131,17 +136,18 @@ class JsonFileGenerator(
       postfix = if (je.pairs.size > 1) ")" else ""
     ) { (p, _) -> p }
 
-    fun parse(parsePrefix: String, parseSeparator: String, parsePostfix: String): String = je.pairs.joinToString(
-      prefix = parsePrefix,
-      separator = parseSeparator,
-      postfix = parsePostfix
-    ) { (p, t) ->
-      when {
-        t.startsWith("arrow.core.Option") -> "value[\"$p\"].fold({ None.right() }, { ${t.decoder()}.run { decode(it) } })"
-        t.endsWith('?') -> "value[\"$p\"].fold({ null.right() }, { ${t.decoder()}.run { decode(it) } })"
-        else -> "value[\"$p\"].fold({ Either.Left(KeyNotFound(\"$p\")) }, { ${t.decoder()}.run { decode(it) } })"
+    fun parse(parsePrefix: String, parseSeparator: String, parsePostfix: String): String =
+      je.pairs.joinToString(
+        prefix = parsePrefix,
+        separator = parseSeparator,
+        postfix = parsePostfix
+      ) { (p, t) ->
+        when {
+          t.startsWith("arrow.core.Option") -> "value[\"$p\"].fold({ None.right() }, { ${t.decoder()}.run { decode(it) } })"
+          t.endsWith('?')                   -> "value[\"$p\"].fold({ null.right() }, { ${t.decoder()}.run { decode(it) } })"
+          else                              -> "value[\"$p\"].fold({ Either.Left(KeyNotFound(\"$p\")) }, { ${t.decoder()}.run { decode(it) } })"
+        }
       }
-    }
 
     val map: String =
       if (je.pairs.size == 1) "${parse(parsePrefix = "", parseSeparator = ",\n", parsePostfix = "")}.map"

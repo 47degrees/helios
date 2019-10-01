@@ -28,13 +28,13 @@ class JsonProcessor : AbstractProcessor() {
       .map { element ->
         when (element.kind) {
           ElementKind.CLASS -> processClass(element as TypeElement)
-          else -> knownError("$jsonAnnotationName can only be used on immutable data classes")
+          else              -> knownError("$jsonAnnotationName can only be used on immutable data classes")
         }
       }
 
     if (roundEnv.processingOver()) {
       val generatedDir =
-        File(this.generatedDir!!, jsonAnnotationClass.simpleName).also { it.mkdirs() }
+        File(generatedDir ?: return, jsonAnnotationClass.simpleName).also { it.mkdirs() }
       JsonFileGenerator(generatedDir, jsonAnnotatedList).generate()
     }
   }

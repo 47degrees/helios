@@ -75,7 +75,11 @@ class InstancesArrowTest : UnitSpec() {
 
     "Tuple3 should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        Tuple3.decoder(String.decoder(), Double.decoder(), Boolean.decoder()).decode(sample) should beLeft()
+        Tuple3.decoder(
+          String.decoder(),
+          Double.decoder(),
+          Boolean.decoder()
+        ).decode(sample) should beLeft()
       }
     }
 
