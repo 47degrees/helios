@@ -26,7 +26,9 @@ class InstancesJavaTest : UnitSpec() {
 
     "BigDecimal should be encoded and decoded successfully"{
       assertAll(Gen.bigDecimal()) { sample ->
-        BigDecimalDecoder.instance.decode(BigDecimalEncoder.instance.run { sample.encode() }) should beRight(sample)
+        BigDecimalDecoder.instance.decode(BigDecimalEncoder.instance.run { sample.encode() }) should beRight(
+          sample
+        )
       }
     }
 
@@ -38,7 +40,9 @@ class InstancesJavaTest : UnitSpec() {
 
     "BigInteger should be encoded and decoded successfully"{
       assertAll(Gen.bigInteger()) { sample ->
-        BigIntegerDecoder.instance.decode(BigIntegerEncoder.instance.run { sample.encode() }) should beRight(sample)
+        BigIntegerDecoder.instance.decode(BigIntegerEncoder.instance.run { sample.encode() }) should beRight(
+          sample
+        )
       }
     }
 

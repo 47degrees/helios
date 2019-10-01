@@ -84,13 +84,15 @@ class JsonFileGenerator(
 
   private fun String.encoder(): String =
     when {
-      this.endsWith('?') -> "NullableEncoder<${substringBeforeLast('?')}>(${substringBefore('?').encoder()})"
+      this.endsWith('?')                         -> "NullableEncoder<${substringBeforeLast('?')}>(${substringBefore(
+        '?'
+      ).encoder()})"
       this.startsWith("kotlin.collections.List") -> complexEncoder("ListEncoder")
-      this.startsWith("kotlin.collections.Map") ->
+      this.startsWith("kotlin.collections.Map")  ->
         "MapEncoder<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyEncoder()}, ${getTypeParameters.last().encoder()})"
-      this.startsWith("java") -> "${substringAfterLast('.')}Encoder.instance"
-      this.contains('<') -> complexEncoder("${substringBefore('<')}.Companion.encoder")
-      else -> "$this.encoder()"
+      this.startsWith("java")                    -> "${substringAfterLast('.')}Encoder.instance"
+      this.contains('<')                         -> complexEncoder("${substringBefore('<')}.Companion.encoder")
+      else                                       -> "$this.encoder()"
     }
 
   private fun jsonProperties(je: JsonElement): String =
@@ -109,14 +111,16 @@ class JsonFileGenerator(
 
   private fun String.decoder(): String =
     when {
-      this.endsWith('?') -> "NullableDecoder<${substringBeforeLast('?')}>(${substringBefore('?').decoder()})"
+      this.endsWith('?')                         -> "NullableDecoder<${substringBeforeLast('?')}>(${substringBefore(
+        '?'
+      ).decoder()})"
       this.startsWith("kotlin.collections.List") ->
         complexDecoder("ListDecoder")
-      this.startsWith("kotlin.collections.Map") ->
+      this.startsWith("kotlin.collections.Map")  ->
         "MapDecoder<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyDecoder()}, ${getTypeParameters.last().decoder()})"
-      this.startsWith("java") -> "${substringAfterLast('.')}Decoder.instance"
-      this.contains('<') -> complexDecoder("${substringBefore('<')}.Companion.decoder")
-      else -> "$this.decoder()"
+      this.startsWith("java")                    -> "${substringAfterLast('.')}Decoder.instance"
+      this.contains('<')                         -> complexDecoder("${substringBefore('<')}.Companion.decoder")
+      else                                       -> "$this.decoder()"
     }
 
   private fun genFromJson(je: JsonElement): String {

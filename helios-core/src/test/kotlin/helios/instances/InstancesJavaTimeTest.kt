@@ -165,7 +165,9 @@ class InstancesJavaTimeTest : UnitSpec() {
 
     "ZoneOffset should be encoded and decoded successfully"{
       val now = ZoneOffset.UTC
-      ZoneOffsetDecoder.instance.decode(ZoneOffsetEncoder.instance.run { now.encode() }) should beRight(now)
+      ZoneOffsetDecoder.instance.decode(ZoneOffsetEncoder.instance.run { now.encode() }) should beRight(
+        now
+      )
     }
 
     "ZoneOffset should fail for wrong content"{
