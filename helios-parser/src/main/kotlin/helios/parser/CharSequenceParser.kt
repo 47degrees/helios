@@ -5,7 +5,7 @@ package helios.parser
  *
  * This is similar to StringParser, but acts on character sequences.
  */
-class CharSequenceParser<J>(val cs: CharSequence) : SyncParser<J>, CharBasedParser<J> {
+class CharSequenceParser<J>(private val cs: CharSequence) : SyncParser<J>, CharBasedParser<J> {
   private var line = 0
   private val charBuilder = CharBuilder()
   override fun charBuilder(): CharBuilder = charBuilder

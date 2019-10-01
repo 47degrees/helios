@@ -15,11 +15,12 @@ import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.channels.ReadableByteChannel
 
-const val MaxLongString = "9223372036854775807"
-const val MinLongString = "-9223372036854775808"
+private const val MaxLongString = "9223372036854775807"
+private const val MinLongString = "-9223372036854775808"
 
-fun String.withPrefixPerLine(prefix: String) = this.lines().joinToString(separator = "\n") { "$prefix$it" }
+private fun String.withPrefixPerLine(prefix: String) = lines().joinToString(separator = "\n") { "$prefix$it" }
 
+@Suppress("unused")
 sealed class Json {
 
   inline val isNull inline get() = this === JsNull
@@ -51,7 +52,7 @@ sealed class Json {
 
   operator fun get(key: String): Option<Json> = when (this) {
     is JsObject -> Option.fromNullable(this.value[key])
-    else -> None
+    else        -> None
   }
 
   fun <A> decode(decoder: Decoder<A>): Either<DecodingError, A> =
@@ -109,10 +110,10 @@ sealed class Json {
   open fun spaces4(): String = noSpaces()
 
   override fun equals(other: Any?): Boolean = Json.eq().run {
-    (other as? Json)?.let { this@Json.eqv(it) } ?: false
+    (other as? Json)?.let { eqv(it) } ?: false
   }
 
-  override fun hashCode(): Int = super.hashCode()
+  override fun hashCode(): Int = javaClass.hashCode()
 
 }
 
@@ -157,7 +158,7 @@ sealed class JsNumber : Json() {
   }
 
   override fun equals(other: Any?): Boolean = JsNumber.eq().run {
-    (other as? JsNumber)?.let { this@JsNumber.eqv(it) } ?: false
+    (other as? JsNumber)?.let { eqv(it) } ?: false
   }
 
   abstract override fun hashCode(): Int
@@ -211,7 +212,7 @@ data class JsDecimal(val value: String) : JsNumber() {
   override fun noSpaces(): String = value
 
   override fun equals(other: Any?): Boolean = JsNumber.eq().run {
-    (other as? JsNumber)?.let { this@JsDecimal.eqv(it) } ?: false
+    (other as? JsNumber)?.let { eqv(it) } ?: false
   }
 
   override fun hashCode(): Int = value.hashCode()
@@ -233,7 +234,7 @@ data class JsLong(val value: Long) : JsNumber() {
   override fun noSpaces(): String = "$value"
 
   override fun equals(other: Any?): Boolean = JsNumber.eq().run {
-    (other as? JsNumber)?.let { this@JsLong.eqv(it) } ?: false
+    (other as? JsNumber)?.let { eqv(it) } ?: false
   }
 
   override fun hashCode(): Int = value.hashCode()
@@ -256,7 +257,7 @@ data class JsDouble(val value: Double) : JsNumber() {
   override fun noSpaces(): String = "$value"
 
   override fun equals(other: Any?): Boolean = JsNumber.eq().run {
-    (other as? JsNumber)?.let { this@JsDouble.eqv(it) } ?: false
+    (other as? JsNumber)?.let { eqv(it) } ?: false
   }
 
   override fun hashCode(): Int = value.hashCode()
@@ -279,7 +280,7 @@ data class JsFloat(val value: Float) : JsNumber() {
   override fun noSpaces(): String = "$value"
 
   override fun equals(other: Any?): Boolean = JsNumber.eq().run {
-    (other as? JsNumber)?.let { this@JsFloat.eqv(it) } ?: false
+    (other as? JsNumber)?.let { eqv(it) } ?: false
   }
 
   override fun hashCode(): Int = value.hashCode()
@@ -307,7 +308,7 @@ data class JsInt(val value: Int) : JsNumber() {
   override fun noSpaces(): String = "$value"
 
   override fun equals(other: Any?): Boolean = JsNumber.eq().run {
-    (other as? JsNumber)?.let { this@JsInt.eqv(it) } ?: false
+    (other as? JsNumber)?.let { eqv(it) } ?: false
   }
 
   override fun hashCode(): Int = value.hashCode()
@@ -337,7 +338,7 @@ data class JsArray(val value: List<Json>) : Json() {
       transform = { it.spaces4().withPrefixPerLine("    ") })
 
   override fun equals(other: Any?): Boolean = JsArray.eq().run {
-    (other as? JsArray)?.let { this@JsArray.eqv(it) } ?: false
+    (other as? JsArray)?.let { eqv(it) } ?: false
   }
 
   override fun hashCode(): Int = value.hashCode()
@@ -379,7 +380,7 @@ data class JsObject(val value: Map<String, Json>) : Json() {
     ) { it.withPrefixPerLine("    ") }
 
   override fun equals(other: Any?): Boolean = JsObject.eq().run {
-    (other as? JsObject)?.let { this@JsObject.eqv(it) } ?: false
+    (other as? JsObject)?.let { eqv(it) } ?: false
   }
 
   override fun hashCode(): Int = value.hashCode()

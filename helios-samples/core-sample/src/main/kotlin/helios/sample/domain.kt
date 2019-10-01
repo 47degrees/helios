@@ -4,7 +4,7 @@ import arrow.core.Either
 import arrow.core.Option
 import arrow.optics.optics
 import helios.json
-import java.util.*
+import java.util.UUID
 
 @json
 data class Company(
@@ -52,7 +52,7 @@ data class Employee(
   val name: String,
   val lastName: String,
   val married: Either<Wife, Husband>?,
-  val childs: Option<List<Child>>
+  val children: Option<List<Child>>
 ) {
   companion object
 }

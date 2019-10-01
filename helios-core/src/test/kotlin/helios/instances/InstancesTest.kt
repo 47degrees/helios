@@ -9,7 +9,7 @@ import io.kotlintest.properties.Gen
 import io.kotlintest.properties.assertAll
 import io.kotlintest.should
 
-class sTest : UnitSpec() {
+class InstancesTest : UnitSpec() {
   init {
 
     "Double should be encoded and decoded successfully"{

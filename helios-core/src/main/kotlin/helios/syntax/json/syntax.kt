@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package helios.syntax.json
 
 import arrow.core.Either

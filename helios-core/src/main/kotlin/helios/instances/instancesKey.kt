@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package helios.instances
 
 import arrow.core.Either

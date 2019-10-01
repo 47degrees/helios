@@ -3,8 +3,6 @@ package helios.retrofit
 import arrow.core.Try
 import arrow.core.Tuple3
 import io.kotlintest.Description
-import io.kotlintest.assertions.arrow.`try`.shouldBeFailure
-import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec

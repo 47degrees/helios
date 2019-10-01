@@ -20,8 +20,8 @@ data class JsonElement(
       target.classOrPackageProto as ClassOrPackageDataWrapper.Class,
       true
     )
-    val pname = target.classOrPackageProto.nameResolver.getString(it.name)
-    pname to retType.removeBackticks()
+    val pName = target.classOrPackageProto.nameResolver.getString(it.name)
+    pName to retType.removeBackticks()
   }
 
 }
@@ -67,7 +67,7 @@ class JsonFileGenerator(
   private inline val String.getTypeParameters
     get() = {
       val inside = this.substringAfter('<').substringBeforeLast('>')
-      inside.split(',').map { it.trim() }.fold(emptyList()) { acc: List<String>, str: String ->
+      inside.split(',').map(String::trim).fold(emptyList()) { acc: List<String>, str: String ->
         val maybeLast = acc.lastOrNull()
         if (maybeLast != null && maybeLast.isComplex && maybeLast.notClosed)
           acc.subList(0, acc.size - 1) + "$maybeLast, $str"
@@ -121,7 +121,8 @@ class JsonFileGenerator(
 
   private fun genFromJson(je: JsonElement): String {
 
-    val extraImports = if (je.pairs.size != 1) "import arrow.core.extensions.either.applicative.applicative" else ""
+    val extraImports =
+      if (je.pairs.size != 1) "import arrow.core.extensions.either.applicative.applicative" else ""
 
     val params = je.pairs.joinToString(
       prefix = if (je.pairs.size > 1) "(" else "",
@@ -129,17 +130,18 @@ class JsonFileGenerator(
       postfix = if (je.pairs.size > 1) ")" else ""
     ) { (p, _) -> p }
 
-    fun parse(parsePrefix: String, parseSeparator: String, parsePostfix: String): String = je.pairs.joinToString(
-      prefix = parsePrefix,
-      separator = parseSeparator,
-      postfix = parsePostfix
-    ) { (p, t) ->
-      when {
-        t.startsWith("arrow.core.Option") -> "value[\"$p\"].fold({ None.right() }, { ${t.decoder()}.run { decode(it) } })"
-        t.endsWith('?') -> "value[\"$p\"].fold({ null.right() }, { ${t.decoder()}.run { decode(it) } })"
-        else -> "value[\"$p\"].fold({ Either.Left(KeyNotFound(\"$p\")) }, { ${t.decoder()}.run { decode(it) } })"
+    fun parse(parsePrefix: String, parseSeparator: String, parsePostfix: String): String =
+      je.pairs.joinToString(
+        prefix = parsePrefix,
+        separator = parseSeparator,
+        postfix = parsePostfix
+      ) { (p, t) ->
+        when {
+          t.startsWith("arrow.core.Option") -> "value[\"$p\"].fold({ None.right() }, { ${t.decoder()}.run { decode(it) } })"
+          t.endsWith('?')                   -> "value[\"$p\"].fold({ null.right() }, { ${t.decoder()}.run { decode(it) } })"
+          else                              -> "value[\"$p\"].fold({ Either.Left(KeyNotFound(\"$p\")) }, { ${t.decoder()}.run { decode(it) } })"
+        }
       }
-    }
 
     val map: String =
       if (je.pairs.size == 1) "${parse(parsePrefix = "", parseSeparator = ",\n", parsePostfix = "")}.map"

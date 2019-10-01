@@ -19,17 +19,19 @@ fun <A> Option.Companion.decoder(decoderA: Decoder<A>) = object : Decoder<Option
     if (value.isNull) None.right() else decoderA.decode(value).map { Some(it) }
 }
 
-fun <A, B> Either.Companion.encoder(encoderA: Encoder<A>, encoderB: Encoder<B>) = object : Encoder<Either<A, B>> {
-  override fun Either<A, B>.encode(): Json =
-    fold({ encoderA.run { it.encode() } },
-      { encoderB.run { it.encode() } })
-}
+fun <A, B> Either.Companion.encoder(encoderA: Encoder<A>, encoderB: Encoder<B>) =
+  object : Encoder<Either<A, B>> {
+    override fun Either<A, B>.encode(): Json =
+      fold({ encoderA.run { it.encode() } },
+        { encoderB.run { it.encode() } })
+  }
 
-fun <A, B> Either.Companion.decoder(decoderA: Decoder<A>, decoderB: Decoder<B>) = object : Decoder<Either<A, B>> {
-  override fun decode(value: Json): Either<DecodingError, Either<A, B>> =
-    decoderB.decode(value).fold({ decoderA.decode(value).map { it.left() } },
-      { v -> v.right().map { it.right() } })
-}
+fun <A, B> Either.Companion.decoder(decoderA: Decoder<A>, decoderB: Decoder<B>) =
+  object : Decoder<Either<A, B>> {
+    override fun decode(value: Json): Either<DecodingError, Either<A, B>> =
+      decoderB.decode(value).fold({ decoderA.decode(value).map { it.left() } },
+        { v -> v.right().map { it.right() } })
+  }
 
 fun <A> NonEmptyList.Companion.encoder(encoderA: Encoder<A>) = object : Encoder<NonEmptyList<A>> {
   override fun NonEmptyList<A>.encode(): Json =
@@ -39,28 +41,31 @@ fun <A> NonEmptyList.Companion.encoder(encoderA: Encoder<A>) = object : Encoder<
 fun <A> NonEmptyList.Companion.decoder(decoderA: Decoder<A>) = object : Decoder<NonEmptyList<A>> {
   override fun decode(value: Json): Either<DecodingError, NonEmptyList<A>> =
     ListDecoder(decoderA).decode(value).flatMap {
-      NonEmptyList.fromList(it)
-        .toEither { ExceptionOnDecoding(value, "Empty JsonArray cannot be decoded to NonEmptyList") }
+      fromList(it).toEither {
+        ExceptionOnDecoding(value, "Empty JsonArray cannot be decoded to NonEmptyList")
+      }
     }
 }
 
-fun <A, B> Tuple2.Companion.encoder(encoderA: Encoder<A>, encoderB: Encoder<B>) = object : Encoder<Tuple2<A, B>> {
-  override fun Tuple2<A, B>.encode(): Json = JsArray(
-    listOf(
-      encoderA.run { a.encode() },
-      encoderB.run { b.encode() }
+fun <A, B> Tuple2.Companion.encoder(encoderA: Encoder<A>, encoderB: Encoder<B>) =
+  object : Encoder<Tuple2<A, B>> {
+    override fun Tuple2<A, B>.encode(): Json = JsArray(
+      listOf(
+        encoderA.run { a.encode() },
+        encoderB.run { b.encode() }
+      )
     )
-  )
-}
+  }
 
-fun <A, B> Tuple2.Companion.decoder(decoderA: Decoder<A>, decoderB: Decoder<B>) = object : Decoder<Tuple2<A, B>> {
-  override fun decode(value: Json): Either<DecodingError, Tuple2<A, B>> =
-    value.asJsArrayOrError { (arr) ->
-      if (arr.size == 2)
-        decoderA.decode(arr.first()).map2(decoderB.decode(arr.last())) { it }.fix()
-      else JsArrayDecodingError(value).left()
-    }
-}
+fun <A, B> Tuple2.Companion.decoder(decoderA: Decoder<A>, decoderB: Decoder<B>) =
+  object : Decoder<Tuple2<A, B>> {
+    override fun decode(value: Json): Either<DecodingError, Tuple2<A, B>> =
+      value.asJsArrayOrError { (arr) ->
+        if (arr.size == 2)
+          decoderA.decode(arr.first()).map2(decoderB.decode(arr.last())) { it }.fix()
+        else JsArrayDecodingError(value).left()
+      }
+  }
 
 fun <A, B, C> Tuple3.Companion.encoder(
   encoderA: Encoder<A>,

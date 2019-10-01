@@ -19,7 +19,8 @@ class HeliosConverterFactory private constructor(
 
   companion object {
 
-    fun create(vararg jsonables: JsonableEvidence<*>): HeliosConverterFactory = create(jsonables.toList())
+    fun create(vararg jsonables: JsonableEvidence<*>): HeliosConverterFactory =
+      create(jsonables.toList())
 
     fun create(jsonables: List<JsonableEvidence<*>>): HeliosConverterFactory {
       val encoderInstances = jsonables.map { (clazz, encoder, _) -> Pair(clazz.java, encoder) }.toMap()

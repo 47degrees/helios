@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package helios.benchmarks
 
 import arrow.core.flatMap
@@ -23,7 +25,7 @@ open class HeliosBenchmark {
   @Benchmark
   fun decodingFromRaw(): Friends =
     Json.parseFromString(jsonString)
-      .flatMap { heliosFriendsDecoder.decode(it) }
+      .flatMap(heliosFriendsDecoder::decode)
       .fold({ throw RuntimeException(it.toString()) }, { it })
 
 }

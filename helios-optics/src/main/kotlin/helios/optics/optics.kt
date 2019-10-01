@@ -16,11 +16,11 @@ import helios.core.*
 import helios.optics.jsarray.each.each
 import helios.optics.jsobject.each.each
 
-fun <S, A : S> PPrism.Companion.fromOption(getOption: (S) -> Option<A>, reverseGet: (A) -> S): Prism<S, A> =
-  Prism({ s: S -> getOption(s).toEither { s } }, { a: A -> reverseGet(a) })
+private fun <S, A : S> PPrism.Companion.fromOption(getOption: (S) -> Option<A>): Prism<S, A> =
+  Prism({ s: S -> getOption(s).toEither { s } }, ::identity)
 
 @PublishedApi
-internal val boolean = Prism.fromOption<Json, JsBoolean>({ it.asJsBoolean() }, { identity(it) })
+internal val boolean = Prism.fromOption<Json, JsBoolean>(Json::asJsBoolean)
 inline val Json.Companion.jsBoolean: Prism<Json, JsBoolean>
   inline get() = boolean
 
@@ -30,7 +30,7 @@ inline val JsBoolean.Companion.value: Iso<JsBoolean, Boolean>
   inline get() = booleanValue
 
 @PublishedApi
-internal val string = Prism.fromOption<Json, JsString>({ it.asJsString() }, { identity(it) })
+internal val string = Prism.fromOption<Json, JsString>(Json::asJsString)
 inline val Json.Companion.jsString: Prism<Json, JsString>
   inline get() = string
 
@@ -40,7 +40,7 @@ inline val JsString.Companion.value: Iso<JsString, CharSequence>
   inline get() = stringValue
 
 @PublishedApi
-internal val array = Prism.fromOption<Json, JsArray>({ it.asJsArray() }, { identity(it) })
+internal val array = Prism.fromOption<Json, JsArray>(Json::asJsArray)
 inline val Json.Companion.jsArray: Prism<Json, JsArray>
   inline get() = array
 
@@ -50,7 +50,7 @@ inline val JsArray.Companion.value: Iso<JsArray, List<Json>>
   inline get() = arrayValue
 
 @PublishedApi
-internal val `object` = Prism.fromOption<Json, JsObject>({ it.asJsObject() }, { identity(it) })
+internal val `object` = Prism.fromOption<Json, JsObject>(Json::asJsObject)
 inline val Json.Companion.jsObject: Prism<Json, JsObject>
   inline get() = `object`
 
@@ -60,17 +60,19 @@ inline val JsObject.Companion.value: Iso<JsObject, Map<String, Json>>
   inline get() = objectValue
 
 @PublishedApi
-internal val `null` = Prism.fromOption<Json, JsNull>({ it.asJsNull() }, { identity(it) })
+internal val `null` = Prism.fromOption<Json, JsNull>(Json::asJsNull)
 inline val Json.Companion.jsNull: Prism<Json, JsNull>
   inline get() = `null`
 
 @PublishedApi
-internal val number = Prism.fromOption<Json, JsNumber>({ (it as? JsNumber).toOption() }, { identity(it) })
+internal val number =
+  Prism.fromOption<Json, JsNumber> { (it as? JsNumber).toOption() }
 inline val Json.Companion.jsNumber: Prism<Json, JsNumber>
   inline get() = number
 
 @PublishedApi
-internal val double = Prism.fromOption<JsNumber, JsDouble>({ JsDouble(it.toDouble()).some() }, { identity(it) })
+internal val double =
+  Prism.fromOption<JsNumber, JsDouble> { JsDouble(it.toDouble()).some() }
 inline val JsNumber.Companion.jsDouble: Prism<JsNumber, JsDouble>
   inline get() = double
 
@@ -80,7 +82,8 @@ inline val JsDouble.Companion.value: Iso<JsDouble, Double>
   inline get() = doubleValue
 
 @PublishedApi
-internal val float = Prism.fromOption<JsNumber, JsFloat>({ JsFloat(it.toFloat()).some() }, { identity(it) })
+internal val float =
+  Prism.fromOption<JsNumber, JsFloat> { JsFloat(it.toFloat()).some() }
 inline val JsNumber.Companion.jsFloat: Prism<JsNumber, JsFloat>
   inline get() = float
 
@@ -90,7 +93,7 @@ inline val JsFloat.Companion.value: Iso<JsFloat, Float>
   inline get() = floatValue
 
 @PublishedApi
-internal val long = Prism.fromOption<JsNumber, JsLong>({ JsLong(it.toLong()).some() }, { identity(it) })
+internal val long = Prism.fromOption<JsNumber, JsLong> { JsLong(it.toLong()).some() }
 inline val JsNumber.Companion.jsLong: Prism<JsNumber, JsLong>
   inline get() = long
 
@@ -100,7 +103,7 @@ inline val JsLong.Companion.value: Iso<JsLong, Long>
   inline get() = longValue
 
 @PublishedApi
-internal val int = Prism.fromOption<JsNumber, JsInt>({ it.toInt().map(::JsInt) }, { identity(it) })
+internal val int = Prism.fromOption<JsNumber, JsInt> { it.toInt().map(::JsInt) }
 inline val JsNumber.Companion.jsInt: Prism<JsNumber, JsInt>
   inline get() = int
 
@@ -110,7 +113,7 @@ inline val JsInt.Companion.value: Iso<JsInt, Int>
   inline get() = intValue
 
 @PublishedApi
-internal val decimal = Prism.fromOption<JsNumber, JsDecimal>({ (it as? JsDecimal).toOption() }, { identity(it) })
+internal val decimal = Prism.fromOption<JsNumber, JsDecimal> { (it as? JsDecimal).toOption() }
 inline val JsNumber.Companion.jsDecimal: Prism<JsNumber, JsDecimal>
   inline get() = decimal
 
