@@ -9,7 +9,7 @@ import io.kotlintest.properties.Gen
 import io.kotlintest.properties.assertAll
 import io.kotlintest.should
 
-class sCollectionsTest : UnitSpec() {
+class InstancesCollectionsTest : UnitSpec() {
 
   init {
 
