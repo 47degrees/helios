@@ -11,15 +11,15 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.UUID
 
-interface UUIDEncoderInstance : Encoder<UUID> {
+interface UUIDEncoder : Encoder<UUID> {
   override fun UUID.encode(): Json = JsString(this.toString())
 
   companion object {
-    operator fun invoke() = object : UUIDEncoderInstance {}
+    val instance = object : UUIDEncoder {}
   }
 }
 
-interface UUIDDecoderInstance : Decoder<UUID> {
+interface UUIDDecoder : Decoder<UUID> {
   override fun decode(value: Json): Either<DecodingError, UUID> =
     value.asJsStringOrError {
       Try { UUID.fromString(it.value.toString()) }.toEither { ex ->
@@ -28,44 +28,44 @@ interface UUIDDecoderInstance : Decoder<UUID> {
     }
 
   companion object {
-    operator fun invoke() = object : UUIDDecoderInstance {}
+    val instance = object : UUIDDecoder {}
   }
 }
 
-interface BigDecimalEncoderInstance : Encoder<BigDecimal> {
+interface BigDecimalEncoder : Encoder<BigDecimal> {
   override fun BigDecimal.encode(): Json = JsNumber(this)
 
   companion object {
-    operator fun invoke() = object : BigDecimalEncoderInstance {}
+    val instance = object : BigDecimalEncoder {}
   }
 }
 
-interface BigDecimalDecoderInstance : Decoder<BigDecimal> {
+interface BigDecimalDecoder : Decoder<BigDecimal> {
   override fun decode(value: Json): Either<DecodingError, BigDecimal> =
     value.asJsNumberOrError(JsNumberDecodingError.JsBigDecimalError(value)) {
       Try(it::toBigDecimal).toEither { JsNumberDecodingError.JsBigDecimalError(value) }
     }
 
   companion object {
-    operator fun invoke() = object : BigDecimalDecoderInstance {}
+    val instance = object : BigDecimalDecoder {}
   }
 }
 
-interface BigIntegerEncoderInstance : Encoder<BigInteger> {
+interface BigIntegerEncoder : Encoder<BigInteger> {
   override fun BigInteger.encode(): Json = JsNumber(this)
 
   companion object {
-    operator fun invoke() = object : BigIntegerEncoderInstance {}
+    val instance = object : BigIntegerEncoder {}
   }
 }
 
-interface BigIntegerDecoderInstance : Decoder<BigInteger> {
+interface BigIntegerDecoder : Decoder<BigInteger> {
   override fun decode(value: Json): Either<DecodingError, BigInteger> =
     value.asJsNumberOrError(JsNumberDecodingError.JsBigIntegerError(value)) {
       Try(it::toBigInteger).toEither { JsNumberDecodingError.JsBigIntegerError(value) }
     }
 
   companion object {
-    operator fun invoke() = object : BigIntegerDecoderInstance {}
+    val instance = object : BigIntegerDecoder {}
   }
 }

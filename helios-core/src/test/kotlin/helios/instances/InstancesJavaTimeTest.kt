@@ -14,171 +14,165 @@ class InstancesJavaTimeTest : UnitSpec() {
 
     "Instant should be encoded and decoded successfully"{
       val now = Instant.now()
-      InstantDecoderInstance().decode(InstantEncoderInstance().run { now.encode() }) should beRight(now)
+      InstantDecoder.instance.decode(InstantEncoder.instance.run { now.encode() }) should beRight(now)
     }
 
     "Instant should fail for wrong content"{
       assertAll(Gen.jsBoolean()) { sample ->
-        InstantDecoderInstance().decode(sample) should beLeft()
+        InstantDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "ZonedDateTime should be encoded and decoded successfully"{
       val now = ZonedDateTime.now()
-      ZonedDateTimeDecoderInstance().decode(ZonedDateTimeEncoderInstance().run { now.encode() }) should beRight(
-        now
-      )
+      ZonedDateTimeDecoder.instance.decode(ZonedDateTimeEncoder.instance.run {
+        now.encode()
+      }) should beRight(now)
     }
 
     "ZonedDateTime should fail for wrong content"{
       assertAll(Gen.jsBoolean()) { sample ->
-        ZonedDateTimeDecoderInstance().decode(sample) should beLeft()
+        ZonedDateTimeDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "LocalDateTime should be encoded and decoded successfully"{
       val now = LocalDateTime.now()
-      LocalDateTimeDecoderInstance().decode(LocalDateTimeEncoderInstance().run { now.encode() }) should beRight(
-        now
-      )
+      LocalDateTimeDecoder.instance.decode(LocalDateTimeEncoder.instance.run {
+        now.encode()
+      }) should beRight(now)
     }
 
     "LocalDateTime should fail for wrong content"{
       assertAll(Gen.jsBoolean()) { sample ->
-        LocalDateTimeDecoderInstance().decode(sample) should beLeft()
+        LocalDateTimeDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "LocalDate should be encoded and decoded successfully"{
       val now = LocalDate.now()
-      LocalDateDecoderInstance().decode(LocalDateEncoderInstance().run { now.encode() }) should beRight(
-        now
-      )
+      LocalDateDecoder.instance.decode(LocalDateEncoder.instance.run { now.encode() }) should beRight(now)
     }
 
     "LocalDate should fail for wrong content"{
       assertAll(Gen.jsBoolean()) { sample ->
-        LocalDateDecoderInstance().decode(sample) should beLeft()
+        LocalDateDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "LocalTime should be encoded and decoded successfully"{
       val now = LocalTime.now()
-      LocalTimeDecoderInstance().decode(LocalTimeEncoderInstance().run { now.encode() }) should beRight(
-        now
-      )
+      LocalTimeDecoder.instance.decode(LocalTimeEncoder.instance.run { now.encode() }) should beRight(now)
     }
 
     "LocalTime should fail for wrong content"{
       assertAll(Gen.jsBoolean()) { sample ->
-        LocalTimeDecoderInstance().decode(sample) should beLeft()
+        LocalTimeDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "OffsetDateTime should be encoded and decoded successfully"{
       val now = OffsetDateTime.now()
-      OffsetDateTimeDecoderInstance().decode(OffsetDateTimeEncoderInstance().run { now.encode() }) should beRight(
-        now
-      )
+      OffsetDateTimeDecoder.instance.decode(OffsetDateTimeEncoder.instance.run {
+        now.encode()
+      }) should beRight(now)
     }
 
     "OffsetDateTime should fail for wrong content"{
       assertAll(Gen.jsBoolean()) { sample ->
-        OffsetDateTimeDecoderInstance().decode(sample) should beLeft()
+        OffsetDateTimeDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "OffsetTime should be encoded and decoded successfully"{
       val now = OffsetTime.now()
-      OffsetTimeDecoderInstance().decode(OffsetTimeEncoderInstance().run { now.encode() }) should beRight(
-        now
-      )
+      OffsetTimeDecoder.instance.decode(OffsetTimeEncoder.instance.run {
+        now.encode()
+      }) should beRight(now)
     }
 
     "OffsetTime should fail for wrong content"{
       assertAll(Gen.jsBoolean()) { sample ->
-        OffsetTimeDecoderInstance().decode(sample) should beLeft()
+        OffsetTimeDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "MonthDay should be encoded and decoded successfully"{
       val now = MonthDay.now()
-      MonthDayDecoderInstance().decode(MonthDayEncoderInstance().run { now.encode() }) should beRight(now)
+      MonthDayDecoder.instance.decode(MonthDayEncoder.instance.run { now.encode() }) should beRight(now)
     }
 
     "MonthDay should fail for wrong content"{
       assertAll(Gen.jsBoolean()) { sample ->
-        MonthDayDecoderInstance().decode(sample) should beLeft()
+        MonthDayDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "Year should be encoded and decoded successfully"{
       val now = Year.now()
-      YearDecoderInstance().decode(YearEncoderInstance().run { now.encode() }) should beRight(now)
+      YearDecoder.instance.decode(YearEncoder.instance.run { now.encode() }) should beRight(now)
     }
 
     "Year should fail for wrong content"{
       assertAll(Gen.jsBoolean()) { sample ->
-        YearDecoderInstance().decode(sample) should beLeft()
+        YearDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "YearMonth should be encoded and decoded successfully"{
       val now = YearMonth.now()
-      YearMonthDecoderInstance().decode(YearMonthEncoderInstance().run { now.encode() }) should beRight(
-        now
-      )
+      YearMonthDecoder.instance.decode(YearMonthEncoder.instance.run { now.encode() }) should beRight(now)
     }
 
     "YearMonth should fail for wrong content"{
       assertAll(Gen.jsBoolean()) { sample ->
-        YearMonthDecoderInstance().decode(sample) should beLeft()
+        YearMonthDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "Period should be encoded and decoded successfully"{
       val now = Period.ofDays(1)
-      PeriodDecoderInstance().decode(PeriodEncoderInstance().run { now.encode() }) should beRight(now)
+      PeriodDecoder.instance.decode(PeriodEncoder.instance.run { now.encode() }) should beRight(now)
     }
 
     "Period should fail for wrong content"{
       assertAll(Gen.jsBoolean()) { sample ->
-        PeriodDecoderInstance().decode(sample) should beLeft()
+        PeriodDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "Duration should be encoded and decoded successfully"{
       val now = Duration.ofDays(1)
-      DurationDecoderInstance().decode(DurationEncoderInstance().run { now.encode() }) should beRight(now)
+      DurationDecoder.instance.decode(DurationEncoder.instance.run { now.encode() }) should beRight(now)
     }
 
     "Duration should fail for wrong content"{
       assertAll(Gen.jsBoolean()) { sample ->
-        DurationDecoderInstance().decode(sample) should beLeft()
+        DurationDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "ZoneId should be encoded and decoded successfully"{
       val now = ZoneId.systemDefault()
-      ZoneIdDecoderInstance().decode(ZoneIdEncoderInstance().run { now.encode() }) should beRight(now)
+      ZoneIdDecoder.instance.decode(ZoneIdEncoder.instance.run { now.encode() }) should beRight(now)
     }
 
     "ZoneId should fail for wrong content"{
       assertAll(Gen.jsBoolean()) { sample ->
-        ZoneIdDecoderInstance().decode(sample) should beLeft()
+        ZoneIdDecoder.instance.decode(sample) should beLeft()
       }
     }
 
     "ZoneOffset should be encoded and decoded successfully"{
       val now = ZoneOffset.UTC
-      ZoneOffsetDecoderInstance().decode(ZoneOffsetEncoderInstance().run { now.encode() }) should beRight(
+      ZoneOffsetDecoder.instance.decode(ZoneOffsetEncoder.instance.run { now.encode() }) should beRight(
         now
       )
     }
 
     "ZoneOffset should fail for wrong content"{
       assertAll(Gen.jsBoolean()) { sample ->
-        ZoneOffsetDecoderInstance().decode(sample) should beLeft()
+        ZoneOffsetDecoder.instance.decode(sample) should beLeft()
       }
     }
 

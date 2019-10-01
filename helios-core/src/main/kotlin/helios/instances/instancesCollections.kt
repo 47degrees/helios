@@ -16,7 +16,7 @@ import helios.typeclasses.KeyDecoder
 import helios.typeclasses.KeyEncoder
 
 @extension
-interface ListEncoderInstance<in A> : Encoder<List<A>> {
+interface ListEncoder<in A> : Encoder<List<A>> {
 
   fun encoderA(): Encoder<A>
 
@@ -25,7 +25,7 @@ interface ListEncoderInstance<in A> : Encoder<List<A>> {
 
   companion object {
     operator fun <A> invoke(encoderA: Encoder<A>): Encoder<List<A>> =
-      object : ListEncoderInstance<A> {
+      object : ListEncoder<A> {
         override fun encoderA(): Encoder<A> = encoderA
       }
   }
@@ -33,7 +33,7 @@ interface ListEncoderInstance<in A> : Encoder<List<A>> {
 }
 
 @extension
-interface ListDecoderInstance<out A> : Decoder<List<A>> {
+interface ListDecoder<out A> : Decoder<List<A>> {
 
   fun decoderA(): Decoder<A>
 
@@ -48,7 +48,7 @@ interface ListDecoderInstance<out A> : Decoder<List<A>> {
 
   companion object {
     operator fun <A> invoke(decoderA: Decoder<A>): Decoder<List<A>> =
-      object : ListDecoderInstance<A> {
+      object : ListDecoder<A> {
         override fun decoderA(): Decoder<A> = decoderA
       }
   }
@@ -56,7 +56,7 @@ interface ListDecoderInstance<out A> : Decoder<List<A>> {
 }
 
 @extension
-interface ArrayEncoderInstance<A> : Encoder<Array<A>> {
+interface ArrayEncoder<A> : Encoder<Array<A>> {
 
   fun encoderA(): Encoder<A>
 
@@ -65,14 +65,14 @@ interface ArrayEncoderInstance<A> : Encoder<Array<A>> {
 
   companion object {
     operator fun <A> invoke(encoderA: Encoder<A>): Encoder<Array<A>> =
-      object : ArrayEncoderInstance<A> {
+      object : ArrayEncoder<A> {
         override fun encoderA(): Encoder<A> = encoderA
       }
   }
 
 }
 
-inline fun <reified A> ArrayDecoderInstance(decoderA: Decoder<A>): Decoder<Array<A>> =
+inline fun <reified A> ArrayDecoder(decoderA: Decoder<A>): Decoder<Array<A>> =
   object : Decoder<Array<A>> {
 
     override fun decode(value: Json): Either<DecodingError, Array<A>> =
@@ -87,20 +87,20 @@ inline fun <reified A> ArrayDecoderInstance(decoderA: Decoder<A>): Decoder<Array
   }
 
 @extension
-interface DoubleArrayEncoderInstance : Encoder<DoubleArray> {
+interface DoubleArrayEncoder : Encoder<DoubleArray> {
 
   override fun DoubleArray.encode(): Json =
     with(Double.encoder()) { JsArray(map { it.encode() }) }
 
   companion object {
     operator fun invoke(): Encoder<DoubleArray> =
-      object : DoubleArrayEncoderInstance {}
+      object : DoubleArrayEncoder {}
   }
 
 }
 
 @extension
-interface DoubleArrayDecoderInstance : Decoder<DoubleArray> {
+interface DoubleArrayDecoder : Decoder<DoubleArray> {
 
   override fun decode(value: Json): Either<DecodingError, DoubleArray> =
     with(Double.decoder()) {
@@ -112,25 +112,25 @@ interface DoubleArrayDecoderInstance : Decoder<DoubleArray> {
     }
 
   companion object {
-    operator fun invoke(): Decoder<DoubleArray> = object : DoubleArrayDecoderInstance {}
+    operator fun invoke(): Decoder<DoubleArray> = object : DoubleArrayDecoder {}
   }
 
 }
 
 @extension
-interface FloatArrayEncoderInstance : Encoder<FloatArray> {
+interface FloatArrayEncoder : Encoder<FloatArray> {
 
   override fun FloatArray.encode(): Json =
     with(Float.encoder()) { JsArray(map { it.encode() }) }
 
   companion object {
-    operator fun invoke(): Encoder<FloatArray> = object : FloatArrayEncoderInstance {}
+    operator fun invoke(): Encoder<FloatArray> = object : FloatArrayEncoder {}
   }
 
 }
 
 @extension
-interface FloatArrayDecoderInstance : Decoder<FloatArray> {
+interface FloatArrayDecoder : Decoder<FloatArray> {
 
   override fun decode(value: Json): Either<DecodingError, FloatArray> =
     with(Float.decoder()) {
@@ -142,25 +142,25 @@ interface FloatArrayDecoderInstance : Decoder<FloatArray> {
     }
 
   companion object {
-    operator fun invoke(): Decoder<FloatArray> = object : FloatArrayDecoderInstance {}
+    operator fun invoke(): Decoder<FloatArray> = object : FloatArrayDecoder {}
   }
 
 }
 
 @extension
-interface LongArrayEncoderInstance : Encoder<LongArray> {
+interface LongArrayEncoder : Encoder<LongArray> {
 
   override fun LongArray.encode(): Json =
     with(Long.encoder()) { JsArray(map { it.encode() }) }
 
   companion object {
-    operator fun invoke(): Encoder<LongArray> = object : LongArrayEncoderInstance {}
+    operator fun invoke(): Encoder<LongArray> = object : LongArrayEncoder {}
   }
 
 }
 
 @extension
-interface LongArrayDecoderInstance : Decoder<LongArray> {
+interface LongArrayDecoder : Decoder<LongArray> {
 
   override fun decode(value: Json): Either<DecodingError, LongArray> =
     with(Long.decoder()) {
@@ -172,25 +172,25 @@ interface LongArrayDecoderInstance : Decoder<LongArray> {
     }
 
   companion object {
-    operator fun invoke(): Decoder<LongArray> = object : LongArrayDecoderInstance {}
+    operator fun invoke(): Decoder<LongArray> = object : LongArrayDecoder {}
   }
 
 }
 
 @extension
-interface IntArrayEncoderInstance : Encoder<IntArray> {
+interface IntArrayEncoder : Encoder<IntArray> {
 
   override fun IntArray.encode(): Json =
     with(Int.encoder()) { JsArray(map { it.encode() }) }
 
   companion object {
-    operator fun invoke(): Encoder<IntArray> = object : IntArrayEncoderInstance {}
+    operator fun invoke(): Encoder<IntArray> = object : IntArrayEncoder {}
   }
 
 }
 
 @extension
-interface IntArrayDecoderInstance : Decoder<IntArray> {
+interface IntArrayDecoder : Decoder<IntArray> {
 
   override fun decode(value: Json): Either<DecodingError, IntArray> =
     with(Int.decoder()) {
@@ -202,25 +202,25 @@ interface IntArrayDecoderInstance : Decoder<IntArray> {
     }
 
   companion object {
-    operator fun invoke(): Decoder<IntArray> = object : IntArrayDecoderInstance {}
+    operator fun invoke(): Decoder<IntArray> = object : IntArrayDecoder {}
   }
 
 }
 
 @extension
-interface ShortArrayEncoderInstance : Encoder<ShortArray> {
+interface ShortArrayEncoder : Encoder<ShortArray> {
 
   override fun ShortArray.encode(): Json =
     with(Short.encoder()) { JsArray(map { it.encode() }) }
 
   companion object {
-    operator fun invoke(): Encoder<ShortArray> = object : ShortArrayEncoderInstance {}
+    operator fun invoke(): Encoder<ShortArray> = object : ShortArrayEncoder {}
   }
 
 }
 
 @extension
-interface ShortArrayDecoderInstance : Decoder<ShortArray> {
+interface ShortArrayDecoder : Decoder<ShortArray> {
 
   override fun decode(value: Json): Either<DecodingError, ShortArray> =
     with(Short.decoder()) {
@@ -232,25 +232,25 @@ interface ShortArrayDecoderInstance : Decoder<ShortArray> {
     }
 
   companion object {
-    operator fun invoke(): Decoder<ShortArray> = object : ShortArrayDecoderInstance {}
+    operator fun invoke(): Decoder<ShortArray> = object : ShortArrayDecoder {}
   }
 
 }
 
 @extension
-interface ByteArrayEncoderInstance : Encoder<ByteArray> {
+interface ByteArrayEncoder : Encoder<ByteArray> {
 
   override fun ByteArray.encode(): Json =
     with(Byte.encoder()) { JsArray(map { it.encode() }) }
 
   companion object {
-    operator fun invoke(): Encoder<ByteArray> = object : ByteArrayEncoderInstance {}
+    operator fun invoke(): Encoder<ByteArray> = object : ByteArrayEncoder {}
   }
 
 }
 
 @extension
-interface ByteArrayDecoderInstance : Decoder<ByteArray> {
+interface ByteArrayDecoder : Decoder<ByteArray> {
 
   override fun decode(value: Json): Either<DecodingError, ByteArray> =
     with(Byte.decoder()) {
@@ -262,25 +262,25 @@ interface ByteArrayDecoderInstance : Decoder<ByteArray> {
     }
 
   companion object {
-    operator fun invoke(): Decoder<ByteArray> = object : ByteArrayDecoderInstance {}
+    operator fun invoke(): Decoder<ByteArray> = object : ByteArrayDecoder {}
   }
 
 }
 
 @extension
-interface BooleanArrayEncoderInstance : Encoder<BooleanArray> {
+interface BooleanArrayEncoder : Encoder<BooleanArray> {
 
   override fun BooleanArray.encode(): Json =
     with(Boolean.encoder()) { JsArray(map { it.encode() }) }
 
   companion object {
-    operator fun invoke(): Encoder<BooleanArray> = object : BooleanArrayEncoderInstance {}
+    operator fun invoke(): Encoder<BooleanArray> = object : BooleanArrayEncoder {}
   }
 
 }
 
 @extension
-interface BooleanArrayDecoderInstance : Decoder<BooleanArray> {
+interface BooleanArrayDecoder : Decoder<BooleanArray> {
 
   override fun decode(value: Json): Either<DecodingError, BooleanArray> =
     with(Boolean.decoder()) {
@@ -292,13 +292,13 @@ interface BooleanArrayDecoderInstance : Decoder<BooleanArray> {
     }
 
   companion object {
-    operator fun invoke(): Decoder<BooleanArray> = object : BooleanArrayDecoderInstance {}
+    operator fun invoke(): Decoder<BooleanArray> = object : BooleanArrayDecoder {}
   }
 
 }
 
 @extension
-interface MapEncoderInstance<A, in B> : Encoder<Map<A, B>> {
+interface MapEncoder<A, in B> : Encoder<Map<A, B>> {
 
   fun keyEncoderA(): KeyEncoder<A>
   fun encoderB(): Encoder<B>
@@ -314,7 +314,7 @@ interface MapEncoderInstance<A, in B> : Encoder<Map<A, B>> {
 
   companion object {
     operator fun <A, B> invoke(keyEncoderA: KeyEncoder<A>, encoderB: Encoder<B>): Encoder<Map<A, B>> =
-      object : MapEncoderInstance<A, B>, Encoder<Map<A, B>> {
+      object : MapEncoder<A, B>, Encoder<Map<A, B>> {
         override fun keyEncoderA(): KeyEncoder<A> = keyEncoderA
         override fun encoderB(): Encoder<B> = encoderB
       }
@@ -323,7 +323,7 @@ interface MapEncoderInstance<A, in B> : Encoder<Map<A, B>> {
 }
 
 @extension
-interface MapDecoderInstance<A, out B> : Decoder<Map<A, B>> {
+interface MapDecoder<A, out B> : Decoder<Map<A, B>> {
 
   fun keyDecoderA(): KeyDecoder<A>
   fun decoderB(): Decoder<B>
@@ -346,7 +346,7 @@ interface MapDecoderInstance<A, out B> : Decoder<Map<A, B>> {
 
   companion object {
     operator fun <A, B> invoke(keyDecoderA: KeyDecoder<A>, decoderB: Decoder<B>): Decoder<Map<A, B>> =
-      object : MapDecoderInstance<A, B> {
+      object : MapDecoder<A, B> {
         override fun keyDecoderA(): KeyDecoder<A> = keyDecoderA
         override fun decoderB(): Decoder<B> = decoderB
       }

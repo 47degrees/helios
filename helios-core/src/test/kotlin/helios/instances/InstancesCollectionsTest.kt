@@ -15,7 +15,7 @@ class InstancesCollectionsTest : UnitSpec() {
 
     "List should be encode and decode successfully"{
       assertAll(Gen.list(Gen.alphaStr())) { sample ->
-        ListDecoderInstance(String.decoder()).decode(ListEncoderInstance(String.encoder()).run {
+        ListDecoder(String.decoder()).decode(ListEncoder(String.encoder()).run {
           sample.encode()
         }) should beRight(sample)
       }
@@ -23,13 +23,13 @@ class InstancesCollectionsTest : UnitSpec() {
 
     "List should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        ListDecoderInstance(String.decoder()).decode(sample) should beLeft()
+        ListDecoder(String.decoder()).decode(sample) should beLeft()
       }
     }
 
     "Array should be encode and decode successfully"{
       assertAll(Gen.array(Gen.alphaStr())) { sample ->
-        ArrayDecoderInstance(String.decoder()).decode(ArrayEncoderInstance(String.encoder()).run {
+        ArrayDecoder(String.decoder()).decode(ArrayEncoder(String.encoder()).run {
           sample.encode()
         }).map { it.contentEquals(sample) } should beRight(true)
       }
@@ -37,13 +37,13 @@ class InstancesCollectionsTest : UnitSpec() {
 
     "Array should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        ArrayDecoderInstance(String.decoder()).decode(sample) should beLeft()
+        ArrayDecoder(String.decoder()).decode(sample) should beLeft()
       }
     }
 
     "DoubleArray should be encode and decode successfully"{
       assertAll(Gen.array(Gen.double())) { sample ->
-        DoubleArrayDecoderInstance().decode(DoubleArrayEncoderInstance().run {
+        DoubleArrayDecoder().decode(DoubleArrayEncoder().run {
           sample.toDoubleArray().encode()
         }).map { it.contentEquals(sample.toDoubleArray()) } should beRight(true)
       }
@@ -51,13 +51,13 @@ class InstancesCollectionsTest : UnitSpec() {
 
     "DoubleArray should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        DoubleArrayDecoderInstance().decode(sample) should beLeft()
+        DoubleArrayDecoder().decode(sample) should beLeft()
       }
     }
 
     "FloatArray should be encode and decode successfully"{
       assertAll(Gen.array(Gen.float())) { sample ->
-        FloatArrayDecoderInstance().decode(FloatArrayEncoderInstance().run {
+        FloatArrayDecoder().decode(FloatArrayEncoder().run {
           sample.toFloatArray().encode()
         }).map { it.contentEquals(sample.toFloatArray()) } should beRight(true)
       }
@@ -65,13 +65,13 @@ class InstancesCollectionsTest : UnitSpec() {
 
     "FloatArray should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        FloatArrayDecoderInstance().decode(sample) should beLeft()
+        FloatArrayDecoder().decode(sample) should beLeft()
       }
     }
 
     "LongArray should be encode and decode successfully"{
       assertAll(Gen.array(Gen.long())) { sample ->
-        LongArrayDecoderInstance().decode(LongArrayEncoderInstance().run {
+        LongArrayDecoder().decode(LongArrayEncoder().run {
           sample.toLongArray().encode()
         }).map { it.contentEquals(sample.toLongArray()) } should beRight(true)
       }
@@ -79,13 +79,13 @@ class InstancesCollectionsTest : UnitSpec() {
 
     "LongArray should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        LongArrayDecoderInstance().decode(sample) should beLeft()
+        LongArrayDecoder().decode(sample) should beLeft()
       }
     }
 
     "IntArray should be encode and decode successfully"{
       assertAll(Gen.array(Gen.int())) { sample ->
-        IntArrayDecoderInstance().decode(IntArrayEncoderInstance().run {
+        IntArrayDecoder().decode(IntArrayEncoder().run {
           sample.toIntArray().encode()
         }).map { it.contentEquals(sample.toIntArray()) } should beRight(true)
       }
@@ -93,13 +93,13 @@ class InstancesCollectionsTest : UnitSpec() {
 
     "IntArray should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        IntArrayDecoderInstance().decode(sample) should beLeft()
+        IntArrayDecoder().decode(sample) should beLeft()
       }
     }
 
     "ShortArray should be encode and decode successfully"{
       assertAll(Gen.array(Gen.short())) { sample ->
-        ShortArrayDecoderInstance().decode(ShortArrayEncoderInstance().run {
+        ShortArrayDecoder().decode(ShortArrayEncoder().run {
           sample.toShortArray().encode()
         }).map { it.contentEquals(sample.toShortArray()) } should beRight(true)
       }
@@ -107,13 +107,13 @@ class InstancesCollectionsTest : UnitSpec() {
 
     "ShortArray should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        ShortArrayDecoderInstance().decode(sample) should beLeft()
+        ShortArrayDecoder().decode(sample) should beLeft()
       }
     }
 
     "ByteArray should be encode and decode successfully"{
       assertAll(Gen.array(Gen.byte())) { sample ->
-        ByteArrayDecoderInstance().decode(ByteArrayEncoderInstance().run {
+        ByteArrayDecoder().decode(ByteArrayEncoder().run {
           sample.toByteArray().encode()
         }).map { it.contentEquals(sample.toByteArray()) } should beRight(true)
       }
@@ -121,13 +121,13 @@ class InstancesCollectionsTest : UnitSpec() {
 
     "ByteArray should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        ByteArrayDecoderInstance().decode(sample) should beLeft()
+        ByteArrayDecoder().decode(sample) should beLeft()
       }
     }
 
     "BooleanArray should be encode and decode successfully"{
       assertAll(Gen.array(Gen.bool())) { sample ->
-        BooleanArrayDecoderInstance().decode(BooleanArrayEncoderInstance().run {
+        BooleanArrayDecoder().decode(BooleanArrayEncoder().run {
           sample.toBooleanArray().encode()
         }).map { it.contentEquals(sample.toBooleanArray()) } should beRight(true)
       }
@@ -135,14 +135,14 @@ class InstancesCollectionsTest : UnitSpec() {
 
     "BooleanArray should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        BooleanArrayDecoderInstance().decode(sample) should beLeft()
+        BooleanArrayDecoder().decode(sample) should beLeft()
       }
     }
 
     "Map should be encode and decode successfully"{
       assertAll(Gen.map(Gen.alphaStr(), Gen.alphaStr())) { sample ->
-        MapDecoderInstance(String.keyDecoder(), String.decoder()).decode(
-          MapEncoderInstance(String.keyEncoder(), String.encoder()).run {
+        MapDecoder(String.keyDecoder(), String.decoder()).decode(
+          MapEncoder(String.keyEncoder(), String.encoder()).run {
             sample.encode()
           }).map { it shouldContainExactly (sample) } should beRight()
       }
@@ -150,7 +150,7 @@ class InstancesCollectionsTest : UnitSpec() {
 
     "Map should fail for wrong content"{
       assertAll(Gen.jsString()) { sample ->
-        MapDecoderInstance(String.keyDecoder(), String.decoder()).decode(sample) should beLeft()
+        MapDecoder(String.keyDecoder(), String.decoder()).decode(sample) should beLeft()
       }
     }
 

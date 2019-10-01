@@ -80,18 +80,17 @@ class JsonFileGenerator(
     postfix = ")"
   ) { it.encoder() }
 
-  private fun String.keyEncoder(): String =
-    if (this.startsWith("java")) "${this.split('.').last()}KeyEncoder" else "$this.keyEncoder()"
+  private fun String.keyEncoder(): String = "${this.split('.').last()}KeyEncoder"
 
   private fun String.encoder(): String =
     when {
-      this.endsWith('?')                         -> "NullableEncoderInstance<${substringBeforeLast('?')}>(${substringBefore(
+      this.endsWith('?')                         -> "NullableEncoder<${substringBeforeLast('?')}>(${substringBefore(
         '?'
       ).encoder()})"
-      this.startsWith("kotlin.collections.List") -> complexEncoder("ListEncoderInstance")
+      this.startsWith("kotlin.collections.List") -> complexEncoder("ListEncoder")
       this.startsWith("kotlin.collections.Map")  ->
-        "MapEncoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyEncoder()}, ${getTypeParameters.last().encoder()})"
-      this.startsWith("java")                    -> "${substringAfterLast('.')}EncoderInstance()"
+        "MapEncoder<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyEncoder()}, ${getTypeParameters.last().encoder()})"
+      this.startsWith("java")                    -> "${substringAfterLast('.')}Encoder.instance"
       this.contains('<')                         -> complexEncoder("${substringBefore('<')}.Companion.encoder")
       else                                       -> "$this.encoder()"
     }
@@ -108,19 +107,18 @@ class JsonFileGenerator(
     postfix = ")"
   ) { it.decoder() }
 
-  private fun String.keyDecoder(): String =
-    if (this.startsWith("java")) "${this.split('.').last()}KeyDecoder" else "$this.keyDecoder()"
+  private fun String.keyDecoder(): String = "${this.split('.').last()}KeyDecoder"
 
   private fun String.decoder(): String =
     when {
-      this.endsWith('?')                         -> "NullableDecoderInstance<${substringBeforeLast('?')}>(${substringBefore(
+      this.endsWith('?')                         -> "NullableDecoder<${substringBeforeLast('?')}>(${substringBefore(
         '?'
       ).decoder()})"
       this.startsWith("kotlin.collections.List") ->
-        complexDecoder("ListDecoderInstance")
+        complexDecoder("ListDecoder")
       this.startsWith("kotlin.collections.Map")  ->
-        "MapDecoderInstance<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyDecoder()}, ${getTypeParameters.last().decoder()})"
-      this.startsWith("java")                    -> "${substringAfterLast('.')}DecoderInstance()"
+        "MapDecoder<${getTypeParameters.joinToString()}>(${getTypeParameters.first().keyDecoder()}, ${getTypeParameters.last().decoder()})"
+      this.startsWith("java")                    -> "${substringAfterLast('.')}Decoder.instance"
       this.contains('<')                         -> complexDecoder("${substringBefore('<')}.Companion.decoder")
       else                                       -> "$this.decoder()"
     }
