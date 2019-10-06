@@ -42,7 +42,7 @@ buildscript {
         jsoniterVersion = "0.9.23"
         
         // Retrofit integration libraries
-        retrofitVersion = "2.6.0"
+        retrofitVersion = "2.6.2"
         mockwebserverVersion = "3.14.2"
     }
 
