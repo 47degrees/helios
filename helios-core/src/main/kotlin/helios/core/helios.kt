@@ -76,8 +76,9 @@ sealed class Json {
       is JsBoolean -> ifJsBoolean(this)
     }
 
-  fun add(key: String, value: Json): JsObject =
-    JsObject(hashMapOf(key to value))
+  fun add(key: String, value: Json): Json = this.asJsObject()
+    .map { JsObject(it.value + (key to value)) }
+    .getOrElse { this }
 
   fun asJsString(): Option<JsString> =
     (this as? JsString)?.some() ?: none()
@@ -98,10 +99,8 @@ sealed class Json {
     (this as? JsNull)?.some() ?: none()
 
   fun merge(that: Json): Json =
-    Option.applicative().map(asJsObject(), that.asJsObject()) { (lhs, rhs) ->
-      lhs.toList().fold(rhs) { acc, (key, value) ->
-        rhs[key].fold({ acc.add(key, value) }, { r -> acc.add(key, value.merge(r)) })
-      }
+    Option.applicative().map(asJsObject(), that.asJsObject()) {
+      JsObject(it.a.value + it.b.value)
     }.fix().getOrElse { that }
 
   abstract fun noSpaces(): String
@@ -357,7 +356,7 @@ data class JsObject(val value: Map<String, Json>) : Json() {
       JsObject(keyValues.map { it.a to it.b }.toMap())
   }
 
-  fun toList(): List<Tuple2<String, Json>> = value.toList().map { it.first toT it.second }
+  fun toList(): List<Tuple2<String, Json>> = value.toList().map { it.toTuple2() }
 
   override fun noSpaces(): String =
     value.map { (k, v) -> """"$k":${v.noSpaces()}""" }.joinToString(
