@@ -2,10 +2,13 @@ package helios.core.model
 
 import arrow.core.NonEmptyList
 import arrow.optics.optics
-import arrow.test.generators.nonEmptyList
+import helios.arrow.generators.nonEmptyList
 import helios.json
 import helios.test.generators.alphaStr
-import io.kotlintest.properties.Gen
+import io.kotest.properties.Gen
+import io.kotest.properties.bind
+import io.kotest.properties.int
+import io.kotest.properties.list
 
 @json
 @optics

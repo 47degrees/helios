@@ -5,17 +5,23 @@ import arrow.core.Option
 import arrow.core.Tuple2
 import arrow.core.Tuple3
 import arrow.core.NonEmptyList
-import arrow.test.UnitSpec
-import arrow.test.generators.*
+import helios.arrow.UnitSpec
+import helios.arrow.generators.nonEmptyList
+import helios.arrow.generators.tuple2
+import helios.arrow.generators.tuple3
 import helios.core.JsArray
 import helios.test.generators.alphaStr
 import helios.test.generators.jsBoolean
 import helios.test.generators.jsString
-import io.kotlintest.assertions.arrow.either.beLeft
-import io.kotlintest.assertions.arrow.either.beRight
-import io.kotlintest.properties.Gen
-import io.kotlintest.properties.assertAll
-import io.kotlintest.should
+import io.kotest.assertions.arrow.either.beLeft
+import io.kotest.assertions.arrow.either.beRight
+import io.kotest.assertions.arrow.either.either
+import io.kotest.assertions.arrow.option.option
+import io.kotest.properties.Gen
+import io.kotest.properties.assertAll
+import io.kotest.properties.bool
+import io.kotest.properties.double
+import io.kotest.should
 
 class InstancesArrowTest : UnitSpec() {
   init {

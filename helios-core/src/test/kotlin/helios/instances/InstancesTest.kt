@@ -1,13 +1,15 @@
 package helios.instances
 
-import arrow.test.UnitSpec
-import arrow.test.generators.intSmall
+import helios.arrow.UnitSpec
+import helios.arrow.generators.intSmall
 import helios.test.generators.*
-import io.kotlintest.assertions.arrow.either.beLeft
-import io.kotlintest.assertions.arrow.either.beRight
-import io.kotlintest.properties.Gen
-import io.kotlintest.properties.assertAll
-import io.kotlintest.should
+import helios.test.generators.byte
+import helios.test.generators.short
+import helios.test.generators.triple
+import io.kotest.assertions.arrow.either.beLeft
+import io.kotest.assertions.arrow.either.beRight
+import io.kotest.properties.*
+import io.kotest.should
 
 class InstancesTest : UnitSpec() {
   init {

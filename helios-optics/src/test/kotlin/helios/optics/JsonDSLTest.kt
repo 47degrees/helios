@@ -4,17 +4,17 @@ import arrow.core.Option
 import arrow.core.extensions.option.eq.eq
 import arrow.core.identity
 import arrow.core.some
-import arrow.test.UnitSpec
-import arrow.test.generators.functionAToB
-import arrow.test.laws.PrismLaws
 import arrow.typeclasses.Eq
+import helios.arrow.UnitSpec
+import helios.arrow.generators.functionAToB
+import helios.arrow.laws.PrismLaws
 import helios.core.JsFalse
 import helios.core.JsString
 import helios.core.Json
 import helios.test.generators.*
-import io.kotlintest.assertions.arrow.option.shouldBeNone
-import io.kotlintest.properties.Gen
-import io.kotlintest.properties.forAll
+import io.kotest.assertions.arrow.option.shouldBeNone
+import io.kotest.properties.Gen
+import io.kotest.properties.forAll
 
 class JsonDSLTest : UnitSpec() {
 

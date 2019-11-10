@@ -1,12 +1,12 @@
 package helios.instances
 
-import arrow.test.UnitSpec
+import helios.arrow.UnitSpec
 import helios.core.EnumValueNotFound
 import helios.core.JsInt
 import helios.core.JsString
 import helios.core.JsStringDecodingError
-import io.kotlintest.assertions.arrow.either.shouldBeLeft
-import io.kotlintest.assertions.arrow.either.shouldBeRight
+import io.kotest.assertions.arrow.either.shouldBeLeft
+import io.kotest.assertions.arrow.either.shouldBeRight
 
 private enum class Foo {
   A

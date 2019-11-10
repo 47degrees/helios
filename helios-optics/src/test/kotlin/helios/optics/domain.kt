@@ -2,7 +2,8 @@ package helios.optics
 
 import helios.json
 import helios.test.generators.alphaStr
-import io.kotlintest.properties.Gen
+import io.kotest.properties.Gen
+import io.kotest.properties.list
 
 @json
 data class City(val streets: List<Street>) {

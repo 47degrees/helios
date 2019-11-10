@@ -5,7 +5,7 @@ package helios.test.generators
 import arrow.core.identity
 import helios.core.*
 import helios.typeclasses.Encoder
-import io.kotlintest.properties.Gen
+import io.kotest.properties.*
 
 private fun genJson(): Gen<Json> =
   Gen.oneOf(
