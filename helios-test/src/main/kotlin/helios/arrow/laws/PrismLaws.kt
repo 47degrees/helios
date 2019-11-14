@@ -1,20 +1,11 @@
 package helios.arrow.laws
 
-import arrow.core.Id
-import arrow.core.None
-import arrow.core.Option
-import arrow.core.Some
-import arrow.core.compose
-import arrow.core.identity
+import arrow.core.*
 import arrow.core.extensions.const.applicative.applicative
 import arrow.core.extensions.id.applicative.applicative
-import arrow.core.orElse
-import arrow.core.value
 import arrow.optics.Prism
-import arrow.typeclasses.Const
 import arrow.typeclasses.Eq
 import arrow.typeclasses.Monoid
-import arrow.typeclasses.value
 import io.kotest.properties.Gen
 import io.kotest.properties.forAll
 

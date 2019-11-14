@@ -1,7 +1,5 @@
 package helios.arrow.laws
 
-
-
 import arrow.typeclasses.Eq
 import helios.arrow.generators.tuple2
 import helios.arrow.generators.tuple3
