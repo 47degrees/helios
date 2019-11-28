@@ -1,13 +1,15 @@
 package helios.instances
 
-import arrow.test.UnitSpec
+import helios.arrow.UnitSpec
 import helios.test.generators.bigDecimal
 import helios.test.generators.jsString
-import io.kotlintest.assertions.arrow.either.beLeft
-import io.kotlintest.assertions.arrow.either.beRight
-import io.kotlintest.properties.Gen
-import io.kotlintest.properties.assertAll
-import io.kotlintest.should
+import io.kotest.assertions.arrow.either.beLeft
+import io.kotest.assertions.arrow.either.beRight
+import io.kotest.properties.Gen
+import io.kotest.properties.assertAll
+import io.kotest.properties.bigInteger
+import io.kotest.properties.uuid
+import io.kotest.should
 
 class InstancesJavaTest : UnitSpec() {
   init {

@@ -17,7 +17,7 @@ import helios.optics.jsarray.each.each
 import helios.optics.jsobject.each.each
 
 private fun <S, A : S> PPrism.Companion.fromOption(getOption: (S) -> Option<A>): Prism<S, A> =
-  Prism({ s: S -> getOption(s).toEither { s } }, ::identity)
+  Prism({ s: S -> getOption(s) }, ::identity)
 
 @PublishedApi
 internal val boolean = Prism.fromOption<Json, JsBoolean>(Json::asJsBoolean)

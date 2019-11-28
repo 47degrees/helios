@@ -5,26 +5,22 @@ dependencies {
     compile project(":helios-parser")
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-    compile "io.arrow-kt:arrow-core-data:$arrowVersion"
-    compile "io.arrow-kt:arrow-core-extensions:$arrowVersion"
+    compile "io.arrow-kt:arrow-core:$arrowVersion"
     compile "io.arrow-kt:arrow-syntax:$arrowVersion"
-    compile "io.arrow-kt:arrow-extras-data:$arrowVersion"
-    compile "io.arrow-kt:arrow-extras-extensions:$arrowVersion"
 
     kapt "io.arrow-kt:arrow-meta:$arrowVersion"
     kapt project(":helios-meta")
 
-    testImplementation("io.arrow-kt:arrow-test:$arrowVersion")
-    testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
-    testImplementation("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
-    
+    testImplementation("io.kotest:kotest-runner-junit5:$kotlinTestVersion")
+    testImplementation("io.kotest:kotest-assertions-arrow:$kotlinTestVersion")
+
     kaptTest project(":helios-meta")
     kaptTest "io.arrow-kt:arrow-meta:$arrowVersion"
 
     testCompile project(":helios-test")
     testCompileOnly "io.arrow-kt:arrow-meta:$arrowVersion"
+    testCompileOnly "io.arrow-kt:arrow-optics:$arrowVersion"
     testCompileOnly project(":helios-meta")
-    
 }
 
 apply from: rootProject.file("gradle/generated-kotlin-sources.gradle")
