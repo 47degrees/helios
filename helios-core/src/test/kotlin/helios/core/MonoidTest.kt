@@ -4,6 +4,8 @@ import arrow.test.UnitSpec
 import arrow.test.laws.MonoidLaws
 import arrow.test.laws.SemigroupLaws
 import helios.instances.jsstring.eq.eq
+import helios.instances.jsstring.monoid.monoid
+import helios.instances.jsstring.semigroup.semigroup
 import io.kotlintest.properties.Gen
 
 class MonoidTest : UnitSpec() {
