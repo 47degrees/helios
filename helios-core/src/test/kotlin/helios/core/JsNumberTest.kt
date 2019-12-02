@@ -1,11 +1,13 @@
 package helios.core
 
 import arrow.core.some
-import arrow.test.UnitSpec
+import helios.arrow.UnitSpec
 import helios.instances.jsnumber.eq.eq
-import io.kotlintest.properties.Gen
-import io.kotlintest.properties.forAll
-import io.kotlintest.shouldBe
+import io.kotest.properties.Gen
+import io.kotest.properties.list
+import io.kotest.properties.long
+import io.kotest.properties.forAll
+import io.kotest.shouldBe
 
 class JsNumberTest : UnitSpec() {
 

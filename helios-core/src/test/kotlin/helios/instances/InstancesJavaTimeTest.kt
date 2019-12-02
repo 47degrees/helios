@@ -1,12 +1,12 @@
 package helios.instances
 
-import arrow.test.UnitSpec
+import helios.arrow.UnitSpec
 import helios.test.generators.jsBoolean
-import io.kotlintest.assertions.arrow.either.beLeft
-import io.kotlintest.assertions.arrow.either.beRight
-import io.kotlintest.properties.Gen
-import io.kotlintest.properties.assertAll
-import io.kotlintest.should
+import io.kotest.assertions.arrow.either.beLeft
+import io.kotest.assertions.arrow.either.beRight
+import io.kotest.properties.Gen
+import io.kotest.properties.assertAll
+import io.kotest.should
 import java.time.*
 
 class InstancesJavaTimeTest : UnitSpec() {

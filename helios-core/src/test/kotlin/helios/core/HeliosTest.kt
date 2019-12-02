@@ -1,12 +1,12 @@
 package helios.core
 
 import arrow.core.Right
-import arrow.test.UnitSpec
+import helios.arrow.UnitSpec
 import helios.core.model.Friend
 import helios.core.model.decoder
 import helios.core.model.genFriend
 import helios.core.model.toJson
-import io.kotlintest.properties.forAll
+import io.kotest.properties.forAll
 
 class HeliosTest : UnitSpec() {
 

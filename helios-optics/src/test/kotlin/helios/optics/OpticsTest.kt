@@ -1,13 +1,13 @@
 package helios.optics
 
 import arrow.core.identity
-import arrow.test.UnitSpec
+import helios.arrow.UnitSpec
 import helios.core.*
 import helios.instances.jsnumber.eq.eq
 import helios.instances.json.eq.eq
-import io.kotlintest.assertions.arrow.option.shouldBeNone
-import io.kotlintest.assertions.arrow.option.shouldBeSome
-import io.kotlintest.shouldBe
+import io.kotest.assertions.arrow.option.shouldBeNone
+import io.kotest.assertions.arrow.option.shouldBeSome
+import io.kotest.shouldBe
 
 class OpticsTest : UnitSpec() {
 

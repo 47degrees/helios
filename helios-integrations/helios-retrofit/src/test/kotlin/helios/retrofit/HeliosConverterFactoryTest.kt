@@ -2,10 +2,10 @@ package helios.retrofit
 
 import arrow.core.Try
 import arrow.core.Tuple3
-import io.kotlintest.Description
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.StringSpec
+import io.kotest.Description
+import io.kotest.shouldBe
+import io.kotest.shouldNotBe
+import io.kotest.specs.StringSpec
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Rule

@@ -1,9 +1,9 @@
 package helios.instances
 
+import arrow.core.ListK
+import arrow.core.extensions.listk.semigroup.semigroup
 import arrow.core.extensions.semigroup
-import arrow.data.ListK
-import arrow.data.extensions.listk.semigroup.semigroup
-import arrow.data.k
+import arrow.core.k
 import arrow.extension
 import arrow.typeclasses.Semigroup
 import helios.core.JsArray

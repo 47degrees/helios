@@ -2,10 +2,9 @@ package helios.instances
 
 import arrow.core.*
 import arrow.core.extensions.either.applicative.applicative
-import arrow.core.extensions.either.applicative.map2
-import arrow.data.extensions.list.foldable.foldLeft
-import arrow.data.extensions.list.traverse.sequence
-import arrow.data.fix
+import arrow.core.extensions.either.apply.map2
+import arrow.core.extensions.list.foldable.foldLeft
+import arrow.core.extensions.list.traverse.sequence
 import arrow.extension
 import helios.core.*
 import helios.syntax.json.asJsArrayOrError

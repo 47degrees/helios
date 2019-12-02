@@ -23,8 +23,8 @@ local.properties
 reports/
 /out/
 
-KotlinTest
-.kotlintest
+kotest
+.kotest
 
 # Keystore files
 *.jks

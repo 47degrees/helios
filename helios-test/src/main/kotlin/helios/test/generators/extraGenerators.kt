@@ -1,6 +1,6 @@
 package helios.test.generators
 
-import io.kotlintest.properties.Gen
+import io.kotest.properties.*
 import java.math.BigDecimal
 
 fun Gen.Companion.alphaStr() =

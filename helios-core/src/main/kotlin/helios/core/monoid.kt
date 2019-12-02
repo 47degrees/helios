@@ -1,9 +1,9 @@
 package helios.core
 
+import arrow.core.ListK
+import arrow.core.extensions.listk.semigroup.semigroup
 import arrow.core.extensions.semigroup
-import arrow.data.ListK
-import arrow.data.extensions.listk.semigroup.semigroup
-import arrow.data.k
+import arrow.core.k
 import arrow.typeclasses.Monoid
 import arrow.typeclasses.Semigroup
 

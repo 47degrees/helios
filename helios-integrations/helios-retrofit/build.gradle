@@ -11,9 +11,8 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
 
     testImplementation("com.squareup.okhttp3:mockwebserver:$mockwebserverVersion")
-    testImplementation("io.arrow-kt:arrow-test:$arrowVersion")
-    testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
-    testImplementation("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
+    testImplementation("io.kotest:kotest-runner-junit5:$kotlinTestVersion")
+    testImplementation("io.kotest:kotest-assertions-arrow:$kotlinTestVersion")
 
     kaptTest project(":helios-meta")
     

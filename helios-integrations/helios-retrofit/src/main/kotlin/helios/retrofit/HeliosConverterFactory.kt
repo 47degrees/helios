@@ -3,7 +3,6 @@ package helios.retrofit
 import arrow.core.Option
 import arrow.core.getOrElse
 import arrow.core.toOption
-import arrow.data.extensions.list.monad.map
 import helios.typeclasses.Decoder
 import helios.typeclasses.Encoder
 import okhttp3.RequestBody

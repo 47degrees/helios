@@ -1,8 +1,8 @@
-
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    compile "io.arrow-kt:arrow-test:$arrowVersion"
-
+    compile("io.kotest:kotest-runner-junit5:$kotlinTestVersion")
+    compile("io.kotest:kotest-assertions-arrow:$kotlinTestVersion")
+    compile "io.arrow-kt:arrow-optics:$arrowVersion"
     compile project(":helios-core")
 }
 
