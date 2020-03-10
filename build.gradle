@@ -19,7 +19,7 @@ buildscript {
         //Plugins
         gradleVersionsPluginVersion = "0.21.0"
         jmhVersion = "0.4.8"
-        hoodVersion = "0.7.0"
+        hoodVersion = "0.8.0"
         bintrayVersion = "1.8.4"
         gitPublishVersion = "2.1.1"
 
@@ -47,7 +47,6 @@ buildscript {
     }
 
     repositories {
-        mavenLocal()
         maven { url "https://jitpack.io" }
         maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
         maven { url "https://dl.bintray.com/jetbrains/markdown/" }
