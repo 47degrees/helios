@@ -4,7 +4,7 @@
 It's based on part of the [Jawn Parser](https://github.com/non/jawn) built on `Arrow`,
 a Functional companion to `Kotlin`'s Standard Library.
 
-Learn more on [**47deg.github.io/helios**](https://47deg.github.io/helios)
+Learn more on [**47degrees.github.io/helios**](https://47degrees.github.io/helios)
 
 ## Why Helios
 
