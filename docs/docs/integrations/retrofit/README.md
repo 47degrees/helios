@@ -56,4 +56,4 @@ fun getRetrofit(): Retrofit = Retrofit.Builder()
 //sampleEnd
 ```
 
-There is also an example project available [here](https://github.com/47deg/helios/tree/master/helios-samples/retrofit-sample).
+There is also an example project available [here](https://github.com/47degrees/helios/tree/master/helios-samples/retrofit-sample).

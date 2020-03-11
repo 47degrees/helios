@@ -141,7 +141,7 @@ subprojects { project ->
             name = project.name
             userOrg = POM_DEVELOPER_ID
             licenses = ["Apache-2.0"]
-            vcsUrl = "https://github.com/47deg/helios.git"
+            vcsUrl = "https://github.com/47degrees/helios.git"
         }
     }
 

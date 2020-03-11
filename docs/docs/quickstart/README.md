@@ -69,4 +69,4 @@ val jsonFromPerson = with(Person.encoder()) {
 jsonFromPerson.noSpaces()
 ```
 
-You can find more on the [`samples` module](https://github.com/47deg/helios/tree/master/helios-samples).
+You can find more on the [`samples` module](https://github.com/47degrees/helios/tree/master/helios-samples).
