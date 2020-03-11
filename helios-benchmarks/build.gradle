@@ -81,7 +81,7 @@ compareBenchmarksCI {
     outputFormat = "json"
     benchmarkThreshold = ["Parsing": 250.00, "Decodingfromraw": 250]
     token = System.getenv("GITHUB_ACCESS_TOKEN")
-    repositoryOwner = POM_DEVELOPER_ID
+    repositoryOwner = POM_GITHUB_ORG
     repositoryName = "helios"
     pullRequestSha = System.getenv("TRAVIS_PULL_REQUEST_SHA")
     pullRequestNumber = (System.getenv("TRAVIS_PULL_REQUEST") != "false") ? System.getenv("TRAVIS_PULL_REQUEST")?.toInteger() : -1
@@ -91,7 +91,7 @@ compareBenchmarksCI {
 uploadBenchmarks {
     benchmarkFiles = [file("$rootDir/build/reports/master_benchmark.json"), file("$rootDir/build/reports/libraries_benchmark.json")]
     token = System.getenv("GITHUB_ACCESS_TOKEN")
-    repositoryOwner = POM_DEVELOPER_ID
+    repositoryOwner = POM_GITHUB_ORG
     repositoryName = "helios"
     commitMessage = "[ci skip] - Upload benchmark"
 }
