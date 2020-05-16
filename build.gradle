@@ -19,7 +19,7 @@ buildscript {
         //Plugins
         gradleVersionsPluginVersion = "0.21.0"
         jmhVersion = "0.4.8"
-        hoodVersion = "0.8.0"
+        hoodVersion = "0.8.1"
         bintrayVersion = "1.8.4"
         gitPublishVersion = "2.1.1"
 
@@ -51,7 +51,6 @@ buildscript {
         maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
         maven { url "https://dl.bintray.com/jetbrains/markdown/" }
         maven { url "https://dl.bintray.com/arrow-kt/arrow-kt/" }
-        maven { url "https://dl.bintray.com/47deg/hood" }
         maven { url "https://plugins.gradle.org/m2/" }
         jcenter()
     }
@@ -61,7 +60,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
         classpath "io.arrow-kt:arrow-ank-gradle:$arrowVersion"
-        classpath "com.47deg:hood:$hoodVersion"
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintrayVersion"
         classpath "org.ajoberstar:gradle-git-publish:$gitPublishVersion"
         classpath "me.champeau.gradle:jmh-gradle-plugin:$jmhVersion"

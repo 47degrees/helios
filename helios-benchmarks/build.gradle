@@ -1,3 +1,7 @@
+plugins {
+  id "com.47deg.hood" version "$hoodVersion"
+}
+
 repositories {
     maven { url "https://kotlin.bintray.com/kotlinx" }
 }
@@ -5,7 +9,6 @@ repositories {
 apply plugin: "me.champeau.gradle.jmh"
 apply plugin: "kotlin-kapt"
 apply plugin: "kotlinx-serialization"
-apply plugin: "com.47deg.hood"
 
 dependencies {
     compile project(":helios-core")
