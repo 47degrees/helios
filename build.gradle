@@ -18,7 +18,7 @@ buildscript {
     ext {
         //Plugins
         gradleVersionsPluginVersion = "0.21.0"
-        jmhVersion = "0.4.8"
+        jmhVersion = "0.5.0"
         hoodVersion = "0.8.1"
         bintrayVersion = "1.8.4"
         gitPublishVersion = "2.1.1"
